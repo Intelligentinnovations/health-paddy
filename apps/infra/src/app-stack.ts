@@ -5,6 +5,8 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
 
+import { secrets } from './secrets';
+
 export class AppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
     super(scope, id, props);
@@ -30,12 +32,12 @@ export class AppStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, 'TopicArn', {
-      exportName: 'TopicArn',
+      exportName: `${secrets.APP_NAME}-app-${secrets.ENV}-TopicArn`,
       value: topic.topicArn,
     });
 
     new cdk.CfnOutput(this, 'QueueUrl', {
-      exportName: 'QueueUrl',
+      exportName: `${secrets.APP_NAME}-app-${secrets.ENV}-QueueUrl`,
       value: appQueue.queueUrl,
     });
   }

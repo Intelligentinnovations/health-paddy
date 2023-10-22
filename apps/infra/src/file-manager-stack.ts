@@ -7,8 +7,10 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3Notification from 'aws-cdk-lib/aws-s3-notifications';
 import { Construct } from 'constructs';
 
+import { secrets } from './secrets';
+
 export class FileManagerStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const storageBucket = new s3.Bucket(this, 'FilesStorage');
@@ -19,7 +21,7 @@ export class FileManagerStack extends cdk.Stack {
 
     const publicKey = new cloudfront.PublicKey(this, 'PublicKey', {
       encodedKey: Buffer.from(
-        process.env.CLOUDFRONT_PUBLIC_KEY ?? '',
+        secrets.CLOUDFRONT_PUBLIC_KEY,
         'base64'
       ).toString(),
     });
@@ -65,7 +67,7 @@ export class FileManagerStack extends cdk.Stack {
         environment: {
           BUCKET_NAME: storageBucket.bucketName,
           TABLE_NAME: filesTable.tableName,
-          CLOUDFRONT_PRIVATE_KEY: process.env.CLOUDFRONT_PRIVATE_KEY ?? '',
+          CLOUDFRONT_PRIVATE_KEY: secrets.CLOUDFRONT_PRIVATE_KEY,
           CLOUDFRONT_KEYPAIR_ID: publicKey.publicKeyId,
           CACHE_DISABLED: 'true',
           DOMAIN: distribution.domainName,
@@ -88,10 +90,6 @@ export class FileManagerStack extends cdk.Stack {
       authType: lambda.FunctionUrlAuthType.NONE,
     });
 
-    new cdk.CfnOutput(this, 'FileUploaderUrl', { value: uploaderUrl.url });
-    new cdk.CfnOutput(this, 'FileUploaderFunction', {
-      value: uploaderFunction.functionArn,
-      exportName: 'FileUploaderFunctionArn',
-    });
+    new cdk.CfnOutput(this, 'FileManagerUrl', { value: uploaderUrl.url });
   }
 }

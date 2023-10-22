@@ -5,12 +5,15 @@ import * as lambdaEventSource from 'aws-cdk-lib/aws-lambda-event-sources';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import { Construct } from 'constructs';
 
+import { secrets } from './secrets';
+
 export class NotificationStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const topicArn = cdk.Fn.importValue('TopicArn');
-    const queueUrl = cdk.Fn.importValue('QueueUrl');
+    const topicArn = cdk.Fn.importValue(
+      `${secrets.APP_NAME}-app-${secrets.ENV}-TopicArn`
+    );
 
     const handler = new lambda.Function(this, 'NotificationHandler', {
       handler: 'main.handler',
@@ -19,8 +22,7 @@ export class NotificationStack extends cdk.Stack {
       memorySize: 512,
       timeout: cdk.Duration.seconds(30),
       environment: {
-        QUEUE_URL: queueUrl,
-        MAIL_FROM: process.env.MAIL_FROM ?? 'noreply@example.com',
+        MAIL_FROM: secrets.MAIL_FROM,
       },
     });
 

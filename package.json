@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {
     "generate-app": ". scripts/new-app.sh",
-    "api-dev": "nx serve api-v1"
+    "api-dev": "nx serve api-v1",
+    "build": "nx run-many --t build --exclude app-template",
+    "deploy": "pnpm run build && cdk deploy --all --outputs-file ./env.json"
   },
   "sideEffects": false,
   "private": true,

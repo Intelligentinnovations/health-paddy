@@ -42,3 +42,5 @@ Thumbs.db
 cdk.out
 cdk.context.json
 #**/*.pem
+
+env.json
