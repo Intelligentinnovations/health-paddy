@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 export APPLICATION="$npm_config_application"
 export DIRECTORY="apps/$APPLICATION"
 

@@ -1,4 +1,4 @@
-import { expireItem, getItem } from '@backend-template/cache';
+import { getItem } from '@backend-template/cache';
 import { NextFunction, Request, Response } from 'express';
 import { DateTime } from 'luxon';
 
@@ -12,11 +12,8 @@ export async function preRequestHandler(
   let key = `${process.env.STACK_NAME}:${req.originalUrl ?? req.url}`;
   if (req.user) key += `:${req.token}`;
 
-  const resetCache = req.headers['cache-control-reset'] === 'true';
-  if (resetCache) {
-    await expireItem(key, -1);
-    return next();
-  }
+  const cacheControl = req.headers['cache-control'];
+  if (!cacheControl) return next();
 
   const cachedData = await getItem(key);
   if (!cachedData) return next();

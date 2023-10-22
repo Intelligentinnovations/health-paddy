@@ -1,0 +1,67 @@
+{
+  "name": "filemanager",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/filemanager/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/filemanager",
+        "format": ["cjs"],
+        "bundle": true,
+        "main": "apps/filemanager/src/main.ts",
+        "tsConfig": "apps/filemanager/tsconfig.app.json",
+        "assets": ["apps/filemanager/src/assets/"],
+        "generatePackageJson": true,
+        "thirdParty": true,
+        "external": ["@aws-sdk/*"],
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {
+          "main": "apps/filemanager/src/server.ts"
+        },
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "filemanager:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "filemanager:build:development"
+        },
+        "production": {
+          "buildTarget": "filemanager:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/filemanager/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

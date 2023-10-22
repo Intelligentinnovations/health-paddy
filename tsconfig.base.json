@@ -18,11 +18,14 @@
     "baseUrl": ".",
     "paths": {
       "@backend-template/cache": ["libs/cache/src/index.ts"],
+      "@backend-template/core": ["libs/core/src/index.ts"],
       "@backend-template/database": ["libs/database/src/index.ts"],
+      "@backend-template/messaging": ["libs/messaging/src/index.ts"],
       "@backend-template/secrets": ["libs/secrets/src/index.ts"],
       "@backend-template/server": ["libs/server/src/index.ts"],
       "@backend-template/token": ["libs/token/src/index.ts"],
-      "@backend-template/types": ["libs/types/src/index.ts"]
+      "@backend-template/types": ["libs/types/src/index.ts"],
+      "@backend-template/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

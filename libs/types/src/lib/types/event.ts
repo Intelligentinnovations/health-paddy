@@ -1,4 +1,9 @@
-export type SQSBody = { action: 'EVENT_ONES'; body: string };
+import { NotificationData } from './notification';
+
+export type MessageBody = {
+  action: 'NOTIFICATION';
+  body: NotificationData;
+};
 
 export const ScheduleType = {
   SCHEDULE_ONE: 'SCHEDULE_ONE',

@@ -16,6 +16,9 @@ export const validateToken = async <T>(
     ) as JwtGenerationPayload<T>;
     if (!data) return;
 
+    const cacheDisabled = process.env.CACHE_DISABLED === 'true';
+    if (cacheDisabled) return data;
+
     const now = DateTime.now().toMillis() + 1;
     const validTokens = (await getSetItems(identifier, now, '+inf')) || [];
     if (!validTokens.includes(token)) return;

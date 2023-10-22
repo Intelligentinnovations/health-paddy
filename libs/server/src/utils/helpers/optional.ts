@@ -30,6 +30,7 @@ export class Optional<T> implements IOptional<T> {
     try {
       val = await this.#val;
     } catch (e) {
+      console.error(`unwrap error :: `, e);
       throw error;
     }
 

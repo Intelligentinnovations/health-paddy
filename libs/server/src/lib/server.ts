@@ -62,5 +62,9 @@ export const server = (
 
   app.use(errorHandler);
 
+  app.use('*', (req, res) => {
+    res.status(404).send({ success: false, message: 'resource not found' });
+  });
+
   return app;
 };

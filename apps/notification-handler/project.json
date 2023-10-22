@@ -1,0 +1,65 @@
+{
+  "name": "notification-handler",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/notification-handler/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/notification-handler",
+        "format": ["cjs"],
+        "bundle": true,
+        "main": "apps/notification-handler/src/main.ts",
+        "tsConfig": "apps/notification-handler/tsconfig.app.json",
+        "assets": ["apps/notification-handler/src/assets/*"],
+        "generatePackageJson": true,
+        "thirdParty": true,
+        "external": ["@aws-sdk/*"],
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "notification-handler:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "notification-handler:build:development"
+        },
+        "production": {
+          "buildTarget": "notification-handler:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/notification-handler/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

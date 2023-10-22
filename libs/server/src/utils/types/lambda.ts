@@ -1,18 +1,21 @@
 import { HTTPMethod } from './controller';
 
-export type LambdaEvent =
-  | { Records: LambdaEventRecord[] }
-  | { routeKey: string }
-  | HttpEvent;
+export type LambdaEvent = { Records: LambdaEventRecord[] } | HttpEvent;
 
 export interface HttpEvent {
+  routeKey: string;
+  body: string;
+  isBase64Encoded: boolean;
   headers: Record<string, string>;
   requestContext: GatewayRequestContext;
 }
 
-export type LambdaEventRecord =
-  | ({ eventSource: 'aws:s3' } & S3EventBody)
-  | ({ eventSource: 'aws:sqs' } & SQSEventBody);
+export type LambdaEventRecord = S3EventBody | SQSEventBody | SNSEventBody;
+
+export type SNSEventBody = {
+  EventSource: 'aws:sns';
+  Sns: { Message: string };
+};
 
 export interface GatewayRequestContext {
   http: GatewayHttpData;
@@ -25,21 +28,25 @@ export interface GatewayHttpData {
 }
 
 export interface SQSEventBody {
+  eventSource: 'aws:sqs';
   messageId: string;
   body: string;
 }
 
 export interface S3EventBody {
-  object: S3Object;
-  bucket: S3Bucket;
+  eventSource: 'aws:s3';
+  eventName: 'ObjectCreated:Put';
+  s3: {
+    object: S3EventObject;
+    bucket: { name: string };
+  };
 }
 
-export interface S3Object {
+export type S3EventType = S3EventBody['eventName'];
+
+export type S3EventObject = {
   key: string;
   size: number;
-}
-
-export interface S3Bucket {
-  arn: string;
-  name: string;
-}
+  eTag: string;
+  sequencer: string;
+};
