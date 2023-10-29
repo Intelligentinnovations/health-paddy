@@ -1,4 +1,4 @@
-import {redisClient} from "../core";
+import { redisClient } from '../core';
 
 export const setItem = (key: string, val: string | number) =>
   redisClient().set(key, val);

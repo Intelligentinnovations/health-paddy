@@ -1,1 +1,0 @@
-export { DefaultServiceImpl } from './defaultServiceImpl';

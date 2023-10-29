@@ -5,38 +5,26 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "platform": "node",
+        "target": "node",
+        "compiler": "tsc",
         "outputPath": "dist/apps/filemanager",
-        "format": ["cjs"],
-        "bundle": true,
         "main": "apps/filemanager/src/main.ts",
         "tsConfig": "apps/filemanager/tsconfig.app.json",
-        "assets": ["apps/filemanager/src/assets/"],
-        "generatePackageJson": true,
-        "thirdParty": true,
-        "external": ["@aws-sdk/*"],
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
+        "assets": [],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/filemanager/webpack.config.js"
       },
       "configurations": {
         "development": {
           "main": "apps/filemanager/src/server.ts"
         },
         "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
+          "sourceMap": false,
+          "generatePackageJson": true
         }
       }
     },

@@ -1,2 +1,2 @@
-export { getDynamoDbClient } from './lib/dynamoDbClient';
-export { getKyselyClient } from './lib/kyselyClient';
+export { DynamoService } from './lib/dynamo.service';
+export { KyselyService } from './lib/kysely.service';

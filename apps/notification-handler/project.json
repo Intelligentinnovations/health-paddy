@@ -5,36 +5,24 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "platform": "node",
+        "target": "node",
+        "compiler": "tsc",
         "outputPath": "dist/apps/notification-handler",
-        "format": ["cjs"],
-        "bundle": true,
         "main": "apps/notification-handler/src/main.ts",
         "tsConfig": "apps/notification-handler/tsconfig.app.json",
-        "assets": ["apps/notification-handler/src/assets/*"],
-        "generatePackageJson": true,
-        "thirdParty": true,
-        "external": ["@aws-sdk/*"],
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
+        "assets": ["apps/notification-handler/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/notification-handler/webpack.config.js"
       },
       "configurations": {
         "development": {},
         "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
+          "sourceMap": false,
+          "generatePackageJson": true
         }
       }
     },

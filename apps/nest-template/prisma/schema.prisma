@@ -1,0 +1,14 @@
+generator kysely {
+  provider = "prisma-kysely"
+  output   = "../src/types"
+  fileName = "database.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Todo {
+  id String @id @default(cuid())
+}
