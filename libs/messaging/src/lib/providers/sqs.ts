@@ -8,36 +8,32 @@ import { v4 } from 'uuid';
 
 import { Messaging } from '../messaging';
 
-let sqsClient: SQSClient;
-
 export class Sqs implements Messaging {
-  readonly #queueUrl: string | undefined;
+  private readonly sqsClient: SQSClient;
 
-  constructor(queueUrl = process.env.QUEUE_URL) {
-    if (!sqsClient)
-      sqsClient = new SQSClient({
-        region: process.env.AWS_REGION,
-      });
-
-    this.#queueUrl = queueUrl;
+  constructor() {
+    this.sqsClient = new SQSClient({ region: process.env.AWS_REGION });
   }
 
-  async send(data: Array<MessageBody> | MessageBody): Promise<void> {
+  async send(
+    data: Array<MessageBody> | MessageBody,
+    queueUrl = process.env.QUEUE_URL
+  ): Promise<void> {
     if (Array.isArray(data)) {
-      await sqsClient.send(
+      await this.sqsClient.send(
         new SendMessageBatchCommand({
           Entries: data.map((i) => ({
             Id: v4(),
             MessageBody: JSON.stringify(i),
           })),
-          QueueUrl: this.#queueUrl,
+          QueueUrl: queueUrl,
         })
       );
     } else {
-      await sqsClient.send(
+      await this.sqsClient.send(
         new SendMessageCommand({
           MessageBody: JSON.stringify(data),
-          QueueUrl: this.#queueUrl,
+          QueueUrl: queueUrl,
         })
       );
     }

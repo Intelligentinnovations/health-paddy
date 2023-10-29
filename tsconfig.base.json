@@ -18,9 +18,10 @@
     "baseUrl": ".",
     "paths": {
       "@backend-template/cache": ["libs/cache/src/index.ts"],
-      "@backend-template/core": ["libs/core/src/index.ts"],
       "@backend-template/database": ["libs/database/src/index.ts"],
+      "@backend-template/helpers": ["libs/helpers/src/index.ts"],
       "@backend-template/messaging": ["libs/messaging/src/index.ts"],
+      "@backend-template/microservice": ["libs/microservice/src/index.ts"],
       "@backend-template/secrets": ["libs/secrets/src/index.ts"],
       "@backend-template/server": ["libs/server/src/index.ts"],
       "@backend-template/token": ["libs/token/src/index.ts"],

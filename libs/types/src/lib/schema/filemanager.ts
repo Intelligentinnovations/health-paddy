@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const UploadFileSchema = z.object({
   action: z.literal('upload'),
   fileName: z.string(),
-  secure: z.boolean().default(false),
+  secure: z.coerce.boolean().default(false),
   fileType: z.union([
     z.object({ type: z.literal('documents'), extension: z.string() }),
     z.object({

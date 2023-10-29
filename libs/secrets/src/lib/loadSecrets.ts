@@ -1,30 +1,43 @@
-import { DateTime } from 'luxon';
-import { z, ZodObject, ZodRawShape } from 'zod';
+import {
+  GetSecretValueCommand,
+  SecretsManagerClient,
+} from '@aws-sdk/client-secrets-manager';
+import { CustomRes } from '@backend-template/helpers';
+import { Logger } from '@nestjs/common';
+import { z, ZodRawShape, ZodType } from 'zod';
 
-import { fetchSecret } from './fetchSecret';
+let secretClient: SecretsManagerClient;
 
-let initialized: DateTime;
-export const loadSecrets = async <
-  TD extends ZodRawShape,
-  TS extends ZodObject<TD>
->(
-  schema: TS,
-  secretNames: string[]
-): Promise<z.infer<TS> | undefined> => {
-  if (!initialized || initialized < DateTime.now().minus({ minutes: 10 })) {
-    initialized = DateTime.now();
-    const secrets: Record<string, unknown> = {};
-
-    for (const secret in secretNames) {
-      Object.assign(secrets, await fetchSecret(secretNames[secret]));
-    }
-
-    Object.assign(secrets, process.env);
-    Object.assign(process.env, secrets);
-
-    const res = schema.safeParse(secrets);
-
-    if (!res.success) throw Error('error validating secrets');
-    else return res.data;
+export async function loadSecrets<
+  TS extends ZodRawShape = Record<string, ZodType>
+>(schema: TS, secretNames: string[] = []) {
+  const secrets: Record<string, unknown> = {};
+  if (!secretClient) {
+    secretClient = new SecretsManagerClient({
+      region: process.env.AWS_REGION,
+    });
   }
-};
+
+  for (const secret in secretNames) {
+    try {
+      const fetchedSecrets = await secretClient.send(
+        new GetSecretValueCommand({ SecretId: secretNames[secret] })
+      );
+
+      const parsedSecrets = JSON.parse(fetchedSecrets.SecretString ?? '{}');
+      Object.assign(secrets, parsedSecrets);
+    } catch (e) {
+      Logger.error('error fetching secrets :: ', secretNames[secret]);
+    }
+  }
+
+  Object.assign(secrets, process.env);
+
+  const res = z.object(schema).safeParse(secrets);
+  if (!res.success) {
+    Logger.error('secrets validation error :: ', res.error);
+    throw CustomRes.serverError('error validating secrets');
+  }
+
+  return res.data;
+}

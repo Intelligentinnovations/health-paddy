@@ -1,0 +1,121 @@
+{
+  "name": "nest-template",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/nest-template/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/nest-template",
+        "main": "apps/nest-template/src/main.ts",
+        "tsConfig": "apps/nest-template/tsconfig.app.json",
+        "assets": [],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/nest-template/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "main": "apps/nest-template/src/server.ts"
+        },
+        "production": {
+          "sourceMap": false,
+          "generatePackageJson": true
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "nest-template:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "nest-template:build:development"
+        },
+        "production": {
+          "buildTarget": "nest-template:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/nest-template/**/*.ts"]
+      }
+    },
+    "prisma-generate": {
+      "executor": "@nx-tools/nx-prisma:generate",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-migrate": {
+      "executor": "@nx-tools/nx-prisma:migrate",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-pull": {
+      "executor": "@nx-tools/nx-prisma:pull",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-push": {
+      "executor": "@nx-tools/nx-prisma:push",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-deploy": {
+      "executor": "@nx-tools/nx-prisma:deploy",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-status": {
+      "executor": "@nx-tools/nx-prisma:status",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-studio": {
+      "executor": "@nx-tools/nx-prisma:studio",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-reset": {
+      "executor": "@nx-tools/nx-prisma:reset",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-resolve": {
+      "executor": "@nx-tools/nx-prisma:resolve",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-seed": {
+      "executor": "@nx-tools/nx-prisma:seed",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    },
+    "prisma-validate": {
+      "executor": "@nx-tools/nx-prisma:validate",
+      "options": {
+        "schema": "apps/nest-template/prisma/schema.prisma"
+      }
+    }
+  },
+  "tags": []
+}

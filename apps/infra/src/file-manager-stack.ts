@@ -69,9 +69,7 @@ export class FileManagerStack extends cdk.Stack {
           TABLE_NAME: filesTable.tableName,
           CLOUDFRONT_PRIVATE_KEY: secrets.CLOUDFRONT_PRIVATE_KEY,
           CLOUDFRONT_KEYPAIR_ID: publicKey.publicKeyId,
-          CACHE_DISABLED: 'true',
           DOMAIN: distribution.domainName,
-          BASE_ROUTE: 'filemanager',
         },
       }
     );
@@ -90,6 +88,10 @@ export class FileManagerStack extends cdk.Stack {
       authType: lambda.FunctionUrlAuthType.NONE,
     });
 
-    new cdk.CfnOutput(this, 'FileManagerUrl', { value: uploaderUrl.url });
+    new cdk.CfnOutput(this, 'Url', { value: uploaderUrl.url });
+    new cdk.CfnOutput(this, 'Domain', { value: distribution.domainName });
+    new cdk.CfnOutput(this, 'BucketName', { value: storageBucket.bucketName });
+    new cdk.CfnOutput(this, 'TableName', { value: filesTable.tableName });
+    new cdk.CfnOutput(this, 'KeypairId', { value: publicKey.publicKeyId });
   }
 }

@@ -1,13 +1,23 @@
-import { Res, SNSEventBody } from '@backend-template/server';
+import {
+  awsBootstrap,
+  awsService,
+  AwsTransporter,
+} from '@backend-template/microservice';
+import { Handler, SQSEvent } from 'aws-lambda';
+import { firstValueFrom, ReplaySubject } from 'rxjs';
 
-import { eventHandler } from './handlers';
-import { getSecrets } from './secrets';
+import { AppModule } from './app.module';
 
-export async function handler(event: { Records: SNSEventBody[] }) {
-  await getSecrets();
-  for (const record of event.Records) {
-    await eventHandler(JSON.parse(record.Sns.Message));
-  }
+const transporterSubject = new ReplaySubject<AwsTransporter>();
+awsBootstrap(AppModule).then((transporter) =>
+  transporterSubject.next(transporter)
+);
 
-  return Res.success();
-}
+export const sqsHandler: Handler = async (event: SQSEvent, context) => {
+  console.log('event :: ', JSON.stringify(event));
+
+  const transporter = await firstValueFrom(transporterSubject);
+  await awsService(event, context, transporter);
+
+  return;
+};

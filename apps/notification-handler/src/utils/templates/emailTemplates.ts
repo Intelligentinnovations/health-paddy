@@ -5,7 +5,7 @@ import { EmailTemplate } from '../types';
 
 function getTemplate(name: string) {
   return Handlebars.compile(
-    fs.readFileSync(`${__dirname}/src/assets/${name}`).toString()
+    fs.readFileSync(`${__dirname}/assets/${name}`).toString()
   );
 }
 
