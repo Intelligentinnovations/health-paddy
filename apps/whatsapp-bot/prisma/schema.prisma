@@ -1,0 +1,23 @@
+generator kysely {
+  provider = "prisma-kysely"
+  output   = "../src/types"
+  fileName = "database.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  email     String   @unique
+  phone     String   @unique
+  name      String
+  age       Int?
+  sex       String?
+  height    String?
+  weight    Decimal?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -15,16 +15,6 @@ export class AppService {
 
   async getData() {
     console.log('entered service');
-    const existing = await this.cacheManager.get<{ name: string }>('test_data');
-    if (existing) return existing;
-
-    // await this.messaging.send({
-    //   action: 'NOTIFICATION',
-    //   body: {
-    //     templateId: 'otp',
-    //     templateData: { value: '12345' },
-    //   },
-    // });
 
     Logger.log('came here');
     await this.cacheManager.set('test_data', { name: 'festus' }, 30000);
