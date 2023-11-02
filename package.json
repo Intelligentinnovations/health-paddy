@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "generate-app": ". scripts/new-app.sh",
-    "api-dev": "nx serve api-v1",
+    "whatsapp-bot": "nx serve whatsapp-bot",
     "build": "nx run-many --t build --exclude app-template",
     "deploy": "pnpm run build && cdk deploy --all --outputs-file ./env.json"
   },
@@ -22,6 +22,7 @@
     "@swc/helpers": "~0.5.3",
     "@vendia/serverless-express": "^4.10.4",
     "aws-cdk-lib": "^2.102.0",
+    "axios": "^1.6.0",
     "cache-manager": "^5.2.4",
     "cache-manager-redis-yet": "^4.1.2",
     "constructs": "^10.3.0",
