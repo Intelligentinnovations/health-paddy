@@ -10,14 +10,65 @@ datasource db {
 }
 
 model User {
+  id                 String              @id @default(dbgenerated("gen_random_uuid()"))
+  email              String              @unique
+  phone              String              @unique
+  name               String
+  age                Int?
+  sex                String?
+  height             String?
+  weight             Decimal?
+  subscriptionStatus SubscriptionStatus?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  Subscription       Subscription[]
+  Card               Card[]
+  Transaction        Transaction[]
+}
+
+model Card {
+  id           String        @id @default(dbgenerated("gen_random_uuid()"))
+  token        String        @unique
+  email        String
+  first6Digits String
+  last4Digits  String
+  issuer       String
+  type         String
+  processor    String
+  isDeleted    Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  Transaction  Transaction[]
+}
+
+model Transaction {
   id        String   @id @default(dbgenerated("gen_random_uuid()"))
-  email     String   @unique
-  phone     String   @unique
-  name      String
-  age       Int?
-  sex       String?
-  height    String?
-  weight    Decimal?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  reference String   @unique @default(dbgenerated("gen_random_uuid()"))
+  status    String
+  amount    Decimal
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Card      Card     @relation(fields: [cardId], references: [id])
+  cardId    String
+}
+
+model Subscription {
+  id            String             @id @default(dbgenerated("gen_random_uuid()"))
+  userId        String
+  user          User               @relation(fields: [userId], references: [id])
+  transactionId String
+  status        SubscriptionStatus
+  startDate     DateTime           @default(now())
+  endDate       DateTime
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
 }
