@@ -1,6 +1,6 @@
 import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
 import { AppRepo } from './app.repo';
@@ -14,21 +14,16 @@ export class AppService {
   ) {}
 
   async getData() {
-    console.log('entered service');
-    const existing = await this.cacheManager.get<{ name: string }>('test_data');
-    if (existing) return existing;
+    await this.cacheManager.set('key', 'val');
+    await this.cacheManager.get('key');
 
-    // await this.messaging.send({
-    //   action: 'NOTIFICATION',
-    //   body: {
-    //     templateId: 'otp',
-    //     templateData: { value: '12345' },
-    //   },
-    // });
-
-    Logger.log('came here');
-    await this.cacheManager.set('test_data', { name: 'festus' }, 30000);
-    Logger.log('repo data :: ', this.repo.findAll().elseReturn([]));
+    await this.messaging.send({
+      action: 'NOTIFICATION',
+      body: {
+        templateId: 'otp',
+        templateData: { value: '12345' },
+      },
+    });
 
     return { name: 'jack' };
   }

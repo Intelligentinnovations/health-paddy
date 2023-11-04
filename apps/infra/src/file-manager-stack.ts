@@ -5,13 +5,25 @@ import * as dynamoDb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3Notification from 'aws-cdk-lib/aws-s3-notifications';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 
-import { secrets } from './secrets';
+import { layerVersionParam, secrets } from './secrets';
 
 export class FileManagerStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    const appName = `${secrets.APP_NAME}-${secrets.ENV}`;
+
+    const dependencyLayer = lambda.LayerVersion.fromLayerVersionArn(
+      this,
+      'DependencyLayer',
+      ssm.StringParameter.valueForStringParameter(
+        this,
+        `/${appName}/${layerVersionParam}`
+      )
+    );
 
     const storageBucket = new s3.Bucket(this, 'FilesStorage');
 
@@ -64,6 +76,7 @@ export class FileManagerStack extends cdk.Stack {
         handler: 'main.handler',
         memorySize: 512,
         timeout: cdk.Duration.seconds(30),
+        layers: [dependencyLayer],
         environment: {
           BUCKET_NAME: storageBucket.bucketName,
           TABLE_NAME: filesTable.tableName,
@@ -89,9 +102,5 @@ export class FileManagerStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, 'Url', { value: uploaderUrl.url });
-    new cdk.CfnOutput(this, 'Domain', { value: distribution.domainName });
-    new cdk.CfnOutput(this, 'BucketName', { value: storageBucket.bucketName });
-    new cdk.CfnOutput(this, 'TableName', { value: filesTable.tableName });
-    new cdk.CfnOutput(this, 'KeypairId', { value: publicKey.publicKeyId });
   }
 }
