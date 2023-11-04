@@ -1,17 +1,24 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { addDays } from 'date-fns';
 
 import { GenericService } from '../handlers/general';
 import { SignupService } from '../handlers/signup/signup';
-import { State, User } from '../types';
+import { SubscriptionService } from '../handlers/subscription';
+import { sendWhatsAppText } from '../helpers';
+import { PaymentService } from '../services/paystack';
+import { State } from '../types';
 import { AppRepo } from './app.repo';
 
 @Injectable()
 export class AppService {
   constructor(
     private generalResponse: GenericService,
+    private subscriptionService: SubscriptionService,
+    private paymentService: PaymentService,
     private signup: SignupService,
     private repo: AppRepo,
     @Inject(MESSAGE_MANAGER) private messaging: Messaging,
@@ -29,7 +36,8 @@ export class AppService {
       ) {
         const sender = body.entry[0].changes[0].value.messages[0].from;
         const msg_body = body.entry[0].changes[0].value.messages[0].text.body;
-        const profileName = body.entry[0].changes[0].value.contacts[0].profile.name;
+        const profileName =
+          body.entry[0].changes[0].value.contacts[0].profile.name;
 
         const user = await this.repo.findUserByPhoneNumber(sender);
         const cache = await this.cacheManager.get<string>(sender);
@@ -50,31 +58,108 @@ export class AppService {
         }
 
         if (!state || ['hi', 'hey'].includes(msg_body.toLowerCase())) {
-          const result = await this.generalResponse.handleNoState({ phoneNumber: sender, profileName });
+          const result = await this.generalResponse.handleNoState({
+            phoneNumber: sender,
+            profileName,
+          });
           return result;
         }
 
         if (state.stage === 'landing') {
-          const result = await this.signup.handleLandingPageSelection({ input: msg_body, phoneNumber: sender, profileName, state })
-          return result
+          const result = await this.generalResponse.handleLandingPageSelection({
+            input: msg_body,
+            phoneNumber: sender,
+            profileName,
+            state,
+          });
+          return result;
         }
         if (state.stage === 'privacy') {
-          const result = await this.signup.handlePrivacyResponse({ input: msg_body, phoneNumber: sender, profileName })
-          return result
+          const result = await this.generalResponse.handlePrivacyResponse({
+            input: msg_body,
+            phoneNumber: sender,
+            profileName,
+          });
+          return result;
         }
         if (state.stage.startsWith('signup')) {
-          const result = await this.signup.handleSignup({ input: msg_body, phoneNumber: sender, state, profileName })
-          return result
+          const result = await this.signup.handleSignup({
+            input: msg_body,
+            phoneNumber: sender,
+            state,
+            profileName,
+          });
+          return result;
+        }
+        if (state.stage.startsWith('subscription')) {
+          const result = await this.subscriptionService.handleSubscription({
+            input: msg_body,
+            phoneNumber: sender,
+            state,
+            profileName,
+          });
+          return result;
         }
 
-        this.generalResponse.handleNoState({ phoneNumber: sender, profileName })
-
+        this.generalResponse.handleNoState({
+          phoneNumber: sender,
+          profileName,
+        });
       }
     } else {
       return {
-        status: 'not-found'
-      }
+        status: 'not-found',
+      };
     }
+  }
 
+  async handlePaystackEvents(reference: string) {
+    const verification = await this.paymentService.verifyPaystackTransaction(
+      reference
+    );
+    const { status, data } = verification;
+
+    const transactionExist = await this.repo.findTransactionByReference(
+      reference
+    );
+    if (transactionExist) return;
+    const {
+      status: transactionStatus,
+      amount: amountInKobo,
+      authorization,
+      customer: { email },
+    } = data.data;
+    const { phoneNumber } = data.data.metadata.custom_fields[0];
+
+    const {
+      bin: first6Digits,
+      last4: last4Digits,
+      brand: issuer,
+      authorization_code: token,
+    } = authorization;
+
+    const amountInNaira = amountInKobo / 100;
+
+    if (status && transactionStatus === 'success') {
+      const user = await this.repo.findUserByPhoneNumber(phoneNumber);
+      const currentDate = new Date();
+      const endDate = addDays(currentDate, 3);
+      await this.repo.createSubscription({
+        token,
+        type: '',
+        issuer,
+        userId: user!.id,
+        processor: 'paystack',
+        date: new Date(),
+        last4Digits,
+        first6Digits,
+        email,
+        endDate,
+        status: 'ACTIVE',
+        amount: `${amountInNaira}`,
+        reference,
+      });
+      sendWhatsAppText({ phoneNumber, message: `Your Card has been added 🎉, your 3-day trial has officially begun. Get ready to start your wellness journey!" 💪🏋️‍♀️` })
+    }
   }
 }

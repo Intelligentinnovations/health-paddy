@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CustomRes } from '@backend-template/helpers';
-import { Body, Controller, Get, Post, Request, Response } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Request, Response } from '@nestjs/common';
 import axios from 'axios'
 import { FastifyReply } from 'fastify';
 
@@ -34,5 +35,12 @@ export class AppController {
     res.status(200).send("ok")
     return CustomRes.success('ok')
 
+  }
+
+  @Get('paystack')
+  async paystack(@Response() res: FastifyReply, @Query('reference') reference: string) {    
+    await this.appService.handlePaystackEvents(reference)
+    res.status(200).send("ok")
+    return CustomRes.success('ok')
   }
 }
