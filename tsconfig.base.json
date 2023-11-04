@@ -17,6 +17,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@backend-template/authorizer": ["libs/authorizer/src/index.ts"],
       "@backend-template/cache": ["libs/cache/src/index.ts"],
       "@backend-template/database": ["libs/database/src/index.ts"],
       "@backend-template/helpers": ["libs/helpers/src/index.ts"],
@@ -24,7 +25,6 @@
       "@backend-template/microservice": ["libs/microservice/src/index.ts"],
       "@backend-template/secrets": ["libs/secrets/src/index.ts"],
       "@backend-template/server": ["libs/server/src/index.ts"],
-      "@backend-template/token": ["libs/token/src/index.ts"],
       "@backend-template/types": ["libs/types/src/index.ts"],
       "@backend-template/utils": ["libs/utils/src/index.ts"]
     }
