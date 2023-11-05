@@ -3,11 +3,13 @@ import { Global, Module } from '@nestjs/common';
 
 import { SecretsModule } from '../secrets/secrets.module';
 import { SecretsService } from '../secrets/secrets.service';
+import { HelperService } from './helper.service';
 
 @Global()
 @Module({
   imports: [SecretsModule],
   providers: [
+    HelperService,
     {
       provide: CognitoService,
       useFactory: (secrets: SecretsService) => {
@@ -16,6 +18,6 @@ import { SecretsService } from '../secrets/secrets.service';
       inject: [SecretsService],
     },
   ],
-  exports: [CognitoService],
+  exports: [CognitoService, HelperService],
 })
 export class LibrariesModule {}
