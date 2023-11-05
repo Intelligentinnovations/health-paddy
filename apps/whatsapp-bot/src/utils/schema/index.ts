@@ -1,1 +1,1 @@
-export { LoginData, LoginSchema } from './auth.schema';
+export { EmailData,EmailSchema } from './auth.schema';

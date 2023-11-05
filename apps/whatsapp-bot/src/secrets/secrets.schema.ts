@@ -11,7 +11,7 @@ export const schema = {
   WHATSAPP_TOKEN: z.string(),
   PHONE_NUMBER_ID: z.string(),
   SUBSCRIPTION_AMOUNT: z.coerce.number(),
-  PAYSTACK_WEBHOOK: z.string()
+  PAYSTACK_WEBHOOK: z.string(),
+  THIRTY_MINUTES_IN_SECONDS: z.coerce.number().optional()
 } as const;
-
 export const objectSchema = z.object(schema);

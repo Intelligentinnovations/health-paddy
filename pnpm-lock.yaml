@@ -80,6 +80,9 @@ dependencies:
   luxon:
     specifier: ^3.4.3
     version: 3.4.3
+  node-cron:
+    specifier: ^3.0.2
+    version: 3.0.2
   pg:
     specifier: ^8.11.3
     version: 8.11.3
@@ -199,6 +202,9 @@ devDependencies:
   '@types/node':
     specifier: ~18.7.1
     version: 18.7.1
+  '@types/node-cron':
+    specifier: ^3.0.10
+    version: 3.0.10
   '@types/pg':
     specifier: ^8.10.5
     version: 8.10.5
@@ -5688,6 +5694,10 @@ packages:
     resolution: {integrity: sha512-AuHIyzR5Hea7ij0P9q7vx7xu4z0C28ucwjAZC0ja7JhINyCnOw8/DnvAPQQ9TfOlCtZAmCERKQX9+o1mgQhuOQ==}
     dev: false
 
+  /@types/node-cron@3.0.10:
+    resolution: {integrity: sha512-8thdLSpV7na8+bsmiyMH/KKQWOBg4WmoLInlGxWz7JJn8Mie+53QWaygSlc7f/AsMsCB5bBTVjoueAU6tRutTw==}
+    dev: true
+
   /@types/node-forge@1.3.8:
     resolution: {integrity: sha512-vGXshY9vim9CJjrpcS5raqSjEfKlJcWy2HNdgUasR66fAnVEYarrf1ULV4nfvpC1nZq/moA9qyqBcu83x+Jlrg==}
     dependencies:
@@ -10320,6 +10330,13 @@ packages:
   /node-addon-api@3.2.1:
     resolution: {integrity: sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A==}
 
+  /node-cron@3.0.2:
+    resolution: {integrity: sha512-iP8l0yGlNpE0e6q1o185yOApANRe47UPbLf4YxfbiNHt/RU5eBcGB/e0oudruheSf+LQeDMezqC5BVAb5wwRcQ==}
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      uuid: 8.3.2
+    dev: false
+
   /node-fetch@2.6.12:
     resolution: {integrity: sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==}
     engines: {node: 4.x || >=6.0.0}
@@ -12839,7 +12856,6 @@ packages:
   /uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
-    dev: true
 
   /uuid@9.0.0:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
