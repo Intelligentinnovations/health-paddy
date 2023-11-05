@@ -49,7 +49,7 @@ model Transaction {
   user      User     @relation(fields: [userId], references: [id])
   reference String   @unique @default(dbgenerated("gen_random_uuid()"))
   status    String
-  amount    Decimal
+  amount    Decimal  @db.Decimal(9, 2)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Card      Card     @relation(fields: [cardId], references: [id])
@@ -62,13 +62,14 @@ model Subscription {
   user          User               @relation(fields: [userId], references: [id])
   transactionId String
   status        SubscriptionStatus
-  startDate     DateTime           @default(now())
-  endDate       DateTime
+  startDate     DateTime           @default(now()) @db.Date
+  endDate       DateTime           @db.Date
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
 }
 
 enum SubscriptionStatus {
-  ACTIVE
-  EXPIRED
+  active
+  expired
+  canceled
 }

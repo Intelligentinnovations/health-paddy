@@ -10,7 +10,6 @@ export interface State {
 export interface SubscriptionPayload {
     userId: string,
     reference: string,
-    status: SubscriptionStatus,
     token: string,
     email: string,
     first6Digits: string,
@@ -20,5 +19,7 @@ export interface SubscriptionPayload {
     processor: string,
     date: Date,
     endDate: Date,
-    amount: string
+    amount: string,
+    subscriptionstatus: SubscriptionStatus,
+    transactionStatus: string
 }

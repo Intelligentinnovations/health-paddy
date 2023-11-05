@@ -66,44 +66,41 @@ export class AppService {
         }
 
         if (state.stage === 'landing') {
-          const result = await this.generalResponse.handleLandingPageSelection({
+          return this.generalResponse.handleLandingPageSelection({
             input: msg_body,
             phoneNumber: sender,
             profileName,
             state,
           });
-          return result;
         }
         if (state.stage === 'privacy') {
-          const result = await this.generalResponse.handlePrivacyResponse({
+          return this.generalResponse.handlePrivacyResponse({
             input: msg_body,
             phoneNumber: sender,
             profileName,
           });
-          return result;
         }
         if (state.stage.startsWith('signup')) {
-          const result = await this.signup.handleSignup({
+          return this.signup.handleSignup({
             input: msg_body,
             phoneNumber: sender,
             state,
             profileName,
           });
-          return result;
         }
         if (state.stage.startsWith('subscription')) {
-          const result = await this.subscriptionService.handleSubscription({
+          return this.subscriptionService.handleSubscription({
             input: msg_body,
             phoneNumber: sender,
             state,
             profileName,
           });
-          return result;
         }
 
         this.generalResponse.handleNoState({
           phoneNumber: sender,
           profileName,
+          customHeader: 'I could not understand your request, lets start fresh again'
         });
       }
     } else {
@@ -155,7 +152,8 @@ export class AppService {
         first6Digits,
         email,
         endDate,
-        status: 'ACTIVE',
+        subscriptionstatus: 'active',
+        transactionStatus,
         amount: `${amountInNaira}`,
         reference,
       });

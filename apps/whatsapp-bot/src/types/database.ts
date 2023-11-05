@@ -5,8 +5,9 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export const SubscriptionStatus = {
-  ACTIVE: 'ACTIVE',
-  EXPIRED: 'EXPIRED',
+  active: 'active',
+  expired: 'expired',
+  canceled: 'canceled',
 } as const;
 export type SubscriptionStatus =
   typeof SubscriptionStatus[keyof typeof SubscriptionStatus];
