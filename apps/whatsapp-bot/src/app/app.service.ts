@@ -6,6 +6,7 @@ import { Cache } from 'cache-manager';
 import { addDays } from 'date-fns';
 
 import { GenericService } from '../handlers/general';
+import { CreateMealPlanService } from '../handlers/meal-plan';
 import { SignupService } from '../handlers/signup/signup';
 import { SubscriptionService } from '../handlers/subscription';
 import { sendWhatsAppText } from '../helpers';
@@ -20,6 +21,7 @@ export class AppService {
     private subscriptionService: SubscriptionService,
     private paymentService: PaymentService,
     private signup: SignupService,
+    private createMealPlan: CreateMealPlanService,
     private repo: AppRepo,
     @Inject(MESSAGE_MANAGER) private messaging: Messaging,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
@@ -90,6 +92,14 @@ export class AppService {
         }
         if (state.stage.startsWith('subscription')) {
           return this.subscriptionService.handleSubscription({
+            input: msg_body,
+            phoneNumber: sender,
+            state,
+            profileName,
+          });
+        }
+        if (state.stage.startsWith('create-meal-plan')) {
+          return this.createMealPlan.handleCreateMealPlan({
             input: msg_body,
             phoneNumber: sender,
             state,
