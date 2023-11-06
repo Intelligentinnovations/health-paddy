@@ -1,3 +1,4 @@
+import { CognitoService } from '@backend-template/authorizer';
 import { DynamoService, KyselyService } from '@backend-template/database';
 import { MESSAGE_MANAGER, Sns } from '@backend-template/messaging';
 import { Global, Module } from '@nestjs/common';
@@ -24,6 +25,13 @@ import { SecretsService } from '../secrets/secrets.service';
       },
     },
     { provide: MESSAGE_MANAGER, useClass: Sns },
+    {
+      provide: CognitoService,
+      useFactory: (secrets: SecretsService) => {
+        return new CognitoService(secrets.get('AWS_REGION'));
+      },
+      inject: [SecretsService],
+    },
   ],
   exports: [KyselyService, DynamoService, MESSAGE_MANAGER],
 })

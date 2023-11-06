@@ -2,7 +2,7 @@
   "app": "node dist/apps/infra/main.js",
   "watch": {
     "include": [
-      "**"
+      "dist/apps/**"
     ],
     "exclude": [
       "README.md",
