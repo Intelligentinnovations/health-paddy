@@ -7,6 +7,7 @@ import { AppRepo } from './app/app.repo';
 import { AppService } from './app/app.service';
 import { CronService } from './cron/subscription';
 import { GenericService, SignupService, SubscriptionService } from './handlers';
+import { CreateMealPlanService } from './handlers/meal-plan';
 import { LibrariesModule } from './libraries/libraries.module';
 import { SecretsModule } from './secrets/secrets.module';
 import { SecretsService } from './secrets/secrets.service';
@@ -29,6 +30,15 @@ import { PaymentService } from './services/paystack';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, AppRepo, GenericService, SignupService, SubscriptionService, PaymentService, CronService],
+  providers: [
+    AppService,
+    AppRepo,
+    GenericService,
+    SignupService,
+    SubscriptionService,
+    PaymentService,
+    CreateMealPlanService,
+    CronService
+  ],
 })
 export class AppModule { }

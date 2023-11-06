@@ -60,8 +60,8 @@ export class GenericService {
         break;
       case CREATE_MEAL_PLAN:
         if (state.user?.subscriptionStatus === 'active') return this.handlePaymentNotification({ phoneNumber })
-        //  create meal plan here
-        sendWhatsAppText({ message: 'Coming soon', phoneNumber })
+        await this.sendTextAndSetCache({ message: `Hi, ${state.user?.name} I'd love to chat with you and ask a few questions to help create your personalized meal plan. 😊`, phoneNumber, stage: 'create-meal-plan/age' })
+        sendWhatsAppText({ message: 'Please tell me your age', phoneNumber })
         break;
 
       case SUBSCRIPTION:
