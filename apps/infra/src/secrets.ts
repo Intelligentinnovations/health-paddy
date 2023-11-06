@@ -10,6 +10,7 @@ const secretsSchema = {
 };
 
 export let secrets: z.infer<ZodObject<typeof secretsSchema>>;
+export const layerVersionParam = 'layer/version';
 
 export async function getSecrets() {
   const fetchedSecrets = await loadSecrets(secretsSchema, []);

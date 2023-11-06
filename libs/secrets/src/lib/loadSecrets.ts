@@ -10,7 +10,7 @@ let secretClient: SecretsManagerClient;
 
 export async function loadSecrets<
   TS extends ZodRawShape = Record<string, ZodType>
->(schema: TS, secretNames: string[] = []) {
+>(schema: TS, secretNames: Array<string | undefined> = []) {
   const secrets: Record<string, unknown> = {};
   if (!secretClient) {
     secretClient = new SecretsManagerClient({

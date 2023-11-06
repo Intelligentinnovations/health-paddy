@@ -22,16 +22,16 @@ export const UploadFileSchema = z.object({
   ]),
 });
 
-export const GenerateSignedSchema = z.object({
+export const GenerateSignedUrlSchema = z.object({
   action: z.enum(['generateSignedUrl', 'generateSignedCookie']),
   url: z.string(),
 });
 
 export const FileManagerSchema = z.union([
   UploadFileSchema,
-  GenerateSignedSchema,
+  GenerateSignedUrlSchema,
 ]);
 
 export type UploadFileData = z.infer<typeof UploadFileSchema>;
-export type GenerateSignedUrlData = z.infer<typeof GenerateSignedSchema>;
+export type GenerateSignedUrlData = z.infer<typeof GenerateSignedUrlSchema>;
 export type FileManagerData = z.infer<typeof FileManagerSchema>;

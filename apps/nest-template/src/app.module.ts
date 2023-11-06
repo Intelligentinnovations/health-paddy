@@ -1,5 +1,8 @@
+import { AuthenticatedGuard } from '@backend-template/authorizer';
+import { CacheInterceptor } from '@backend-template/cache';
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { redisStore } from 'cache-manager-redis-yet';
 
 import { AppController } from './app/app.controller';
@@ -25,6 +28,11 @@ import { SecretsService } from './secrets/secrets.service';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, AppRepo],
+  providers: [
+    AppService,
+    AppRepo,
+    { provide: APP_GUARD, useClass: AuthenticatedGuard },
+    { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
+  ],
 })
 export class AppModule {}

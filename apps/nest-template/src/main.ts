@@ -10,17 +10,17 @@ import { firstValueFrom, ReplaySubject } from 'rxjs';
 
 import { AppModule } from './app.module';
 
-const microserviceSubject = new ReplaySubject<AwsTransporter>();
-awsBootstrap(AppModule).then((transporter) =>
-  microserviceSubject.next(transporter)
-);
-
 const serverSubject = new ReplaySubject<CallbackHandler>();
-httpBootstrap(AppModule, '').then((transporter) => {
+httpBootstrap(AppModule, 'v1').then((transporter) => {
   serverSubject.next(
     awsLambdaFastify(transporter.getHttpAdapter().getInstance())
   );
 });
+
+const microserviceSubject = new ReplaySubject<AwsTransporter>();
+awsBootstrap(AppModule).then((transporter) =>
+  microserviceSubject.next(transporter)
+);
 
 export const handler: Handler = async (
   event: APIGatewayProxyEvent | SQSEvent | SNSEvent,
@@ -31,6 +31,9 @@ export const handler: Handler = async (
 
   if ('requestContext' in event) {
     const server = await firstValueFrom(serverSubject);
+    const user = event.requestContext.authorizer?.jwt?.claims;
+    if (user) event.headers.user = JSON.stringify(user);
+
     return server(event, context, callback);
   } else {
     const transporter = await firstValueFrom(microserviceSubject);
