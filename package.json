@@ -7,7 +7,9 @@
     "whatsapp-bot": "nx serve whatsapp-bot",
     "build": "nx run-many --t build --exclude app-template",
     "build:dependencies": ". scripts/create-dependency-output.sh",
-    "deploy": "pnpm run build && cdk deploy --all --previous-parameters=false --asset-parallelism --outputs-file ./env.json --require-approval never"
+    "deploy": "pnpm run build && cdk deploy app api --previous-parameters=false --asset-parallelism --outputs-file ./env.json --require-approval never",
+    "deploy:dependencies": "cdk deploy dependency --require-approval never"
+
   },
   "private": true,
   "dependencies": {
@@ -18,11 +20,9 @@
     "@nestjs/microservices": "^10.2.7",
     "@nestjs/platform-express": "10.2.7",
     "@nestjs/platform-fastify": "10.2.7",
-    "aws-cdk-lib": "^2.102.0",
     "axios": "^1.6.0",
     "cache-manager": "^5.2.4",
     "cache-manager-redis-yet": "^4.1.2",
-    "constructs": "^10.3.0",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
@@ -32,7 +32,6 @@
     "jsonwebtoken": "^9.0.2",
     "kysely": "^0.26.3",
     "luxon": "^3.4.3",
-    "node-cron": "^3.0.2",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",

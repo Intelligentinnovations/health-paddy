@@ -19,6 +19,9 @@ model User {
   height             String?
   weight             Decimal?
   subscriptionStatus SubscriptionStatus?
+  activityLevel      String?
+  healthCondition    String?
+  hasUsedFreeTrial   Boolean             @default(false)
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   Subscription       Subscription[]

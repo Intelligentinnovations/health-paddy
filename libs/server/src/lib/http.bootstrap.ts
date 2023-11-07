@@ -13,6 +13,9 @@ export async function httpBootstrap(module: unknown, globalPrefix: string) {
   );
 
   app.setGlobalPrefix(globalPrefix);
+
+  console.log({globalPrefix});
+  
   app.useGlobalFilters(new CustomResFilter());
   app.useGlobalInterceptors(new DefaultInterceptor());
 

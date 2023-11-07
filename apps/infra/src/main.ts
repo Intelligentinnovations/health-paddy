@@ -26,10 +26,10 @@ getSecrets().then(() => {
     env,
   });
 
-  new AuthStack(app, 'auth', {
-    stackName: `${appName}-auth`,
-    env,
-  });
+  // new AuthStack(app, 'auth', {
+  //   stackName: `${appName}-auth`,
+  //   env,
+  // });
 
   new AppStack(app, 'app', {
     stackName: `${appName}-app`,
@@ -41,13 +41,13 @@ getSecrets().then(() => {
     env,
   });
 
-  new FileManagerStack(app, 'filemanager', {
-    stackName: `${appName}-file`,
-    env,
-  });
+  // new FileManagerStack(app, 'filemanager', {
+  //   stackName: `${appName}-file`,
+  //   env,
+  // });
 
-  new NotificationStack(app, 'notification', {
-    stackName: `${appName}-notification`,
-    env,
-  });
+  // new NotificationStack(app, 'notification', {
+  //   stackName: `${appName}-notification`,
+  //   env,
+  // });
 });

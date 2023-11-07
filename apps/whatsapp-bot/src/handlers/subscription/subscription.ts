@@ -5,7 +5,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
 import { AppRepo } from '../../app/app.repo';
-import { formatCurrency } from '../../helpers';
+import { capitalizeString, formatCurrency, formatDate } from '../../helpers';
 import { SecretsService } from '../../secrets/secrets.service';
 import { PaymentService } from '../../services/paystack';
 import { State, User } from '../../types';
@@ -51,7 +51,7 @@ export class SubscriptionService {
           });
           const { data, status } = paymentLink;
           if (status) {
-            const message = `Here is the link ${data.data.authorization_url} to begin, your add your card and start enjoying the 3-day trial period. Please complete the payment process to get started with the trial.`;
+            const message = `Please follow the link ${data.data.authorization_url} to add your card and start enjoying the 3-day trial period.`;
             return this.helper.sendTextAndSetCache({
               phoneNumber,
               message,
@@ -71,20 +71,22 @@ export class SubscriptionService {
           const subscription = await this.repo.fetchSubscription(
             userId as unknown as string
           );
+
           const message = `Subscription Status\n
 Dear ${user?.name}
 Here's a quick update on your subscription:\n
 Amount: ${formatCurrency(+subscription!.amount)}
-Status: ${subscription?.status.toLocaleLowerCase()}
-${subscription?.status === 'active' ? 'Next billing date' : 'Expires on'}: ${subscription?.endDate.toISOString().split('T')[0]}
+Status: ${capitalizeString(subscription!.subscriptionStatus)}
+${subscription?.status === 'active' ? 'Next billing date' : 'Expires on'}: ${formatDate(subscription!.endDate)}
 Billed with: ${subscription?.issuer} ****${subscription?.last4Digits}\n         
 If you have any questions, contact our support team.
 Best regards`;
-          return this.helper.sendTextAndSetCache({
+          await this.helper.sendTextAndSetCache({
             message,
             phoneNumber,
             stage: 'landing',
           });
+          return this.helper.handleNoState({ phoneNumber, profileName: user!.name, customHeader: `Hi, how else can i be of service to you?` })
         }
 
         if (input == DECLINE) {
