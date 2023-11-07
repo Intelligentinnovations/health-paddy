@@ -5,9 +5,9 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { AppController } from './app/app.controller';
 import { AppRepo } from './app/app.repo';
 import { AppService } from './app/app.service';
-import { CronService } from './cron/subscription';
+// import { CronService } from './cron/subscription';
 import { GenericService, SignupService, SubscriptionService } from './handlers';
-import { CreateMealPlanService } from './handlers/meal-plan';
+import { CreateMealPlanService, ViewMealPlanService } from './handlers/meal-plan';
 import { LibrariesModule } from './libraries/libraries.module';
 import { SecretsModule } from './secrets/secrets.module';
 import { SecretsService } from './secrets/secrets.service';
@@ -20,8 +20,11 @@ import { PaymentService } from './services/paystack';
     SecretsModule,
     CacheModule.registerAsync({
       useFactory: async (secrets: SecretsService) => {
+        console.log(secrets.get('REDIS_URL'));
+        
         return {
           isGlobal: true,
+          ttl: secrets.get('THIRTY_MINUTES_IN_SECONDS'),
           store: await redisStore({ url: secrets.get('REDIS_URL') }),
         };
       },
@@ -38,7 +41,8 @@ import { PaymentService } from './services/paystack';
     SubscriptionService,
     PaymentService,
     CreateMealPlanService,
-    CronService
+    ViewMealPlanService,
+    // CronService
   ],
 })
 export class AppModule { }

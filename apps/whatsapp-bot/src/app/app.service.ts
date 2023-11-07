@@ -6,7 +6,7 @@ import { Cache } from 'cache-manager';
 import { addDays } from 'date-fns';
 
 import { GenericService } from '../handlers/general';
-import { CreateMealPlanService } from '../handlers/meal-plan';
+import { CreateMealPlanService, ViewMealPlanService } from '../handlers/meal-plan';
 import { SignupService } from '../handlers/signup/signup';
 import { SubscriptionService } from '../handlers/subscription';
 import { sendWhatsAppText } from '../helpers';
@@ -22,6 +22,7 @@ export class AppService {
     private paymentService: PaymentService,
     private signup: SignupService,
     private createMealPlan: CreateMealPlanService,
+    private viewMealPlan: ViewMealPlanService,
     private repo: AppRepo,
     @Inject(MESSAGE_MANAGER) private messaging: Messaging,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
@@ -36,6 +37,7 @@ export class AppService {
         body.entry[0].changes[0].value.messages &&
         body.entry[0].changes[0].value.messages[0]
       ) {
+
         const sender = body.entry[0].changes[0].value.messages[0].from;
         const msg_body = body.entry[0].changes[0].value.messages[0].text.body;
         const profileName =
@@ -107,6 +109,15 @@ export class AppService {
           });
         }
 
+        if (state.stage.startsWith('view-meal-plan')) {
+          return this.viewMealPlan.handleViewMealPlan({
+            input: msg_body,
+            phoneNumber: sender,
+            state,
+            profileName,
+          });
+        }
+
         this.generalResponse.handleNoState({
           phoneNumber: sender,
           profileName,
@@ -167,7 +178,9 @@ export class AppService {
         amount: `${amountInNaira}`,
         reference,
       });
-      sendWhatsAppText({ phoneNumber, message: `Your Card has been added 🎉, your 3-day trial has officially begun. Get ready to start your wellness journey!" 💪🏋️‍♀️` })
+      this.repo.updateUser({ payload: { hasUsedFreeTrial: true }, userId: user!.id })
+      await sendWhatsAppText({ phoneNumber, message: `Your card has been added 🎉, your 3-day trial has officially begun. Get ready to start your wellness journey!" 💪` })
+      await this.generalResponse.handleNoState({ phoneNumber, profileName: user!.name, customHeader: 'You now have access to all our service' })
     }
   }
 }

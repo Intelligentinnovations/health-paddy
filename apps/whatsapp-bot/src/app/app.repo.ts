@@ -1,7 +1,7 @@
 import { KyselyService } from '@backend-template/database';
 import { Injectable } from '@nestjs/common';
 
-import { DB, SubscriptionPayload, SubscriptionStatus, UserPayload } from '../types';
+import { DB, SubscriptionPayload, SubscriptionStatus, User, UserPayload } from '../types';
 
 @Injectable()
 export class AppRepo {
@@ -103,9 +103,10 @@ export class AppRepo {
   async fetchSubscription(userId: string) {
     return await this.client
       .selectFrom('Subscription')
+      .select(['Subscription.status as subscriptionStatus'])
       .where('Subscription.userId', '=', userId)
       .where((eb) => eb.or([
-        eb('status', '=', 'active'),
+        eb('Subscription.status', '=', 'active'),
       ])).orderBy('Subscription.createdAt desc')
       .innerJoin('Transaction', 'Transaction.id', 'Subscription.transactionId')
       .selectAll().innerJoin('Card', 'Card.id', 'Transaction.cardId').selectAll()
@@ -134,5 +135,9 @@ export class AppRepo {
 
   async fetchUserCards(userId: string) {
     return await this.client.selectFrom('Card').selectAll().where('userId', '=', userId).execute()
+  }
+
+  async updateUser({ payload, userId }: { payload: any, userId: string }) {
+    return await this.client.updateTable('User').set(payload).where('id', '=', userId).executeTakeFirst()
   }
 }

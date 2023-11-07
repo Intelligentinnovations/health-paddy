@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { addMonths } from 'date-fns';
-import * as cron from 'node-cron';
 
+// import * as cron from 'node-cron';
 import { AppRepo } from '../app/app.repo';
 import { PaymentService } from '../services/paystack';
 
@@ -11,8 +11,8 @@ export class CronService {
     this.scheduleCronJob();
   }
 
-  private scheduleCronJob() {
-    cron.schedule('0 10 * * *', async () => {
+   public async scheduleCronJob() {
+    // cron.schedule('0 10 * * *', async () => {
       try {
         const dueSubscriptions = await this.repo.fetchDueSubscription();
 
@@ -74,6 +74,6 @@ export class CronService {
       } catch (error) {
         console.log(error);
       }
-    });
+    // });
   }
 }

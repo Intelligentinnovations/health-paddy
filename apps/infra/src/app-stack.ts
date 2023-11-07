@@ -26,7 +26,7 @@ export class AppStack extends cdk.Stack {
     const topic = new sns.Topic(this, 'AppTopic');
 
     const appFunction = new lambda.Function(this, 'AppFunction', {
-      code: lambda.Code.fromAsset('dist/apps/nest-template'),
+      code: lambda.Code.fromAsset('dist/apps/whatsapp-bot'),
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: 'main.handler',
       layers: [dependencyLayer],

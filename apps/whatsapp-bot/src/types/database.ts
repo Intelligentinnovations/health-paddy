@@ -55,6 +55,9 @@ export type User = {
   height: string | null;
   weight: string | null;
   subscriptionStatus: SubscriptionStatus | null;
+  activityLevel: string | null;
+  healthCondition: string | null;
+  hasUsedFreeTrial: Generated<boolean>;
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
 };

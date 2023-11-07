@@ -16,7 +16,7 @@ awsBootstrap(AppModule).then((transporter) =>
 );
 
 const serverSubject = new ReplaySubject<CallbackHandler>();
-httpBootstrap(AppModule, 'whatsapp').then((transporter) => {
+httpBootstrap(AppModule, 'v1/whatsapp').then((transporter) => {
   serverSubject.next(
     awsLambdaFastify(transporter.getHttpAdapter().getInstance())
   );
