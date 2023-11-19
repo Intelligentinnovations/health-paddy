@@ -8,12 +8,7 @@ const { DB } = require('../types')
 async function seed() {
   const dialect = new PostgresDialect({
     pool: new Pool({
-      database: 'health_paddy',
-      host: 'localhost',
-      user: 'postgres',
-      password: 'postgres',
-      port: 5432,
-      max: 10,
+      connectionString: process.env.DATABASE_URL
     })
   })
 
