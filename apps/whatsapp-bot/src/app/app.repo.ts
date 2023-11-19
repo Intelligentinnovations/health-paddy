@@ -1,11 +1,14 @@
 import { KyselyService } from '@backend-template/database';
 import { Injectable } from '@nestjs/common';
+import { sql } from 'kysely';
 
-import { DB, SubscriptionPayload, SubscriptionStatus, User, UserPayload } from '../types';
+import { DB, MealPlan, SubscriptionPayload, SubscriptionStatus, UserPayload } from '../types';
 
 @Injectable()
 export class AppRepo {
-  constructor(private client: KyselyService<DB>) { }
+  constructor(
+    private client: KyselyService<DB>
+  ) { }
 
   async findUserByPhoneNumber(phoneNumber: string) {
 
@@ -139,5 +142,34 @@ export class AppRepo {
 
   async updateUser({ payload, userId }: { payload: any, userId: string }) {
     return await this.client.updateTable('User').set(payload).where('id', '=', userId).executeTakeFirst()
+  }
+
+  async fetchCalorieRange() {
+    return await this.client.selectFrom('CalorieNeed').selectAll().execute()
+  }
+
+  async fetchMealPlanByCalorieNeedId({ calorieNeedId, limit }: { calorieNeedId: string, limit: number }) {
+    return await sql<MealPlan>`WITH RankedDays AS (
+      SELECT *, 
+        ROW_NUMBER() OVER (ORDER BY 
+          CASE 
+            WHEN day = 'Sunday' THEN 1
+            WHEN day = 'Monday' THEN 2
+            WHEN day = 'Tuesday' THEN 3
+            WHEN day = 'Wednesday' THEN 4
+            WHEN day = 'Thursday' THEN 5
+            WHEN day = 'Friday' THEN 6
+            WHEN day = 'Saturday' THEN 7
+            ELSE 8
+          END
+        ) AS rnk
+      FROM "MealPlan"
+      WHERE "calorieNeedId" = ${calorieNeedId}
+    )
+    SELECT * FROM RankedDays
+    ORDER BY rnk, day
+    LIMIT ${limit};
+    `.execute(this.client)
+
   }
 }

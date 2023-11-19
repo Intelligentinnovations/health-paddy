@@ -11,6 +11,20 @@ export const SubscriptionStatus = {
 } as const;
 export type SubscriptionStatus =
   typeof SubscriptionStatus[keyof typeof SubscriptionStatus];
+export const FoodCategory = {
+  starch: 'starch',
+  fruit: 'fruit',
+  vegetable: 'vegetable',
+  milk: 'milk',
+  protein: 'protein',
+  fat_and_oil: 'fat_and_oil',
+  snack: 'snack',
+} as const;
+export type FoodCategory = typeof FoodCategory[keyof typeof FoodCategory];
+export type CalorieNeed = {
+  id: Generated<string>;
+  calories: number;
+};
 export type Card = {
   id: Generated<string>;
   token: string;
@@ -24,6 +38,29 @@ export type Card = {
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
   userId: string;
+};
+export type FoodItems = {
+  id: Generated<string>;
+  name: string;
+  calorie: number;
+  portion: string;
+  category: FoodCategory;
+  description: string | null;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Timestamp;
+};
+export type MealPlan = {
+  id: Generated<string>;
+  day: string;
+  breakfast: string;
+  breakfastCalories: number;
+  snack: string;
+  snackCalories: number;
+  lunch: string;
+  lunchCalories: number;
+  dinner: string;
+  dinnerCalories: number;
+  calorieNeedId: string;
 };
 export type Subscription = {
   id: Generated<string>;
@@ -57,12 +94,16 @@ export type User = {
   subscriptionStatus: SubscriptionStatus | null;
   activityLevel: string | null;
   healthCondition: string | null;
+  requiredCalorie: number | null;
   hasUsedFreeTrial: Generated<boolean>;
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
 };
 export type DB = {
+  CalorieNeed: CalorieNeed;
   Card: Card;
+  FoodItems: FoodItems;
+  MealPlan: MealPlan;
   Subscription: Subscription;
   Transaction: Transaction;
   User: User;

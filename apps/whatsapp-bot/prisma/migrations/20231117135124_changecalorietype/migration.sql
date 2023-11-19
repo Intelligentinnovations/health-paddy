@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "requiredCalorie" SET DATA TYPE DOUBLE PRECISION;

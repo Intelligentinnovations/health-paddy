@@ -19,9 +19,7 @@ import { PaymentService } from './services/paystack';
     LibrariesModule,
     SecretsModule,
     CacheModule.registerAsync({
-      useFactory: async (secrets: SecretsService) => {
-        console.log(secrets.get('REDIS_URL'));
-        
+      useFactory: async (secrets: SecretsService) => {        
         return {
           isGlobal: true,
           ttl: secrets.get('THIRTY_MINUTES_IN_SECONDS'),

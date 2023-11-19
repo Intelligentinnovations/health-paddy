@@ -6,9 +6,9 @@ import { Cache } from 'cache-manager';
 
 import { AppRepo } from '../../app/app.repo';
 import { SecretsService } from '../../secrets/secrets.service';
-import { PaymentService } from '../../services/paystack';
-import { State, User } from '../../types';
+import { User } from '../../types';
 import { GenericService } from '../general';
+
 
 @Injectable()
 export class ViewMealPlanService {
@@ -16,32 +16,22 @@ export class ViewMealPlanService {
     private repo: AppRepo,
     private helper: GenericService,
     private secrets: SecretsService,
-    private payment: PaymentService,
     @Inject(MESSAGE_MANAGER) private messaging: Messaging,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
   handleViewMealPlan = async ({
     phoneNumber,
-    profileName,
-    state,
-    input,
+    requiredCalorie,
+    user
+
   }: {
     phoneNumber: string;
-    state: State;
-    input: number;
-    profileName: string;
+    requiredCalorie: number
+    user: User
   }) => {
     try {
-      const { stage } = state;
-
-      if (stage === 'view-meal-plan') {
-        const message = `Coming soon`
-        return this.helper.sendTextAndSetCache({
-          message, phoneNumber, stage: 'view-plan', data: { age: input }
-        })
-      }
-
+      return this.helper.generateAndSendMealPlan({ requiredCalorie, user, phoneNumber })
     } catch (err) {
       console.log(err);
 

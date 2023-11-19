@@ -3,11 +3,15 @@ import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { DateTime } from 'luxon';
 
 import { AppRepo } from '../app/app.repo';
-import { sendWhatsAppText } from '../helpers';
+import { delay, sendWhatsAppText } from '../helpers';
 import { SecretsService } from '../secrets/secrets.service';
 import { State, User } from '../types';
+
+
+DateTime.local().setLocale('en-NG');
 
 @Injectable()
 export class GenericService {
@@ -39,13 +43,7 @@ export class GenericService {
       SUBSCRIPTION: '6'
     }
 
-    const protectedRoutes = {
-      CREATE_MEAL_PLAN: '2',
-      View_MEAL_PLAN: '3',
-      SWAP_MEAL_ITEMS: '4',
-      SUBSCRIPTION: '6'
-    }
-    const protectedSelection = Object.keys(protectedRoutes)
+    const protectedSelection = ['2', '3', '4', '6']
 
     if (!state.user && protectedSelection.includes(input)) {
       return this.handleNoState({
@@ -75,14 +73,25 @@ export class GenericService {
 
         if (state.user?.subscriptionStatus !== 'active') return this.handlePaymentNotification({ phoneNumber, user: state.user as User })
         await this.sendTextAndSetCache({ message: `Hi, ${state.user?.name} I'd love to chat with you and ask a few questions to help create your personalized meal plan. 😊`, phoneNumber, stage: 'create-meal-plan/age' })
+        await delay()
         await sendWhatsAppText({ message: 'Please tell me your age', phoneNumber })
         break;
+
+      case ROUTE.View_MEAL_PLAN:
+        if (!state.user?.activityLevel) {
+          return this.sendTextAndSetCache({ message: 'Please create a meal plan to proceed', phoneNumber, stage: 'landing' });
+        }
+
+        if (state.user?.subscriptionStatus !== 'active') {
+          return this.handlePaymentNotification({ phoneNumber, user: state.user as User })
+        }
+
+        return this.generateAndSendMealPlan({ phoneNumber, requiredCalorie: state.user.requiredCalorie!, user: state.user })
 
       case ROUTE.SUPPORT:
         return this.sendTextAndSetCache({
           message: `I apologize for any inconvenience you may have experienced. To log a complaint, please contact our support team at support@healthpaddy.com or call our helpline +xxxx . They will be able to assist you further and address your concerns.`, phoneNumber, stage: 'landing'
         })
-        break;
 
       case ROUTE.SUBSCRIPTION:
         if (state.user?.subscriptionStatus === 'active') {
@@ -92,8 +101,7 @@ export class GenericService {
 2. Cancel Subscription `, phoneNumber, stage: 'subscription-management'
           })
         }
-        sendWhatsAppText({ message: `😔😔 I'm sorry, but you don't currently have an active subscription. To enjoy all the benefits, please consider subscribing.`, phoneNumber })
-        this.handleNoState({ phoneNumber, profileName, customHeader: 'How else can i be of service?' })
+        this.handleNoState({ phoneNumber, profileName, customHeader: `😔😔 I'm sorry, but you don't currently have an active subscription. To enjoy all the benefits, please consider subscribing. How else can I be of service?` })
         break;
       default:
         return this.handleNoState({ phoneNumber, profileName, customHeader: 'I could not understand your your request, lets start again' })
@@ -176,6 +184,7 @@ By using our chat bot, you consent to the collection and use of your personal da
     const message = `Great! 🚀 Thanks for saying 'yes' to our privacy notice. Your data is in good hands! Please follow the prompt below to get signup`;
     if (input === '1') {
       await sendWhatsAppText({ message, phoneNumber })
+      await delay()
       sendWhatsAppText({ message: 'What is your name?', phoneNumber })
 
       await this.cacheManager.set(
@@ -194,7 +203,8 @@ By using our chat bot, you consent to the collection and use of your personal da
   }: {
     phoneNumber: string; user: User
   }) => {
-    const text = user.hasUsedFreeTrial ? 'Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.' : `Thank you for giving our service a try! We provide a 3-day trial period for first-time users to fully experience our offerings. Once the trial period ends, we kindly ask you to subscribe to one of our plans. To start your free trial, we'd appreciate it if you could add your payment card.`
+    const subscription = await this.repo.fetchSubscription(user.id! as unknown as string)
+    const text = subscription?.subscriptionStatus !== 'active' ? 'Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.' : `Thank you for giving our service a try! We provide a 3-day trial period for first-time users to fully experience our offerings. Once the trial period ends, we kindly ask you to subscribe to one of our plans. To start your free trial, we'd appreciate it if you could add your payment card.`
     const message = `Subscription alert\n
 ${text}
 
@@ -218,4 +228,48 @@ ${text}
       status: 'success',
     };
   };
+
+  async getClosestMealPlan(userCalorie: number) {
+    const mealPlans = await this.repo.fetchCalorieRange();
+
+    let closestMealPlan = mealPlans[0];
+    let minDifference = Math.abs(+userCalorie - closestMealPlan!.calories);
+
+    mealPlans.forEach(plan => {
+      const difference = Math.abs(+userCalorie - plan.calories!);
+      if (difference < minDifference) {
+        minDifference = difference;
+        closestMealPlan = plan;
+      }
+    });
+    return closestMealPlan
+  }
+
+  async generateAndSendMealPlan({ requiredCalorie, user, phoneNumber }: { requiredCalorie: number; user: User; phoneNumber: string }) {
+    const closestCalorie = await this.getClosestMealPlan(requiredCalorie)
+    const subscription = await this.repo.fetchSubscription(user.id as unknown as string)
+    const subscriptionEndDate = DateTime.fromISO(subscription!.endDate!.toISOString().split('T')[0]!);
+    const currentDate = DateTime.fromISO(new Date().toISOString().split('T')[0]!)
+    const remainingSubscriptionsDays = user.hasUsedFreeTrial ? subscriptionEndDate.diff(currentDate, 'days').toObject().days : this.secrets.get('FREE_PLAN_DAYS')
+    const numberOfMealPlanToFetch = remainingSubscriptionsDays! > 7 ? 7 : remainingSubscriptionsDays
+
+    if (remainingSubscriptionsDays! < 0) return this.handleNoState({ phoneNumber, profileName: user.name, customHeader: `You don't have any active subscription, please subscribe to continue enjoying our service` })
+
+    const mealPlan = (await this.repo.fetchMealPlanByCalorieNeedId({
+      calorieNeedId: closestCalorie!.id,
+      limit: numberOfMealPlanToFetch!
+    })).rows
+
+    for await (const plan of mealPlan) {
+      let message = `*${plan.day}*\n\n`;
+      message += `*Breakfast*: ${plan.breakfast}\n`;
+      message += `*Snack*: ${plan.snack}\n\n`;
+      message += `*Lunch*: ${plan.lunch}\n\n`;
+      message += `*Dinner*: ${plan.dinner}\n\n`;
+      message += `\nTotal Calories: ${plan.breakfastCalories + plan.snackCalories + plan.lunchCalories + plan.dinnerCalories}`;
+      this.sendTextAndSetCache({ message, phoneNumber, stage: 'view-plan' })
+      await delay()
+    }
+    if (!user.hasUsedFreeTrial) return this.repo.updateUser({ payload: { hasUsedFreeTrial: true }, userId: user!.id as unknown as string })
+  }
 }

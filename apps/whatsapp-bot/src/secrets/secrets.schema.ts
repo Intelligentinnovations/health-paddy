@@ -12,6 +12,7 @@ export const schema = {
   PHONE_NUMBER_ID: z.string(),
   SUBSCRIPTION_AMOUNT: z.coerce.number(),
   PAYSTACK_WEBHOOK: z.string(),
-  THIRTY_MINUTES_IN_SECONDS: z.coerce.number().optional()
+  THIRTY_MINUTES_IN_SECONDS: z.coerce.number().optional(),
+  FREE_PLAN_DAYS: z.coerce.number(),
 } as const;
 export const objectSchema = z.object(schema);
