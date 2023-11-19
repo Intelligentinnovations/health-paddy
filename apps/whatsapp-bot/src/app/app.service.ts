@@ -29,6 +29,7 @@ export class AppService {
   ) { }
 
   async handleIncomingMessage(body: any) {
+
     if (body.object) {
       if (
         body.entry &&
@@ -105,18 +106,16 @@ export class AppService {
             input: msg_body,
             phoneNumber: sender,
             state,
-            profileName,
           });
         }
 
-        if (state.stage.startsWith('view-meal-plan')) {
-          return this.viewMealPlan.handleViewMealPlan({
-            input: msg_body,
-            phoneNumber: sender,
-            state,
-            profileName,
-          });
-        }
+        // if (state.stage.startsWith('view-meal-plan')) {
+        //   return this.viewMealPlan.handleViewMealPlan({
+        //     phoneNumber: sender,
+        //     profileName,
+        //     requiredCalorie
+        //   });
+        // }
 
         this.generalResponse.handleNoState({
           phoneNumber: sender,
@@ -178,7 +177,6 @@ export class AppService {
         amount: `${amountInNaira}`,
         reference,
       });
-      this.repo.updateUser({ payload: { hasUsedFreeTrial: true }, userId: user!.id })
       await sendWhatsAppText({ phoneNumber, message: `Your card has been added 🎉, your 3-day trial has officially begun. Get ready to start your wellness journey!" 💪` })
       await this.generalResponse.handleNoState({ phoneNumber, profileName: user!.name, customHeader: 'You now have access to all our service' })
     }

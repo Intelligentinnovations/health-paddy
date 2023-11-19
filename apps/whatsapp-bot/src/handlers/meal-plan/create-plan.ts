@@ -1,37 +1,30 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
+import { MESSAGE_MANAGER } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Injectable } from '@nestjs/common';
 
 import { AppRepo } from '../../app/app.repo';
-import { calculateRequireCalorie, sendWhatsAppText } from '../../helpers';
-import { SecretsService } from '../../secrets/secrets.service';
-import { PaymentService } from '../../services/paystack';
-import { State, User } from '../../types';
+import { calculateRequireCalorie, sendWhatsAppText, validFeetAndInches } from '../../helpers';
+import { State } from '../../types';
 import { GenericService } from '../general';
+import { ViewMealPlanService } from './view-plan';
 
 @Injectable()
 export class CreateMealPlanService {
   constructor(
     private repo: AppRepo,
     private helper: GenericService,
-    private secrets: SecretsService,
-    private payment: PaymentService,
-    @Inject(MESSAGE_MANAGER) private messaging: Messaging,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    private viewMealPlan: ViewMealPlanService,
   ) { }
 
   handleCreateMealPlan = async ({
     phoneNumber,
-    profileName,
     state,
     input,
   }: {
     phoneNumber: string;
     state: State;
-    input: number;
-    profileName: string;
+    input: number | string;
   }) => {
     try {
       const { stage } = state;
@@ -40,9 +33,7 @@ export class CreateMealPlanService {
         const message = `Thanks! could you share your gender with me?\n
 1. Male
 2. Female`
-
         const parsedAge = Number(input)
-
         if (Number.isNaN(parsedAge)) {
           sendWhatsAppText({ message: `Please enter a valid age`, phoneNumber })
           return {
@@ -61,18 +52,32 @@ export class CreateMealPlanService {
             status: 'success'
           }
         }
-        const message = `Perfect!, May I ask for your height in feet?`
+        const message = `Perfect!, May I ask for your height in feet, for example, in the format "5f11" or 5'11?`
         return this.helper.sendTextAndSetCache({
           message, phoneNumber, stage: 'create-meal-plan/height', data: { ...state.data, gender }
         })
       }
       if (stage === 'create-meal-plan/height') {
+        const validatedFeetAndInches = validFeetAndInches(input as string)
+        if (!validatedFeetAndInches) {
+          sendWhatsAppText({ message: `Please enter a valid height in feet, for example, in the format "5f11" or 5'11?`, phoneNumber })
+          return {
+            status: 'success'
+          }
+        }
         const message = `Excellent! Would you be willing to tell me your weight in kilograms?`
         return this.helper.sendTextAndSetCache({
           message, phoneNumber, stage: 'create-meal-plan/weight', data: { ...state.data, height: input }
         })
       }
       if (stage === 'create-meal-plan/weight') {
+        const parsedWeight = Number(input)
+        if (isNaN(parsedWeight)) {
+          sendWhatsAppText({ message: `Please enter a valid weight in kilograms`, phoneNumber })
+          return {
+            status: 'success'
+          }
+        }
         const message = `We are almost there, Please, Select your most appropriate activity level?\n
 1. Sedentary (little to no regular exercise).
 
@@ -112,19 +117,19 @@ export class CreateMealPlanService {
         const healthCondition = input == 1 ? 'none' : input == 2 ? 'hypertension' : input == 3 ? 'diabetes' : input == 4 ? 'diabetes' : input == 5 ? 'highCholesterol' : ''
         if (healthCondition === 'none') {
           const { data: { age, activityLevel, gender, height, weight, healthCondition } } = state
-          const { id: userId } = state.user as User;
-
-          this.repo.updateUser({ payload: { age, activityLevel, sex: gender, height, weight, healthCondition }, userId: userId as unknown as string })
-          const requiredCalorie = calculateRequireCalorie({ age, height, weight, gender, activityLevel })
+          const value = validFeetAndInches(height)
+          const requiredCalorie = calculateRequireCalorie({ age, inches: value!.inches, feet: value!.feet, weight, gender, activityLevel })
+          this.repo.updateUser({ payload: { age, activityLevel, sex: gender, height, weight, healthCondition, requiredCalorie }, userId: state.user!.id as unknown as string })
           await sendWhatsAppText({ message, phoneNumber })
-          return this.helper.sendTextAndSetCache({
-            message: `Thank you ${state.user?.name}, to maintain your current weight, you will be needing ${requiredCalorie}cal per day`, phoneNumber, stage: 'create-meal-plan/view', data: { ...state.data, healthCondition }
+          await this.helper.sendTextAndSetCache({
+            message: `Thank you ${state.user?.name}, to maintain your current weight, you will be needing ${requiredCalorie} Cal per day`, phoneNumber, stage: 'create-meal-plan/view', data: { ...state.data, healthCondition }
           })
+          return this.viewMealPlan.handleViewMealPlan({ phoneNumber, requiredCalorie, user: state.user! })
+
         }
         return this.helper.sendTextAndSetCache({
           message: `Please contact support`, phoneNumber, stage: 'create-meal-plan/view', data: { ...state.data, healthCondition }
         })
-
       }
 
     } catch (err) {
@@ -133,3 +138,4 @@ export class CreateMealPlanService {
     }
   }
 }
+

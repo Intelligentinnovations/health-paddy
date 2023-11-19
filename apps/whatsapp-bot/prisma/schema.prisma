@@ -17,10 +17,11 @@ model User {
   age                Int?
   sex                String?
   height             String?
-  weight             Decimal?
+  weight             Decimal?            @db.Decimal(9, 2)
   subscriptionStatus SubscriptionStatus?
   activityLevel      String?
   healthCondition    String?
+  requiredCalorie    Float?
   hasUsedFreeTrial   Boolean             @default(false)
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
@@ -65,14 +66,56 @@ model Subscription {
   user          User               @relation(fields: [userId], references: [id])
   transactionId String
   status        SubscriptionStatus
-  startDate     DateTime           @default(now()) @db.Date
-  endDate       DateTime           @db.Date
+  startDate     DateTime           @default(now()) @db.Timestamptz()
+  endDate       DateTime           @db.Timestamptz()
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
+}
+
+model FoodItems {
+  id          String       @id @default(dbgenerated("gen_random_uuid()"))
+  name        String
+  calorie     Int
+  portion     String
+  category    FoodCategory
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model CalorieNeed {
+  id       String     @id @default(dbgenerated("gen_random_uuid()"))
+  calories Int
+  MealPlan MealPlan[]
+}
+
+model MealPlan {
+  id                String      @id @default(dbgenerated("gen_random_uuid()"))
+  day               String
+  breakfast         String
+  breakfastCalories Int
+  snack             String
+  snackCalories     Int
+  lunch             String
+  lunchCalories     Int
+  dinner            String
+  dinnerCalories    Int
+  calorieNeed       CalorieNeed @relation(fields: [calorieNeedId], references: [id])
+  calorieNeedId     String
 }
 
 enum SubscriptionStatus {
   active
   expired
   canceled
+}
+
+enum FoodCategory {
+  starch
+  fruit
+  vegetable
+  milk
+  protein
+  fat_and_oil
+  snack
 }
