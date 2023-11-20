@@ -3,13 +3,13 @@ import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { addDays } from 'date-fns';
+import  { DateTime } from 'luxon';
 
 import { GenericService } from '../handlers/general';
 import { CreateMealPlanService, ViewMealPlanService } from '../handlers/meal-plan';
 import { SignupService } from '../handlers/signup/signup';
 import { SubscriptionService } from '../handlers/subscription';
-import { sendWhatsAppText } from '../helpers';
+import { delay, sendWhatsAppText } from '../helpers';
 import { PaymentService } from '../services/paystack';
 import { State } from '../types';
 import { AppRepo } from './app.repo';
@@ -157,10 +157,11 @@ export class AppService {
 
     const amountInNaira = amountInKobo / 100;
 
+    const today = DateTime.now();
+
     if (status && transactionStatus === 'success') {
       const user = await this.repo.findUserByPhoneNumber(phoneNumber);
-      const currentDate = new Date();
-      const endDate = addDays(currentDate, 3);
+      const endDate = today.plus({ day: 1 }).toJSDate();
       await this.repo.createSubscription({
         token,
         type: '',
@@ -177,8 +178,9 @@ export class AppService {
         amount: `${amountInNaira}`,
         reference,
       });
-      await sendWhatsAppText({ phoneNumber, message: `Your card has been added 🎉, your 3-day trial has officially begun. Get ready to start your wellness journey!" 💪` })
-      await this.generalResponse.handleNoState({ phoneNumber, profileName: user!.name, customHeader: 'You now have access to all our service' })
+      await sendWhatsAppText({ phoneNumber, message: `Your card has been added 🎉, you can now access your free one-day meal Plan. Get ready to start your wellness journey!" 💪` })
+      await delay()
+      await this.generalResponse.handleNoState({ phoneNumber, profileName: user!.name, customHeader: 'You now have access to all our meal plan service' })
     }
   }
 }

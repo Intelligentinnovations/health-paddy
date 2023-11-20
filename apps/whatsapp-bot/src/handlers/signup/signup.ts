@@ -4,7 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
 import { AppRepo } from '../../app/app.repo';
-import { sendWhatsAppText } from '../../helpers';
+import { delay, sendWhatsAppText } from '../../helpers';
 import { State } from '../../types';
 import { EmailSchema } from '../../utils/schema';
 import { StringSchema } from '../../utils/schema/auth.schema';
@@ -44,7 +44,7 @@ export class SignupService {
         return { status: 'success' }
       }
       const emailExist = await this.repo.findUserByEmail(input);
-      const message = emailExist ? 'The email already exist, Please enter another email' : `Hey! 🎉🎉 Thank you for signing up to Health Paddy!Get started on your wellness journey by creating your personalized meal plan and get a free 3-day trial period`;
+      const message = emailExist ? 'The email already exist, Please enter another email' : `Hey! 🎉🎉 Thank you for signing up to Health Paddy!Get started on your wellness journey by creating your personalized meal plan and get a free day meal plan`;
       if (!emailExist) {
         await this.repo.createUser({ email: input, phone: phoneNumber, name: state.data.name as string })
       }
@@ -52,6 +52,7 @@ export class SignupService {
       if (emailExist) return {
         status: 'success',
       };
+      await delay()
       return this.helper.handleNoState({ phoneNumber, profileName })
     }
     return this.helper.handleNoState({ phoneNumber, profileName, customHeader: 'Could not understand your request, lets start again' });

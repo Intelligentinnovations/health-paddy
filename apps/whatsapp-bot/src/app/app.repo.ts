@@ -150,7 +150,8 @@ export class AppRepo {
 
   async fetchMealPlanByCalorieNeedId({ calorieNeedId, limit }: { calorieNeedId: string, limit: number }) {
     return await sql<MealPlan>`WITH RankedDays AS (
-      SELECT *, 
+      SELECT 
+        *,
         ROW_NUMBER() OVER (ORDER BY 
           CASE 
             WHEN day = 'Sunday' THEN 1
@@ -166,8 +167,26 @@ export class AppRepo {
       FROM "MealPlan"
       WHERE "calorieNeedId" = ${calorieNeedId}
     )
-    SELECT * FROM RankedDays
-    ORDER BY rnk, day
+    
+    , MatchingSnacks AS (
+      SELECT DISTINCT ON (mp."calorieNeedId", mp."day")
+        mp."calorieNeedId",
+        mp."day",
+        s."snack",
+        RANDOM() AS random_order
+      FROM "MealPlan" mp
+      JOIN "Snack" s ON mp."snackCalories" = s."calories"
+      WHERE mp."snackCalories" IS NOT NULL
+      ORDER BY mp."calorieNeedId", mp."day", random_order
+    )
+    
+    SELECT 
+      rd.*,
+      ms."snack"
+    FROM RankedDays rd
+    LEFT JOIN MatchingSnacks ms ON rd."calorieNeedId" = ms."calorieNeedId" AND rd."day" = ms."day"
+    WHERE rd.rnk >= EXTRACT(DOW FROM CURRENT_DATE) + 1
+    ORDER BY rd.rnk, rd.day
     LIMIT ${limit};
     `.execute(this.client)
 

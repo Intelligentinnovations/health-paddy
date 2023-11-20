@@ -51,7 +51,7 @@ export class SubscriptionService {
           });
           const { data, status } = paymentLink;
           if (status) {
-            const message = `Please follow the link ${data.data.authorization_url} to add your card and start enjoying the 3-day trial period.`;
+            const message = `Please follow the link ${data.data.authorization_url} to add your card and start enjoy our free 1-day meal plan.`;
             return this.helper.sendTextAndSetCache({
               phoneNumber,
               message,

@@ -104,6 +104,14 @@ model MealPlan {
   calorieNeedId     String
 }
 
+model Snack {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  snack     String
+  calories  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum SubscriptionStatus {
   active
   expired
