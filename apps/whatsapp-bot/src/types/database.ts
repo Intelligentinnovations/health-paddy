@@ -62,6 +62,13 @@ export type MealPlan = {
   dinnerCalories: number;
   calorieNeedId: string;
 };
+export type Snack = {
+  id: Generated<string>;
+  snack: string;
+  calories: number;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Timestamp;
+};
 export type Subscription = {
   id: Generated<string>;
   userId: string;
@@ -104,6 +111,7 @@ export type DB = {
   Card: Card;
   FoodItems: FoodItems;
   MealPlan: MealPlan;
+  Snack: Snack;
   Subscription: Subscription;
   Transaction: Transaction;
   User: User;

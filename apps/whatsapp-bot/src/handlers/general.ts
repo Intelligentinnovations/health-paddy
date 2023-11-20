@@ -8,7 +8,7 @@ import { DateTime } from 'luxon';
 import { AppRepo } from '../app/app.repo';
 import { delay, sendWhatsAppText } from '../helpers';
 import { SecretsService } from '../secrets/secrets.service';
-import { State, User } from '../types';
+import { MealPlan, State, User } from '../types';
 
 
 DateTime.local().setLocale('en-NG');
@@ -204,7 +204,7 @@ By using our chat bot, you consent to the collection and use of your personal da
     phoneNumber: string; user: User
   }) => {
     const subscription = await this.repo.fetchSubscription(user.id! as unknown as string)
-    const text = subscription?.subscriptionStatus !== 'active' ? 'Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.' : `Thank you for giving our service a try! We provide a 3-day trial period for first-time users to fully experience our offerings. Once the trial period ends, we kindly ask you to subscribe to one of our plans. To start your free trial, we'd appreciate it if you could add your payment card.`
+    const text = subscription?.subscriptionStatus === undefined ? `We provide a complimentary one-day meal plan after which you can subscribe to gain full access to our services. To get your free one-day meal plan, we'd appreciate it if you could add your payment card.` : 'Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.'
     const message = `Subscription alert\n
 ${text}
 
@@ -245,31 +245,73 @@ ${text}
     return closestMealPlan
   }
 
-  async generateAndSendMealPlan({ requiredCalorie, user, phoneNumber }: { requiredCalorie: number; user: User; phoneNumber: string }) {
-    const closestCalorie = await this.getClosestMealPlan(requiredCalorie)
-    const subscription = await this.repo.fetchSubscription(user.id as unknown as string)
+  async generateAndSendMealPlan({
+    requiredCalorie,
+    user,
+    phoneNumber,
+  }: {
+    requiredCalorie: number;
+    user: User;
+    phoneNumber: string;
+  }) {
+    const closestCalorie = await this.getClosestMealPlan(requiredCalorie);
+    const subscription = await this.repo.fetchSubscription(user.id as unknown as string);
     const subscriptionEndDate = DateTime.fromISO(subscription!.endDate!.toISOString().split('T')[0]!);
-    const currentDate = DateTime.fromISO(new Date().toISOString().split('T')[0]!)
-    const remainingSubscriptionsDays = user.hasUsedFreeTrial ? subscriptionEndDate.diff(currentDate, 'days').toObject().days : this.secrets.get('FREE_PLAN_DAYS')
-    const numberOfMealPlanToFetch = remainingSubscriptionsDays! > 7 ? 7 : remainingSubscriptionsDays
+    const currentDate = DateTime.fromISO(new Date().toISOString().split('T')[0]!);
+    const remainingSubscriptionsDays = user.hasUsedFreeTrial
+      ? subscriptionEndDate.diff(currentDate, 'days').toObject().days
+      : this.secrets.get('FREE_PLAN_DAYS');
+    const numberOfMealPlanToFetch = remainingSubscriptionsDays! > 7 ? 7 : remainingSubscriptionsDays;
+    const cacheKey = `${phoneNumber}-meal-plan`;
 
-    if (remainingSubscriptionsDays! < 0) return this.handleNoState({ phoneNumber, profileName: user.name, customHeader: `You don't have any active subscription, please subscribe to continue enjoying our service` })
-
-    const mealPlan = (await this.repo.fetchMealPlanByCalorieNeedId({
-      calorieNeedId: closestCalorie!.id,
-      limit: numberOfMealPlanToFetch!
-    })).rows
-
-    for await (const plan of mealPlan) {
+    const sendPlanMessage = async (plan: MealPlan) => {
       let message = `*${plan.day}*\n\n`;
-      message += `*Breakfast*: ${plan.breakfast}\n`;
+      message += `*Breakfast*: ${plan.breakfast}\n\n`;
       message += `*Snack*: ${plan.snack}\n\n`;
       message += `*Lunch*: ${plan.lunch}\n\n`;
       message += `*Dinner*: ${plan.dinner}\n\n`;
       message += `\nTotal Calories: ${plan.breakfastCalories + plan.snackCalories + plan.lunchCalories + plan.dinnerCalories}`;
-      this.sendTextAndSetCache({ message, phoneNumber, stage: 'view-plan' })
-      await delay()
+      this.sendTextAndSetCache({ message, phoneNumber, stage: 'view-plan' });
+      await delay(300);
+    };
+
+    const mealPlan = await this.cacheManager.get<MealPlan[]>(cacheKey);
+
+    if (mealPlan) {
+      for await (const plan of mealPlan) {
+        await sendPlanMessage(plan);
+      }
+      if (!user.hasUsedFreeTrial) {
+        return this.repo.updateUser({ payload: { hasUsedFreeTrial: true }, userId: user!.id as unknown as string });
+      }
+    } else {
+      if (remainingSubscriptionsDays! < 0) {
+        return this.handleNoState({
+          phoneNumber,
+          profileName: user.name,
+          customHeader: `You don't have any active subscription, please subscribe to continue enjoying our service`,
+        });
+      }
+
+      const fetchedMealPlan = (
+        await this.repo.fetchMealPlanByCalorieNeedId({
+          calorieNeedId: closestCalorie!.id,
+          limit: numberOfMealPlanToFetch!,
+        })
+      ).rows;
+
+      const SEVEN_DAYS_IN_SECONDS = 604800;
+      await this.cacheManager.set(cacheKey, fetchedMealPlan, SEVEN_DAYS_IN_SECONDS);
+
+      for await (const plan of fetchedMealPlan) {
+        await sendPlanMessage(plan);
+      }
+
+      if (!user.hasUsedFreeTrial) {
+        return this.repo.updateUser({ payload: { hasUsedFreeTrial: true }, userId: user!.id as unknown as string });
+      }
     }
-    if (!user.hasUsedFreeTrial) return this.repo.updateUser({ payload: { hasUsedFreeTrial: true }, userId: user!.id as unknown as string })
   }
+
+
 }
