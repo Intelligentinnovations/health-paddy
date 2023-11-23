@@ -3,16 +3,17 @@ import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import  { DateTime } from 'luxon';
+import { DateTime } from 'luxon';
 
-import { GenericService } from '../handlers/general';
-import { CreateMealPlanService, ViewMealPlanService } from '../handlers/meal-plan';
-import { SignupService } from '../handlers/signup/signup';
-import { SubscriptionService } from '../handlers/subscription';
 import { delay, sendWhatsAppText } from '../helpers';
+import { SecretsService } from "../secrets/secrets.service";
 import { PaymentService } from '../services/paystack';
 import { State } from '../types';
 import { AppRepo } from './app.repo';
+import { SignupService } from './auth/signup'
+import { GenericService } from './general';
+import { CreateMealPlanService } from './meal-plan/create-plan.service';
+import { SubscriptionService } from './subscription/subscription'
 
 @Injectable()
 export class AppService {
@@ -22,14 +23,13 @@ export class AppService {
     private paymentService: PaymentService,
     private signup: SignupService,
     private createMealPlan: CreateMealPlanService,
-    private viewMealPlan: ViewMealPlanService,
     private repo: AppRepo,
+    private secrets: SecretsService,
     @Inject(MESSAGE_MANAGER) private messaging: Messaging,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
   async handleIncomingMessage(body: any) {
-
     if (body.object) {
       if (
         body.entry &&
@@ -38,7 +38,6 @@ export class AppService {
         body.entry[0].changes[0].value.messages &&
         body.entry[0].changes[0].value.messages[0]
       ) {
-
         const sender = body.entry[0].changes[0].value.messages[0].from;
         const msg_body = body.entry[0].changes[0].value.messages[0].text.body;
         const profileName =
@@ -63,11 +62,10 @@ export class AppService {
         }
 
         if (!state || ['hi', 'hey'].includes(msg_body.toLowerCase())) {
-          const result = await this.generalResponse.handleNoState({
+          return await this.generalResponse.handleNoState({
             phoneNumber: sender,
             profileName,
           });
-          return result;
         }
 
         if (state.stage === 'landing') {
@@ -108,19 +106,10 @@ export class AppService {
             state,
           });
         }
-
-        // if (state.stage.startsWith('view-meal-plan')) {
-        //   return this.viewMealPlan.handleViewMealPlan({
-        //     phoneNumber: sender,
-        //     profileName,
-        //     requiredCalorie
-        //   });
-        // }
-
-        this.generalResponse.handleNoState({
+        return this.generalResponse.handleNoState({
           phoneNumber: sender,
           profileName,
-          customHeader: 'I could not understand your request, lets start fresh again'
+          customHeader: 'I could not understand your request, lets start afresh again'
         });
       }
     } else {
@@ -161,7 +150,7 @@ export class AppService {
 
     if (status && transactionStatus === 'success') {
       const user = await this.repo.findUserByPhoneNumber(phoneNumber);
-      const endDate = today.plus({ day: 1 }).toJSDate();
+      const endDate = today.plus({ day: this.secrets.get('FREE_PLAN_DAYS') }).toJSDate();
       await this.repo.createSubscription({
         token,
         type: '',
@@ -173,7 +162,7 @@ export class AppService {
         first6Digits,
         email,
         endDate,
-        subscriptionstatus: 'active',
+        subscriptionStatus: 'active',
         transactionStatus,
         amount: `${amountInNaira}`,
         reference,

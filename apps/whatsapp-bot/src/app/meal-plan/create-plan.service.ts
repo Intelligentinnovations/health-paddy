@@ -3,11 +3,11 @@ import { MESSAGE_MANAGER } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Injectable } from '@nestjs/common';
 
-import { AppRepo } from '../../app/app.repo';
 import { calculateRequireCalorie, sendWhatsAppText, validFeetAndInches } from '../../helpers';
 import { State } from '../../types';
+import { AppRepo } from '../app.repo';
 import { GenericService } from '../general';
-import { ViewMealPlanService } from './view-plan';
+import { ViewMealPlanService } from '../meal-plan';
 
 @Injectable()
 export class CreateMealPlanService {
@@ -102,7 +102,7 @@ export class CreateMealPlanService {
           }
         }
         const message = `Finally, are you managing any of these health conditions?\n
-1. None 
+1. None
 2. Hypertension
 3. Diabetes
 4. Pre-diabetes

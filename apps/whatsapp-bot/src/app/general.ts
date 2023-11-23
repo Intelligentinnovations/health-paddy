@@ -5,10 +5,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { DateTime } from 'luxon';
 
-import { AppRepo } from '../app/app.repo';
 import { delay, sendWhatsAppText } from '../helpers';
 import { SecretsService } from '../secrets/secrets.service';
 import { MealPlan, State, User } from '../types';
+import { AppRepo } from './app.repo';
 
 
 DateTime.local().setLocale('en-NG');
@@ -181,7 +181,7 @@ By using our chat bot, you consent to the collection and use of your personal da
     input: string;
     profileName: string;
   }) => {
-    const message = `Great! 🚀 Thanks for saying 'yes' to our privacy notice. Your data is in good hands! Please follow the prompt below to get signup`;
+    const message = `Great! 🚀 Thanks for saying 'yes' to our privacy notice. Your data is in good hands! Please follow the prompt below to get signed up`;
     if (input === '1') {
       await sendWhatsAppText({ message, phoneNumber })
       await delay()
@@ -221,7 +221,8 @@ ${text}
     };
   };
 
-  sendTextAndSetCache = async ({ message, phoneNumber, stage, data = {} }: { message: string, phoneNumber: string, stage: string, data?: any }) => {
+  sendTextAndSetCache = async ({ message, phoneNumber, stage, data = {} }
+    : { message: string, phoneNumber: string, stage: string, data?: unknown }) => {
     await this.cacheManager.set(phoneNumber, JSON.stringify({ stage, data }));
     sendWhatsAppText({ message, phoneNumber });
     return {
