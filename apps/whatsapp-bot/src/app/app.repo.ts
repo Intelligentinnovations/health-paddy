@@ -11,34 +11,28 @@ export class AppRepo {
   ) { }
 
   async findUserByPhoneNumber(phoneNumber: string) {
-
     return await this.client.selectFrom('User').selectAll().where('phone', '=', phoneNumber)
       .executeTakeFirst();
   }
-
   async findUserByEmail(email: string) {
     return await this.client.selectFrom('User').selectAll().where('email', '=', email)
       .executeTakeFirst();
   }
-
   async createUser(payload: UserPayload) {
     return await this.client.insertInto("User").values({ ...payload, updatedAt: new Date() }).executeTakeFirst()
   }
-
   async findTransactionByReference(reference: string) {
     return await this.client.selectFrom("Transaction").selectAll().where('reference', '=', reference).executeTakeFirst()
   }
-
   async findUserExistingCard({ last4Digits, userId }: { last4Digits: string, userId: string }) {
     return await this.client.selectFrom("Card").select('id').where('last4Digits', '=', last4Digits).where('userId', '=', userId).executeTakeFirst()
   }
-
   async createSubscription(subscriptionPayload: SubscriptionPayload) {
     return await this.client.transaction().execute(async (trx) => {
       const {
         userId,
         reference,
-        subscriptionstatus,
+        subscriptionStatus,
         transactionStatus,
         token,
         email,
@@ -85,7 +79,7 @@ export class AppRepo {
         .values({
           userId,
           transactionId: transaction.id,
-          status: subscriptionstatus,
+          status: subscriptionStatus,
           startDate: date,
           endDate,
           updatedAt: date
@@ -135,7 +129,6 @@ export class AppRepo {
     ])).execute()
   }
 
-
   async fetchUserCards(userId: string) {
     return await this.client.selectFrom('Card').selectAll().where('userId', '=', userId).execute()
   }
@@ -150,10 +143,10 @@ export class AppRepo {
 
   async fetchMealPlanByCalorieNeedId({ calorieNeedId, limit }: { calorieNeedId: string, limit: number }) {
     return await sql<MealPlan>`WITH RankedDays AS (
-      SELECT 
+      SELECT
         *,
-        ROW_NUMBER() OVER (ORDER BY 
-          CASE 
+        ROW_NUMBER() OVER (ORDER BY
+          CASE
             WHEN day = 'Sunday' THEN 1
             WHEN day = 'Monday' THEN 2
             WHEN day = 'Tuesday' THEN 3
@@ -167,7 +160,7 @@ export class AppRepo {
       FROM "MealPlan"
       WHERE "calorieNeedId" = ${calorieNeedId}
     )
-    
+
     , MatchingSnacks AS (
       SELECT DISTINCT ON (mp."calorieNeedId", mp."day")
         mp."calorieNeedId",
@@ -179,8 +172,8 @@ export class AppRepo {
       WHERE mp."snackCalories" IS NOT NULL
       ORDER BY mp."calorieNeedId", mp."day", random_order
     )
-    
-    SELECT 
+
+    SELECT
       rd.*,
       ms."snack"
     FROM RankedDays rd

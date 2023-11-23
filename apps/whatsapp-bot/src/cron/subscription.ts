@@ -46,7 +46,7 @@ export class CronService {
                     date: today.toJSDate(),
                     endDate: today.plus({ month: 1 }).toJSDate(),
                     amount: '10000', // this should be plan driven
-                    subscriptionstatus: 'active',
+                    subscriptionStatus: 'active',
                     transactionStatus: 'success',
                   });
                   break;

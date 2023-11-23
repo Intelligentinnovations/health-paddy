@@ -20,7 +20,7 @@ export interface SubscriptionPayload {
     date: Date,
     endDate: Date,
     amount: string,
-    subscriptionstatus: SubscriptionStatus,
+    subscriptionStatus: SubscriptionStatus,
     transactionStatus: string
 }
 

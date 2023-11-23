@@ -4,9 +4,9 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
-import { AppRepo } from '../../app/app.repo';
 import { SecretsService } from '../../secrets/secrets.service';
 import { User } from '../../types';
+import { AppRepo } from '../app.repo';
 import { GenericService } from '../general';
 
 

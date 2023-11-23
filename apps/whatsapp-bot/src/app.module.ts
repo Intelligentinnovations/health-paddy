@@ -5,9 +5,11 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { AppController } from './app/app.controller';
 import { AppRepo } from './app/app.repo';
 import { AppService } from './app/app.service';
+import { SignupService } from './app/auth/signup'
 // import { CronService } from './cron/subscription';
-import { GenericService, SignupService, SubscriptionService } from './handlers';
-import { CreateMealPlanService, ViewMealPlanService } from './handlers/meal-plan';
+import { GenericService, } from './app/general';
+import { CreateMealPlanService, ViewMealPlanService } from './app/meal-plan';
+import { SubscriptionService } from './app/subscription/subscription'
 import { LibrariesModule } from './libraries/libraries.module';
 import { SecretsModule } from './secrets/secrets.module';
 import { SecretsService } from './secrets/secrets.service';
@@ -19,7 +21,7 @@ import { PaymentService } from './services/paystack';
     LibrariesModule,
     SecretsModule,
     CacheModule.registerAsync({
-      useFactory: async (secrets: SecretsService) => {        
+      useFactory: async (secrets: SecretsService) => {
         return {
           isGlobal: true,
           ttl: secrets.get('THIRTY_MINUTES_IN_SECONDS'),
