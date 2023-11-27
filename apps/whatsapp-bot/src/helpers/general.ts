@@ -1,4 +1,4 @@
-import { ActivityLevel, CalorieCalculator } from "../types";
+import {ActivityLevel, CalorieCalculator} from "../types";
 
 export function formatCurrency(amount: number, currencyCode = 'NGN') {
   const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -13,17 +13,30 @@ export function formatCurrency(amount: number, currencyCode = 'NGN') {
 function feetAndInchesToCm({ feet, inches }: { feet: number; inches: number }) {
   const feetToCm = feet * 30.48;
   const inchesToCm = inches * 2.54;
-  const totalCm = feetToCm + inchesToCm;
-  return totalCm;
+  return feetToCm + inchesToCm;
 }
 
 
-
-export const calculateRequireCalorie = ({ age, weight, feet, inches, gender, activityLevel }: CalorieCalculator) => {
+export const calculateRequireCalorie = ({ age, weight, feet, inches, gender, activityLevel, goal, targetWeight, durationInMonth }: CalorieCalculator) => {
   const commonCalories = (10 * weight) + (6.25 * feetAndInchesToCm({ feet, inches })) - (5 * age);
   const activityLevelIndex = ActivityLevel[activityLevel]
-  const calorieRequired = gender === 'male' ? commonCalories + 5 * activityLevelIndex : commonCalories - 161 * activityLevelIndex;
-  return calorieRequired
+  const caloriesToMaintainWeight =  gender === 'male' ? commonCalories + 5 * activityLevelIndex : commonCalories - 161 * activityLevelIndex
+
+  if (goal === 'loose weight') {
+    const amountOfWeightToLoose = weight - targetWeight;
+    const durationInWeeks = durationInMonth * 4;
+    const calorieNeed = caloriesToMaintainWeight - (amountOfWeightToLoose / durationInWeeks * 500)
+    return Math.round(calorieNeed / 100) * 100;
+  }
+  else if (goal === 'gain weight'){
+    const amountOfWeightToGain = targetWeight - weight;
+    const durationInWeeks = durationInMonth * 4;
+    const calorieNeed = caloriesToMaintainWeight + (amountOfWeightToGain / durationInWeeks * 500)
+    return  Math.round(calorieNeed / 100) * 100;
+  }
+  else {
+    return caloriesToMaintainWeight
+  }
 }
 
 
@@ -31,9 +44,8 @@ export const capitalizeString = (text: string) => {
   return text.replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-
 export const validFeetAndInches = (input: string) => {
-  const regex = /(\d+)\s*(?:f|'|(?:feet))?\s*(\d+)\s*(?:in|")?(?:ches)?/;
+  const regex = /^(\d+)[f']([0-9]|1[0-1])$/;
   const match = input?.match(regex);
   if (!match) {
     return null

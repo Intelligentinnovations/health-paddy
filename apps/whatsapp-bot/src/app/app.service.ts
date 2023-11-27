@@ -12,7 +12,7 @@ import { State } from '../types';
 import { AppRepo } from './app.repo';
 import { SignupService } from './auth/signup'
 import { GenericService } from './general';
-import { CreateMealPlanService } from './meal-plan/create-plan.service';
+import { CreateMealPlanService } from './meal-plan';
 import { SubscriptionService } from './subscription/subscription'
 
 @Injectable()
@@ -109,7 +109,7 @@ export class AppService {
         return this.generalResponse.handleNoState({
           phoneNumber: sender,
           profileName,
-          customHeader: 'I could not understand your request, lets start afresh again'
+          customHeader: 'I could not understand your request, lets start afresh'
         });
       }
     } else {

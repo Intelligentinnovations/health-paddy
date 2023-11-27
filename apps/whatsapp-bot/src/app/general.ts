@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
-import { DateTime } from 'luxon';
+import {MESSAGE_MANAGER, Messaging} from '@backend-template/messaging';
+import {CACHE_MANAGER} from '@nestjs/cache-manager';
+import {Inject, Injectable} from '@nestjs/common';
+import {Cache} from 'cache-manager';
+import {DateTime} from 'luxon';
 
-import { delay, sendWhatsAppText } from '../helpers';
-import { SecretsService } from '../secrets/secrets.service';
-import { MealPlan, State, User } from '../types';
-import { AppRepo } from './app.repo';
+import {delay, sendWhatsAppText} from '../helpers';
+import {SecretsService} from '../secrets/secrets.service';
+import {MealPlan, State, User} from '../types';
+import {AppRepo} from './app.repo';
 
 
 DateTime.local().setLocale('en-NG');
@@ -56,7 +56,7 @@ export class GenericService {
     switch (input) {
       case ROUTE.SIGN_UP:
         if (state.user) {
-          this.handleNoState({
+          await this.handleNoState({
             phoneNumber,
             profileName,
             customHeader:
@@ -64,33 +64,55 @@ export class GenericService {
           });
           break;
         }
-        this.handlePrivacy(phoneNumber);
+        await this.handlePrivacy(phoneNumber);
         break;
       case ROUTE.CREATE_MEAL_PLAN:
         if (state.user?.activityLevel) {
-          return this.sendTextAndSetCache({ message: 'You have already created a meal plan', phoneNumber, stage: 'landing' });
+          return this.sendTextAndSetCache({
+            message: 'You have already created a meal plan',
+            phoneNumber,
+            stage: 'landing' });
         }
 
-        if (state.user?.subscriptionStatus !== 'active') return this.handlePaymentNotification({ phoneNumber, user: state.user as User })
-        await this.sendTextAndSetCache({ message: `Hi, ${state.user?.name} I'd love to chat with you and ask a few questions to help create your personalized meal plan. 😊`, phoneNumber, stage: 'create-meal-plan/age' })
+        if (state.user?.subscriptionStatus !== 'active') return this.handlePaymentNotification({
+          phoneNumber,
+          user: state.user as User
+        })
+        await this.sendTextAndSetCache({
+          message: `Hi, ${state.user?.name} I'd love to chat with you and ask a few questions to help create your personalized meal plan. 😊`,
+          phoneNumber,
+          stage: 'create-meal-plan/age'
+        })
         await delay()
         await sendWhatsAppText({ message: 'Please tell me your age', phoneNumber })
         break;
 
       case ROUTE.View_MEAL_PLAN:
         if (!state.user?.activityLevel) {
-          return this.sendTextAndSetCache({ message: 'Please create a meal plan to proceed', phoneNumber, stage: 'landing' });
+          return this.sendTextAndSetCache({
+            message: 'Please create a meal plan to proceed',
+            phoneNumber,
+            stage: 'landing'
+          });
         }
 
         if (state.user?.subscriptionStatus !== 'active') {
-          return this.handlePaymentNotification({ phoneNumber, user: state.user as User })
+          return this.handlePaymentNotification({
+            phoneNumber,
+            user: state.user as User
+          })
         }
-
-        return this.generateAndSendMealPlan({ phoneNumber, requiredCalorie: state.user.requiredCalorie!, user: state.user })
+        return this.generateAndSendMealPlan({
+          phoneNumber,
+          requiredCalorie: state.user.requiredCalorie!,
+          user: state.user
+        })
 
       case ROUTE.SUPPORT:
         return this.sendTextAndSetCache({
-          message: `I apologize for any inconvenience you may have experienced. To log a complaint, please contact our support team at support@healthpaddy.com or call our helpline +xxxx . They will be able to assist you further and address your concerns.`, phoneNumber, stage: 'landing'
+          message: `I apologize for any inconvenience you may have experienced. To log a complaint, please contact our support team at support@healthpaddy.com or call our helpline +xxxx . They will be able to assist you further and address your concerns.`,
+          phoneNumber,
+          stage: 'landing'
         })
 
       case ROUTE.SUBSCRIPTION:
@@ -98,13 +120,23 @@ export class GenericService {
           return this.sendTextAndSetCache({
             message: `Manage your subscription\n
 1. View Subscription
-2. Cancel Subscription `, phoneNumber, stage: 'subscription-management'
+2. Cancel Subscription `,
+            phoneNumber,
+            stage: 'subscription-management'
           })
         }
-        this.handleNoState({ phoneNumber, profileName, customHeader: `😔😔 I'm sorry, but you don't currently have an active subscription. To enjoy all the benefits, please consider subscribing. How else can I be of service?` })
+        await this.handleNoState({
+          phoneNumber,
+          profileName,
+          customHeader: `😔😔 I'm sorry, but you don't currently have an active subscription. To enjoy all the benefits, please consider subscribing. How else can I be of service?`
+        })
         break;
       default:
-        return this.handleNoState({ phoneNumber, profileName, customHeader: 'I could not understand your your request, lets start again' })
+        return this.handleNoState({
+          phoneNumber,
+          profileName,
+          customHeader: 'I could not understand your request, lets start again'
+        })
     }
 
     return {
@@ -125,19 +157,19 @@ export class GenericService {
       const heading = customHeader
         ? customHeader
         : `Hi! ${profileName}, I am Health Paddy! Your personal meal planning assistant. How may I be of service to you today?`;
-      sendWhatsAppText({
+      await sendWhatsAppText({
         phoneNumber, message: `${heading}\n
 1. Signup
 2. Create Meal Plan
 3. View My Meal Plan
 4. Swap Meal Items
 5. Log a Complaint
-6. Manage Subscription`});
+6. Manage Subscription`
+      });
     } catch (error) {
       console.log({ error });
     }
-    const key = phoneNumber;
-    this.cacheManager.set(key, JSON.stringify({ stage: 'landing', data: {} }));
+    this.cacheManager.set(phoneNumber, JSON.stringify({ stage: 'landing', data: {} }));
     return {
       status: 'success',
     };
@@ -145,7 +177,7 @@ export class GenericService {
 
   handlePrivacy = async (phoneNumber: string) => {
     const message = `Privacy Notice
-                
+
 We may collect the following personal data:
 - Name
 - Age
@@ -165,7 +197,7 @@ Data Security
 We prioritize the security of your personal data. We implement measures to protect your data from unauthorized access, disclosure, alteration, and destruction.
 
 Consent
-By using our chat bot, you consent to the collection and use of your personal data as described in this privacy notice.
+By using our chatbot, you consent to the collection and use of your personal data as described in this privacy notice.
 
 1. Accept
 2. Reject`
@@ -185,8 +217,7 @@ By using our chat bot, you consent to the collection and use of your personal da
     if (input === '1') {
       await sendWhatsAppText({ message, phoneNumber })
       await delay()
-      sendWhatsAppText({ message: 'What is your name?', phoneNumber })
-
+      await sendWhatsAppText({ message: 'What is your name?', phoneNumber })
       await this.cacheManager.set(
         phoneNumber,
         JSON.stringify({ stage: 'signup/name', data: {} }));
@@ -215,7 +246,7 @@ ${text}
   };
 
   handleUnknownRequest = async ({ phoneNumber, message }: { phoneNumber: string; message: string }) => {
-    sendWhatsAppText({ phoneNumber, message });
+    await sendWhatsAppText({ phoneNumber, message });
     return {
       status: 'success',
     };
@@ -224,7 +255,7 @@ ${text}
   sendTextAndSetCache = async ({ message, phoneNumber, stage, data = {} }
     : { message: string, phoneNumber: string, stage: string, data?: unknown }) => {
     await this.cacheManager.set(phoneNumber, JSON.stringify({ stage, data }));
-    sendWhatsAppText({ message, phoneNumber });
+    await sendWhatsAppText({ message, phoneNumber });
     return {
       status: 'success',
     };
@@ -272,7 +303,7 @@ ${text}
       message += `*Lunch*: ${plan.lunch}\n\n`;
       message += `*Dinner*: ${plan.dinner}\n\n`;
       message += `\nTotal Calories: ${plan.breakfastCalories + plan.snackCalories + plan.lunchCalories + plan.dinnerCalories}`;
-      this.sendTextAndSetCache({ message, phoneNumber, stage: 'view-plan' });
+      await this.sendTextAndSetCache({ message, phoneNumber, stage: 'view-plan' });
       await delay(300);
     };
 
@@ -283,7 +314,10 @@ ${text}
         await sendPlanMessage(plan);
       }
       if (!user.hasUsedFreeTrial) {
-        return this.repo.updateUser({ payload: { hasUsedFreeTrial: true }, userId: user!.id as unknown as string });
+        return this.repo.updateUser({
+          payload: { hasUsedFreeTrial: true },
+          userId: user!.id as unknown as string
+        });
       }
     } else {
       if (remainingSubscriptionsDays! < 0) {
@@ -309,7 +343,10 @@ ${text}
       }
 
       if (!user.hasUsedFreeTrial) {
-        return this.repo.updateUser({ payload: { hasUsedFreeTrial: true }, userId: user!.id as unknown as string });
+        return this.repo.updateUser({
+          payload: { hasUsedFreeTrial: true },
+          userId: user!.id as unknown as string
+        });
       }
     }
   }
