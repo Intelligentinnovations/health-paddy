@@ -40,7 +40,7 @@ export class SignupService {
       try {
         EmailSchema.parse({ email: input })
       } catch (error) {
-        sendWhatsAppText({ message: `Please enter a valid email`, phoneNumber })
+        await sendWhatsAppText({ message: `Please enter a valid email`, phoneNumber })
         return { status: 'success' }
       }
       const emailExist = await this.repo.findUserByEmail(input);

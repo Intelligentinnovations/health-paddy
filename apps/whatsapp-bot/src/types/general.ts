@@ -39,5 +39,23 @@ export interface CalorieCalculator {
     gender: 'male' | 'female',
     activityLevel: 'sedentary' | 'mild' | 'moderate' | 'heavy' | 'extreme',
     feet: number,
-    inches: number
+    inches: number,
+    goal: string,
+    targetWeight: number,
+    durationInMonth: number
+}
+
+export const HealthGoal: { [key: string]: number } = {
+    'maintain weight': 1,
+    'loose weight': 2,
+    'gain weight': 3
+}
+
+
+export interface GetCalorieGoalText {
+    goal: string,
+    requiredCalorie: number,
+    userName: string,
+    durationInMonth: number,
+    weightDifference: number
 }
