@@ -54,7 +54,7 @@ export class AppService {
             };
             const user = await this.repo.findUserByPhoneNumber(sender);
             state = { ...initialState, user }
-            await this.cacheManager.set(sender, state, 3000000);
+            await this.cacheManager.set(sender, state);
           }
 
 

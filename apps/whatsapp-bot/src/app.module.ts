@@ -24,8 +24,7 @@ import { PaymentService } from './services/paystack';
       useFactory: async (secrets: SecretsService) => {
         return {
           isGlobal: true,
-          ttl: secrets.get('THIRTY_MINUTES_IN_SECONDS'),
-          store: await redisStore({ url: secrets.get('REDIS_URL') }),
+          store: await redisStore({ttl: secrets.get('THIRTY_MINUTES_IN_SECONDS'), url: secrets.get('REDIS_URL') }),
         };
       },
       inject: [SecretsService],
