@@ -90,7 +90,7 @@ export type Transaction = {
   cardId: string;
 };
 export type User = {
-  id: Generated<string>;
+  id: Generated<string> | string;
   email: string;
   phone: string;
   name: string;
@@ -102,9 +102,9 @@ export type User = {
   activityLevel: string | null;
   healthCondition: string | null;
   requiredCalorie: number | null;
-  hasUsedFreeTrial: Generated<boolean>;
-  createdAt: Generated<Timestamp>;
-  updatedAt: Timestamp;
+  hasUsedFreeTrial: Generated<boolean> | boolean;
+  createdAt: Generated<Timestamp> | Date;
+  updatedAt: Timestamp | Date;
 };
 export type DB = {
   CalorieNeed: CalorieNeed;

@@ -40,7 +40,7 @@ export class SubscriptionService {
       const { stage, user } = state;
       if (stage === 'subscription-acceptance') {
         if (input == DECLINE) {
-          return this.helper.handleNoState({ phoneNumber, profileName });
+          return this.helper.handleNoState({ phoneNumber, profileName, state });
         }
         if (input == ACCEPT) {
           const paymentLink = await this.payment.initializePaystackPayment({
@@ -55,7 +55,8 @@ export class SubscriptionService {
             return this.helper.sendTextAndSetCache({
               phoneNumber,
               message,
-              stage: 'subscription-payment-option',
+              nextStage: 'subscription-payment-option',
+              state
             });
           }
         } else {
@@ -84,9 +85,15 @@ Best regards`;
           await this.helper.sendTextAndSetCache({
             message,
             phoneNumber,
-            stage: 'landing',
+            nextStage: 'landing',
+            state
           });
-          return this.helper.handleNoState({ phoneNumber, profileName: user!.name, customHeader: `Hi, how else can i be of service to you?` })
+          return this.helper.handleNoState({
+            phoneNumber,
+            state,
+            profileName: user!.name,
+            customHeader: `Hi, how else can I be of service to you?`
+          })
         }
 
         if (input == DECLINE) {
@@ -96,10 +103,16 @@ Best regards`;
           return this.helper.sendTextAndSetCache({
             message,
             phoneNumber,
-            stage: 'subscription-cancel',
+            nextStage: 'subscription-cancel',
+            state
           });
         }
-        return this.helper.handleNoState({ phoneNumber, profileName, customHeader: 'Could not understand your request, Lets start this again' });
+        return this.helper.handleNoState({
+          phoneNumber,
+          state,
+          profileName,
+          customHeader: 'Could not understand your request, Lets start this again'
+        });
       }
 
       if (stage === 'subscription-cancel') {
@@ -111,13 +124,19 @@ Best regards`;
           return this.helper.handleNoState({
             phoneNumber,
             profileName,
+            state,
             customHeader: message,
           });
         }
         if (input == DECLINE) {
-          return this.helper.handleNoState({ phoneNumber, profileName });
+          return this.helper.handleNoState({ phoneNumber, state, profileName });
         }
-        return this.helper.handleNoState({ phoneNumber, profileName, customHeader: 'Could not understand your request, lets start this again' });
+        return this.helper.handleNoState({
+          phoneNumber,
+          state,
+          profileName,
+          customHeader: 'Could not understand your request, lets start this again'
+        });
       }
     } catch (error) {
       console.log({ error });

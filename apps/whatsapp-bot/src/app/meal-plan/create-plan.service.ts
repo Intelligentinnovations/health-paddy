@@ -1,13 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@nestjs/common';
 
-import {
-  calculateRequireCalorie,
-  sendWhatsAppText,
-  validFeetAndInches,
-} from '../../helpers';
+import { calculateRequireCalorie, sendWhatsAppText, validFeetAndInches, } from '../../helpers';
 import { HealthGoal, State } from '../../types';
-import { ParsedNumber } from '../../utils/schema/auth.schema';
 import {
   activityLevelText,
   extremeGainWeightText,
@@ -26,12 +21,13 @@ export class CreateMealPlanService {
     private repo: AppRepo,
     private helper: GenericService,
     private viewMealPlan: ViewMealPlanService
-  ) { }
+  ) {
+  }
 
   handleCreateMealPlan = async ({
     phoneNumber,
     state,
-    input,
+    input
   }: {
     phoneNumber: string;
     state: State;
@@ -58,7 +54,8 @@ export class CreateMealPlanService {
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
-          stage: `${basePath}/gender`,
+          nextStage: `${basePath}/gender`,
+          state,
           data: { age: input },
         });
       }
@@ -77,7 +74,8 @@ export class CreateMealPlanService {
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
-          stage: `${basePath}/height`,
+          nextStage: `${basePath}/height`,
+          state,
           data: { ...state.data, gender },
         });
       }
@@ -96,7 +94,8 @@ export class CreateMealPlanService {
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
-          stage: 'create-meal-plan/weight',
+          nextStage: 'create-meal-plan/weight',
+          state,
           data: { ...state.data, height: input },
         });
       }
@@ -112,61 +111,69 @@ export class CreateMealPlanService {
           };
         }
         const message = `What health goal do you want to achieve ?\n
-1) Maintain weight
-2) Loose weight
-3  Weight gain`;
+1) Maintain Weight
+2) Loose Weight
+3) Gain Weight`;
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
-          stage: `${basePath}/goal`,
+          nextStage: `${basePath}/goal`,
+          state,
           data: { ...state.data, weight: input },
         });
       }
 
       if (stage === `${basePath}/goal`) {
-        if (input === HealthGoal['maintain weight']) {
+        if (input === HealthGoal['Maintain Weight']) {
           return this.helper.sendTextAndSetCache({
             message: activityLevelText,
             phoneNumber,
-            stage: `${basePath}/activity-level`,
+            state,
+            nextStage: `${basePath}/activity-level`,
             data: { ...state.data, goal: 'maintain weight' },
           });
         }
         if (
-          input === HealthGoal['loose weight'] ||
-          input === HealthGoal['gain weight']
+          input == HealthGoal['Loose Weight'] ||
+          input == HealthGoal['Gain Weight']
         ) {
           const message = 'What is your target weight in Kilograms';
+          const goal = Object.keys(HealthGoal).find(
+            (key) => HealthGoal[key] == input
+          );
+
           return this.helper.sendTextAndSetCache({
             phoneNumber,
             message,
-            stage: `${basePath}/target-weight`,
+            nextStage: `${basePath}/target-weight`,
+            state,
             data: {
               ...state.data,
-              goal: Object.keys(HealthGoal).find(
-                (key) => HealthGoal[key] === input
-              ),
+              goal
             },
           });
         }
         return this.helper.sendTextAndSetCache({
           phoneNumber,
-          stage: `${basePath}/goal`,
+          nextStage: `${basePath}/goal`,
+          state,
           message: 'Please select your desired health goal',
           data: state.data,
         });
       }
 
       if (stage === `${basePath}/target-weight`) {
-        try {
-          ParsedNumber.parse(input);
-        } catch (e) {
+        const parseTargetWeight = Number(input);
+        if (isNaN(parseTargetWeight)) {
           await sendWhatsAppText({
-            message: `Please enter a valid target weight`,
+            message: `Please enter a valid weight in kilograms`,
             phoneNumber,
           });
+          return {
+            status: 'success',
+          };
         }
-        if (state.data.goal === 'loose weight') {
+        if (state.data.goal === 'Loose Weight') {
           if (input >= state.data.weight) {
             return sendWhatsAppText({
               phoneNumber,
@@ -187,44 +194,78 @@ export class CreateMealPlanService {
         return this.helper.sendTextAndSetCache({
           phoneNumber,
           message: weightLossDurationText,
-          stage: `${basePath}/goal-duration`,
-          data: { ...state.data, targetWeight: input },
+          nextStage: `${basePath}/goal-duration`,
+          state,
+          data: { ...state.data, targetWeight: Number(input) },
         });
       }
-      if (stage === `${basePath}/duration`) {
-        try {
-          ParsedNumber.parse(input);
-        } catch (e) {
+      if (stage === `${basePath}/goal-duration`) {
+        const parsedDuration = Number(input);
+        if (isNaN(parsedDuration)) {
           await sendWhatsAppText({
             message: `Please enter a valid duration in months`,
             phoneNumber,
           });
+          return {
+            status: 'success',
+          };
         }
         const { targetWeight, weight: currentWeight } = state.data;
-        if (state.data.goal === 'loose weight') {
+        if (state.data.goal === 'Loose Weight') {
           const weightToLoose = currentWeight - targetWeight;
+
           const weightLossPerMonth = weightToLoose / Number(input);
           if (weightLossPerMonth > 8)
-            return sendWhatsAppText({
+            return this.helper.sendTextAndSetCache({
               phoneNumber,
-              message: extremeWeightLossText
+              message: extremeWeightLossText,
+              nextStage: `${basePath}/extreme/weight-loss/gain`,
+              state,
+              data: state.data
             });
         } else {
           const weightToGain = targetWeight - currentWeight;
           const weightGainPerMonth = weightToGain / Number(input);
           if (weightGainPerMonth > 2.5)
-            return sendWhatsAppText({
+            return this.helper.sendTextAndSetCache({
               phoneNumber,
               message: extremeGainWeightText,
+              nextStage: `${basePath}/extreme/weight-loss/gain`,
+              state,
+              data: state.data
             });
         }
         return this.helper.sendTextAndSetCache({
           phoneNumber,
           message: activityLevelText,
-          stage: `${basePath}/activity-level`,
-          data: { ...state.data, durationInMonth: input },
+          nextStage: `${basePath}/activity-level`,
+          state,
+          data: { ...state.data, durationInMonth: Number(input) },
         });
       }
+
+      if (stage === `${basePath}/extreme/weight-loss/gain`) {
+        if (input == 1) {
+          return this.helper.sendTextAndSetCache({
+            phoneNumber,
+            message: `Please re-enter a duration in months`,
+            nextStage: `${basePath}/goal-duration`,
+            state,
+            data: state.data
+          });
+        }
+
+        if (input == 2) {
+          return this.helper.sendTextAndSetCache({
+            phoneNumber,
+            message: `Please re-enter your target weight`,
+            nextStage: `${basePath}/target-weight`,
+            state,
+            data: state.data
+          });
+        }
+      }
+
       if (stage === `${basePath}/activity-level`) {
         const activityLevel =
           input == 1
@@ -250,7 +291,8 @@ export class CreateMealPlanService {
         return this.helper.sendTextAndSetCache({
           message: healthConditionText,
           phoneNumber,
-          stage: `${basePath}/health-condition`,
+          nextStage: `${basePath}/health-condition`,
+          state,
           data: { ...state.data, activityLevel },
         });
       }
@@ -294,6 +336,12 @@ export class CreateMealPlanService {
             targetWeight,
             durationInMonth,
           });
+          if (requiredCalorie < 1200) return this.helper.sendTextAndSetCache({
+            message: `Your calorie requirement  of ${requiredCalorie} is too low. The recommended minimum is 1200cal per day to meet your body's nutritional needs`,
+            phoneNumber,
+            nextStage: 'landing',
+            state
+          })
           await this.repo.updateUser({
             payload: {
               age,
@@ -309,21 +357,28 @@ export class CreateMealPlanService {
           const weightDifference = Math.abs(weight - targetWeight);
           await sendWhatsAppText({ message: firstMessage, phoneNumber });
           await this.helper.sendTextAndSetCache({
-            message: getCalorieGoalText({ goal, requiredCalorie, userName: state.user!.name, durationInMonth, weightDifference }),
+            message: getCalorieGoalText({
+              goal,
+              requiredCalorie,
+              userName: state.user!.name,
+              durationInMonth,
+              weightDifference
+            }),
             phoneNumber,
-            stage: `${basePath}/view`,
+            nextStage: `${basePath}/view`,
+            state,
             data: { ...state.data, healthCondition },
           });
           return this.viewMealPlan.handleViewMealPlan({
             phoneNumber,
-            requiredCalorie,
-            user: state.user!,
+            state,
           });
         }
         return this.helper.sendTextAndSetCache({
           message: `Please contact support`,
           phoneNumber,
-          stage: '',
+          nextStage: '',
+          state,
           data: { ...state.data, healthCondition },
         });
       }

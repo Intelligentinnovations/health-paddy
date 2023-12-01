@@ -30,92 +30,96 @@ export class AppService {
   ) { }
 
   async handleIncomingMessage(body: any) {
-    if (body.object) {
-      if (
-        body.entry &&
-        body.entry[0].changes &&
-        body.entry[0].changes[0] &&
-        body.entry[0].changes[0].value.messages &&
-        body.entry[0].changes[0].value.messages[0]
-      ) {
-        const sender = body.entry[0].changes[0].value.messages[0].from;
-        const msg_body = body.entry[0].changes[0].value.messages[0].text.body;
-        const profileName =
-          body.entry[0].changes[0].value.contacts[0].profile.name;
+    try {
+      if (body.object) {
+        if (
+          body.entry &&
+          body.entry[0].changes &&
+          body.entry[0].changes[0] &&
+          body.entry[0].changes[0].value.messages &&
+          body.entry[0].changes[0].value.messages[0]
+        ) {
+          const sender = body.entry[0].changes[0].value.messages[0].from;
+          const msg_body = body.entry[0].changes[0].value.messages[0].text.body;
+          const profileName =
+            body.entry[0].changes[0].value.contacts[0].profile.name;
 
-        const user = await this.repo.findUserByPhoneNumber(sender);
-        const cache = await this.cacheManager.get<string>(sender);
 
-        let state: State = {
-          data: null,
-          stage: '',
-          user: undefined,
-        };
-
-        if (cache) {
-          try {
-            const cachedData = JSON.parse(cache);
-            state = { ...cachedData, user };
-          } catch (error) {
-            console.error('Error parsing cached data:', error);
+          let state = await this.cacheManager.get<State>(sender);
+          if (!state?.user?.id) {
+            const initialState: State = {
+              data: {},
+              stage: 'landing',
+              user: undefined
+            };
+            const user = await this.repo.findUserByPhoneNumber(sender);
+            state = { ...initialState, user }
+            await this.cacheManager.set(sender, state, 3000000);
           }
-        }
 
-        if (!state || ['hi', 'hey'].includes(msg_body.toLowerCase())) {
-          return await this.generalResponse.handleNoState({
-            phoneNumber: sender,
-            profileName,
-          });
-        }
 
-        if (state.stage === 'landing') {
-          return this.generalResponse.handleLandingPageSelection({
-            input: msg_body,
+          if (!state || ['hi', 'hey'].includes(msg_body.toLowerCase())) {
+            return await this.generalResponse.handleNoState({
+              phoneNumber: sender,
+              profileName,
+              state: state!
+            });
+          }
+
+          if (state.stage === 'landing') {
+            return this.generalResponse.handleLandingPageSelection({
+              input: msg_body,
+              phoneNumber: sender,
+              profileName,
+              state,
+            });
+          }
+          if (state.stage === 'privacy') {
+            return this.generalResponse.handlePrivacyResponse({
+              input: msg_body,
+              phoneNumber: sender,
+              profileName,
+              state
+            });
+          }
+          if (state.stage.startsWith('signup')) {
+            return this.signup.handleSignup({
+              input: msg_body,
+              phoneNumber: sender,
+              state,
+              profileName,
+            });
+          }
+          if (state.stage.startsWith('subscription')) {
+            return this.subscriptionService.handleSubscription({
+              input: msg_body,
+              phoneNumber: sender,
+              state,
+              profileName,
+            });
+          }
+          if (state.stage.startsWith('create-meal-plan')) {
+            return this.createMealPlan.handleCreateMealPlan({
+              input: msg_body,
+              phoneNumber: sender,
+              state,
+            });
+          }
+          return this.generalResponse.handleNoState({
             phoneNumber: sender,
             profileName,
             state,
+            customHeader: 'I could not understand your request, lets start afresh'
           });
         }
-        if (state.stage === 'privacy') {
-          return this.generalResponse.handlePrivacyResponse({
-            input: msg_body,
-            phoneNumber: sender,
-            profileName,
-          });
-        }
-        if (state.stage.startsWith('signup')) {
-          return this.signup.handleSignup({
-            input: msg_body,
-            phoneNumber: sender,
-            state,
-            profileName,
-          });
-        }
-        if (state.stage.startsWith('subscription')) {
-          return this.subscriptionService.handleSubscription({
-            input: msg_body,
-            phoneNumber: sender,
-            state,
-            profileName,
-          });
-        }
-        if (state.stage.startsWith('create-meal-plan')) {
-          return this.createMealPlan.handleCreateMealPlan({
-            input: msg_body,
-            phoneNumber: sender,
-            state,
-          });
-        }
-        return this.generalResponse.handleNoState({
-          phoneNumber: sender,
-          profileName,
-          customHeader: 'I could not understand your request, lets start afresh'
-        });
+      } else {
+        return {
+          status: 'not-found',
+        };
       }
-    } else {
-      return {
-        status: 'not-found',
-      };
+    } catch (error) {
+      console.log({ error });
+
     }
   }
 
@@ -169,7 +173,11 @@ export class AppService {
       });
       await sendWhatsAppText({ phoneNumber, message: `Your card has been added 🎉, you can now access your free one-day meal Plan. Get ready to start your wellness journey!" 💪` })
       await delay()
-      await this.generalResponse.handleNoState({ phoneNumber, profileName: user!.name, customHeader: 'You now have access to all our meal plan service' })
+      await this.generalResponse.handleNoState({
+        phoneNumber,
+        state: { stage: '', user, data: {} },
+        profileName: user!.name, customHeader: 'You now have access to all our meal plan service'
+      })
     }
   }
 }

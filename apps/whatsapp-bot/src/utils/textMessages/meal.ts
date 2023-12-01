@@ -8,9 +8,13 @@ export const activityLevelText = `We are almost there, Please, Select your most 
 5. Extreme activity (Exceedingly active and/ or very demanding activities, such as athlete with an almost unstoppable training schedule, very demanding jobs such as shovelling coal or working long hours on an assembly line).\n`
 
 
-export const extremeGainWeightText = `Trust me I get it, you want results really quick! But when you gain weight too quickly, you tend to gain a lot of unhealthy fat. Weight should be gained at a moderate pace of 1 - 2kg per month, so kindly click below to adjust your numbers`
+export const extremeGainWeightText = `Trust me I get it, you want results really quick! But when you gain weight too quickly, you tend to gain a lot of unhealthy fat. Weight should be gained at a moderate pace of 1 - 2kg per month, you should either increase the duration or reduce your target weight\n
+1) Increase Duration
+2) Reduce Target Weight`
 
-export const extremeWeightLossText = `Trust me I get it, you want to lose the weight as fast as possible. But it seems you are trying to lose more than 8kg per month, and that's highly unrealistic. you should increase the month further`
+export const extremeWeightLossText = `Trust me I get it, you want to lose the weight as fast as possible. But it seems you are trying to lose more than 8kg per month, and that's highly unrealistic. you should either increase the duration or reduce your target weight\n
+1) Increase Duration
+2) Reduce Target Weight`
 
 export const healthConditionText = `Finally, are you managing any of these health conditions?\n
 1. None

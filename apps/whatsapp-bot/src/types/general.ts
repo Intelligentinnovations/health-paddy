@@ -46,9 +46,9 @@ export interface CalorieCalculator {
 }
 
 export const HealthGoal: { [key: string]: number } = {
-    'maintain weight': 1,
-    'loose weight': 2,
-    'gain weight': 3
+    'Maintain Weight': 1,
+    'Loose Weight': 2,
+    'Gain Weight': 3
 }
 
 
