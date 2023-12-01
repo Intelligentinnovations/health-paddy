@@ -25,7 +25,7 @@ export const calculateRequireCalorie = ({ age, weight, feet, inches, gender, act
   if (goal === 'loose weight') {
     const amountOfWeightToLoose = weight - targetWeight;
     const durationInWeeks = durationInMonth * 4;
-    const calorieNeed = caloriesToMaintainWeight - (amountOfWeightToLoose / durationInWeeks * 500)
+    const calorieNeed = caloriesToMaintainWeight - (amountOfWeightToLoose / durationInWeeks * 500)    
     return Math.round(calorieNeed / 100) * 100;
   }
   else if (goal === 'gain weight'){

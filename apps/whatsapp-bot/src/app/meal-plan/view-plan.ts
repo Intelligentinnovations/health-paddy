@@ -5,7 +5,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
 import { SecretsService } from '../../secrets/secrets.service';
-import { User } from '../../types';
+import { State } from '../../types';
 import { AppRepo } from '../app.repo';
 import { GenericService } from '../general';
 
@@ -22,16 +22,14 @@ export class ViewMealPlanService {
 
   handleViewMealPlan = async ({
     phoneNumber,
-    requiredCalorie,
-    user
+    state
 
   }: {
     phoneNumber: string;
-    requiredCalorie: number
-    user: User
+    state: State
   }) => {
     try {
-      return this.helper.generateAndSendMealPlan({ requiredCalorie, user, phoneNumber })
+      return this.helper.generateAndSendMealPlan({ state, phoneNumber })
     } catch (err) {
       console.log(err);
 
