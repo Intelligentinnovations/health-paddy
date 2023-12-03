@@ -40,11 +40,12 @@ export class GenericService {
         CREATE_MEAL_PLAN: '2',
         View_MEAL_PLAN: '3',
         SWAP_MEAL_ITEMS: '4',
-        SUPPORT: '5',
-        SUBSCRIPTION: '6'
+        VIEW_RECIPE: '5',
+        SUPPORT: '6',
+        SUBSCRIPTION: '7'
       }
 
-      const protectedSelection = ['2', '3', '4', '6']
+      const protectedSelection = ['2', '3', '4', '5', '7']
 
       if (!state.user && protectedSelection.includes(input)) {
         return this.handleNoState({
@@ -176,12 +177,26 @@ export class GenericService {
         : `Hi! ${profileName}, I am Health Paddy! Your personal meal planning assistant. How may I be of service to you today?`;
       await sendWhatsAppText({
         phoneNumber, message: `${heading}\n
-1. Signup
-2. Create Meal Plan
-3. View My Meal Plan
-4. Swap Meal Items
-5. Log a Complaint
-6. Manage Subscription`
+1. Signup 👤🔐
+Create an account with us
+
+2. Create Meal Plan 🍳📝 
+Chef Mode: Plan your personalized meal for your health journey in minutes
+
+3. View My Meal Plan 🍽️📋
+See what's cooking on your plate today
+
+4. Swap Meal Items 🔀
+Don't like a meal item? Shake things up with a variety of interesting alternatives
+
+5. View your recipe list 📖🍽️
+Your path to wellness starts here
+
+6. Log a Complaint 📢
+Help us improve our service: Share your thoughts with us!
+
+7. Manage Subscription
+Saying goodbye to our subscription? we understand. But remember, we're always here to support you on your health journey`
       });
       this.cacheManager.set(phoneNumber, { ...state, stage: 'landing', data: {} });
       return {
@@ -209,16 +224,18 @@ export class GenericService {
     state: State
   }) => {
     try {
-      const message = `Great! 🚀 Thanks for saying 'yes' to our privacy notice. Your data is in good hands! Please follow the prompt below to get signed up`;
       if (input === '1') {
+        const message = `Great! 🚀 Thanks for saying 'yes' to our privacy notice. Your data is in good hands! Please follow the prompt below to get signed up`;
         await sendWhatsAppText({ message, phoneNumber })
         await delay()
-        await sendWhatsAppText({ message: 'What is your name?', phoneNumber })
-        await this.cacheManager.set(
-          phoneNumber,
-          { stage: 'signup/name', data: {} });
+        await this.sendTextAndSetCache({ message: 'What is your name?', phoneNumber, state, nextStage: 'signup/name' });
       } else {
-        return this.handleNoState({ phoneNumber, profileName, state, customHeader: ' We respect your decision regarding our privacy policy. If you have any concerns or questions about specific aspects of the policy, please feel free to reach out to our support team' });
+        return this.handleNoState({
+          phoneNumber,
+          profileName,
+          state,
+          customHeader: 'We respect your decision regarding our privacy policy. If you have any concerns or questions about specific aspects of the policy, please feel free to reach out to our support team'
+        });
       }
       return {
         status: 'success',
@@ -235,7 +252,9 @@ export class GenericService {
     phoneNumber: string; state: State
   }) => {
     const subscription = await this.repo.fetchSubscription(state!.user!.id! as unknown as string)
-    const text = subscription?.subscriptionStatus === undefined ? `We provide a complimentary one-day meal plan after which you can subscribe to gain full access to our services. To get your free one-day meal plan, we'd appreciate it if you could add your payment card.` : 'Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.'
+    const text = subscription?.subscriptionStatus === undefined
+      ? `We provide a complimentary one-day meal plan after which you can subscribe to gain full access to our services. To get your free one-day meal plan, we'd appreciate it if you could add your payment card.`
+      : 'Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.'
     const message = `Subscription alert\n
 ${text}
 
@@ -355,6 +374,4 @@ ${text}
       }
     }
   }
-
-
 }

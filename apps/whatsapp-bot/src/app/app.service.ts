@@ -29,6 +29,7 @@ export class AppService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
+
   async handleIncomingMessage(body: any) {
     try {
       if (body.object) {
@@ -48,14 +49,15 @@ export class AppService {
           let state = await this.cacheManager.get<State>(sender);
           if (!state?.user?.id) {
             const initialState: State = {
-              data: {},
-              stage: 'landing',
-              user: undefined
+              stage: state?.stage || 'landing',
+              user: undefined,
+              data: state?.data
             };
             const user = await this.repo.findUserByPhoneNumber(sender);
             state = { ...initialState, user }
             await this.cacheManager.set(sender, state);
           }
+
 
 
           if (!state || ['hi', 'hey'].includes(msg_body.toLowerCase())) {
@@ -65,6 +67,7 @@ export class AppService {
               state: state!
             });
           }
+          console.log(state.stage);
 
           if (state.stage === 'landing') {
             return this.generalResponse.handleLandingPageSelection({
@@ -74,6 +77,7 @@ export class AppService {
               state,
             });
           }
+
           if (state.stage === 'privacy') {
             return this.generalResponse.handlePrivacyResponse({
               input: msg_body,

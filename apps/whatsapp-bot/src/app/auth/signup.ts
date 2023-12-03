@@ -50,16 +50,23 @@ export class SignupService {
           return { status: 'success' }
         }
         const emailExist = await this.repo.findUserByEmail(input);
-        const message = emailExist ? 'The email already exist, Please enter another email' : `Hey! 🎉🎉 Thank you for signing up to Health Paddy!Get started on your wellness journey by creating your personalized meal plan and get a free day meal plan`;
         if (!emailExist) {
           await this.repo.createUser({ email: input, phone: phoneNumber, name: state.data.name as string })
         }
-        await sendWhatsAppText({ message, phoneNumber })
-        if (emailExist) return {
-          status: 'success',
-        };
+        if (emailExist) {
+          const message = 'The email already exist, Please enter another email';
+          await sendWhatsAppText({ message, phoneNumber })
+          return {
+            status: 'success',
+          };
+        }
         await delay()
-        return this.helper.handleNoState({ phoneNumber, profileName, state })
+        return this.helper.handleNoState({
+          phoneNumber,
+          profileName,
+          state,
+          customHeader: `Hey! 🎉🎉 Thank you for signing up to Health Paddy!Get started on your wellness journey by creating your personalized meal plan and get a free day meal plan`
+        })
       }
       return this.helper.handleNoState({
         phoneNumber,

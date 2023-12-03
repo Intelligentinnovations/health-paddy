@@ -4,9 +4,9 @@ import { Injectable } from '@nestjs/common';
 import { calculateRequireCalorie, sendWhatsAppText, validFeetAndInches, } from '../../helpers';
 import { HealthGoal, State } from '../../types';
 import {
-  activityLevelText,
   extremeGainWeightText,
   extremeWeightLossText,
+  getActivityLevelText,
   getCalorieGoalText,
   healthConditionText,
   weightLossDurationText
@@ -126,7 +126,7 @@ export class CreateMealPlanService {
       if (stage === `${basePath}/goal`) {
         if (input === HealthGoal['Maintain Weight']) {
           return this.helper.sendTextAndSetCache({
-            message: activityLevelText,
+            message: getActivityLevelText("Maintain Weight"),
             phoneNumber,
             state,
             nextStage: `${basePath}/activity-level`,
@@ -137,6 +137,11 @@ export class CreateMealPlanService {
           input == HealthGoal['Loose Weight'] ||
           input == HealthGoal['Gain Weight']
         ) {
+          const initialMessage = input == HealthGoal['Loose Weight'] ? `You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you `: `Enjoy delicious and nourishing meals that promote muscle 
+          growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫`
+          await sendWhatsAppText({
+            message: initialMessage, phoneNumber
+          })
           const message = 'What is your target weight in Kilograms';
           const goal = Object.keys(HealthGoal).find(
             (key) => HealthGoal[key] == input
@@ -237,7 +242,7 @@ export class CreateMealPlanService {
         }
         return this.helper.sendTextAndSetCache({
           phoneNumber,
-          message: activityLevelText,
+          message: getActivityLevelText(state.data.goal),
           nextStage: `${basePath}/activity-level`,
           state,
           data: { ...state.data, durationInMonth: Number(input) },
@@ -248,7 +253,7 @@ export class CreateMealPlanService {
         if (input == 1) {
           return this.helper.sendTextAndSetCache({
             phoneNumber,
-            message: `Please re-enter a duration in months`,
+            message: `Please re - enter a duration in months`,
             nextStage: `${basePath}/goal-duration`,
             state,
             data: state.data
@@ -258,7 +263,7 @@ export class CreateMealPlanService {
         if (input == 2) {
           return this.helper.sendTextAndSetCache({
             phoneNumber,
-            message: `Please re-enter your target weight`,
+            message: `Please re - enter your target weight`,
             nextStage: `${basePath}/target-weight`,
             state,
             data: state.data
@@ -297,7 +302,6 @@ export class CreateMealPlanService {
         });
       }
       if (stage === `${basePath}/health-condition`) {
-        const firstMessage = `Sit back while I calculate your required daily calorie and create your customized meal plan`;
         const healthCondition =
           input == 1
             ? 'none'
@@ -337,7 +341,7 @@ export class CreateMealPlanService {
             durationInMonth,
           });
           if (requiredCalorie < 1200) return this.helper.sendTextAndSetCache({
-            message: `Your calorie requirement  of ${requiredCalorie} is too low. The recommended minimum is 1200cal per day to meet your body's nutritional needs`,
+            message: `Your calorie requirement  of ${requiredCalorie} is too low.The recommended minimum is 1200cal per day to meet your body's nutritional needs`,
             phoneNumber,
             nextStage: 'landing',
             state
@@ -355,7 +359,6 @@ export class CreateMealPlanService {
             userId: state.user!.id as unknown as string,
           });
           const weightDifference = Math.abs(weight - targetWeight);
-          await sendWhatsAppText({ message: firstMessage, phoneNumber });
           await this.helper.sendTextAndSetCache({
             message: getCalorieGoalText({
               goal,
@@ -369,15 +372,22 @@ export class CreateMealPlanService {
             state,
             data: { ...state.data, healthCondition },
           });
-          return this.viewMealPlan.handleViewMealPlan({
+          await this.viewMealPlan.handleViewMealPlan({
             phoneNumber,
             state,
           });
+          return this.helper.handleNoState({
+            phoneNumber,
+            profileName: state.user!.name,
+            state,
+            customHeader: `Congratulations on creating your personalized meal plan with Health Paddy! You have taken the first step to a healthier and happier you 🌱🥗
+            Is there anything else I may assist you with ?`
+          })
         }
         return this.helper.sendTextAndSetCache({
           message: `Please contact support`,
           phoneNumber,
-          nextStage: '',
+          nextStage: 'landing',
           state,
           data: { ...state.data, healthCondition },
         });
