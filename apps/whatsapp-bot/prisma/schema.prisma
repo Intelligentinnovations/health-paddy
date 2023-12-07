@@ -87,6 +87,7 @@ model CalorieNeed {
   id       String     @id @default(dbgenerated("gen_random_uuid()"))
   calories Int
   MealPlan MealPlan[]
+  Recipe   Recipe[]
 }
 
 model MealPlan {
@@ -94,7 +95,6 @@ model MealPlan {
   day               String
   breakfast         String
   breakfastCalories Int
-  snack             String
   snackCalories     Int
   lunch             String
   lunchCalories     Int
@@ -110,6 +110,19 @@ model Snack {
   calories  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Recipe {
+  id            String      @id @default(dbgenerated("gen_random_uuid()"))
+  name          String
+  servings      Int
+  instructions  String
+  ingredients   String
+  instruction   String
+  calorieNeedId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  CalorieNeed   CalorieNeed @relation(fields: [calorieNeedId], references: [id])
 }
 
 enum SubscriptionStatus {

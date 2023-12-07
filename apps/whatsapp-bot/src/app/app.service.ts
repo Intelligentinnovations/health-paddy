@@ -12,7 +12,7 @@ import { State } from '../types';
 import { AppRepo } from './app.repo';
 import { SignupService } from './auth/signup'
 import { GenericService } from './general';
-import { CreateMealPlanService } from './meal-plan';
+import { CreateMealPlanService, ViewRecipeService } from './meal-plan';
 import { SubscriptionService } from './subscription/subscription'
 
 @Injectable()
@@ -23,6 +23,7 @@ export class AppService {
     private paymentService: PaymentService,
     private signup: SignupService,
     private createMealPlan: CreateMealPlanService,
+    private recipe: ViewRecipeService,
     private repo: AppRepo,
     private secrets: SecretsService,
     @Inject(MESSAGE_MANAGER) private messaging: Messaging,
@@ -109,6 +110,13 @@ export class AppService {
               state,
             });
           }
+          if (state.stage.startsWith('view-recipe')) {
+            return this.recipe.handleViewRecipe({
+              input: msg_body,
+              phoneNumber: sender,
+              state,
+            });
+          }
           return this.generalResponse.handleNoState({
             phoneNumber: sender,
             profileName,
@@ -175,12 +183,10 @@ export class AppService {
         amount: `${amountInNaira}`,
         reference,
       });
-      await sendWhatsAppText({ phoneNumber, message: `Your card has been added 🎉, you can now access your free one-day meal Plan. Get ready to start your wellness journey!" 💪` })
-      await delay()
       await this.generalResponse.handleNoState({
         phoneNumber,
         state: { stage: '', user, data: {} },
-        profileName: user!.name, customHeader: 'You now have access to all our meal plan service'
+        profileName: user!.name, customHeader: `Your card has been added 🎉, you can now access your free one-day meal Plan. Get ready to start your wellness journey!" 💪`
       })
     }
   }

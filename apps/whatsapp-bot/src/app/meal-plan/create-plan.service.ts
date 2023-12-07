@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@nestjs/common';
 
-import { calculateRequireCalorie, sendWhatsAppText, validFeetAndInches, } from '../../helpers';
+import { calculateRequireCalorie, delay, sendWhatsAppText, validFeetAndInches, } from '../../helpers';
 import { HealthGoal, State } from '../../types';
 import {
   extremeGainWeightText,
@@ -137,11 +137,12 @@ export class CreateMealPlanService {
           input == HealthGoal['Loose Weight'] ||
           input == HealthGoal['Gain Weight']
         ) {
-          const initialMessage = input == HealthGoal['Loose Weight'] ? `You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you `: `Enjoy delicious and nourishing meals that promote muscle 
+          const initialMessage = input == HealthGoal['Loose Weight'] ? `You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you ` : `Enjoy delicious and nourishing meals that promote muscle 
           growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫`
           await sendWhatsAppText({
             message: initialMessage, phoneNumber
           })
+          await delay()
           const message = 'What is your target weight in Kilograms';
           const goal = Object.keys(HealthGoal).find(
             (key) => HealthGoal[key] == input
@@ -322,7 +323,6 @@ export class CreateMealPlanService {
               gender,
               height,
               weight,
-              healthCondition,
               goal,
               targetWeight,
               durationInMonth,
@@ -340,6 +340,7 @@ export class CreateMealPlanService {
             targetWeight,
             durationInMonth,
           });
+
           if (requiredCalorie < 1200) return this.helper.sendTextAndSetCache({
             message: `Your calorie requirement  of ${requiredCalorie} is too low.The recommended minimum is 1200cal per day to meet your body's nutritional needs`,
             phoneNumber,
@@ -353,7 +354,7 @@ export class CreateMealPlanService {
               sex: gender,
               height,
               weight,
-              healthCondition,
+              healthCondition: 'none',
               requiredCalorie,
             },
             userId: state.user!.id as unknown as string,
@@ -375,13 +376,14 @@ export class CreateMealPlanService {
           await this.viewMealPlan.handleViewMealPlan({
             phoneNumber,
             state,
+            requiredCalorie,
           });
           return this.helper.handleNoState({
             phoneNumber,
             profileName: state.user!.name,
             state,
             customHeader: `Congratulations on creating your personalized meal plan with Health Paddy! You have taken the first step to a healthier and happier you 🌱🥗
-            Is there anything else I may assist you with ?`
+Is there anything else I may assist you with ?`
           })
         }
         return this.helper.sendTextAndSetCache({

@@ -27,8 +27,8 @@ export const healthConditionText = `Finally, are you managing any of these healt
 export const weightLossDurationText = `In how many months would you like to achieve this goal? (Please be realistic here. Extreme weight loss is rarely ever sustainable, we recommend a target of 5kg or less per month)`
 
 export const getCalorieGoalText = ({ goal, requiredCalorie, userName, durationInMonth, weightDifference }: GetCalorieGoalText) =>
-  goal === 'maintain weight'
+  goal === 'Maintain Weight'
     ? `Thank you ${userName}, to maintain your current weight, you will be needing ${requiredCalorie} Cal per day`
-    : goal === 'loose weight'
+    : goal === 'Loose Weight'
       ? `To loose ${weightDifference}KG over the next ${durationInMonth} months, at your current level of activity and weight, you'll need to consume: ${requiredCalorie}cal per day`
       : `To gain ${weightDifference}KG over the next ${durationInMonth} months, at your current level of activity and weight, you'll need to consume: ${requiredCalorie}cal per day`

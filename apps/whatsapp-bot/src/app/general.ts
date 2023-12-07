@@ -5,7 +5,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { DateTime } from 'luxon';
 
-import { delay, sendWhatsAppText } from '../helpers';
+import { delay, generateDaysOfWeek, sendWhatsAppText } from '../helpers';
 import { SecretsService } from '../secrets/secrets.service';
 import { MealPlan, State } from '../types';
 import { privacyMessage } from '../utils/textMessages';
@@ -79,21 +79,26 @@ export class GenericService {
               state
 
             });
+          } else {
+            const subscription = await this.repo.fetchSubscriptionStatus(state!.user!.id as string)
+            if (subscription?.status !== 'active') {
+              return this.handlePaymentNotification({
+                phoneNumber,
+                state
+              })
+            }
+            await this.sendTextAndSetCache({
+              message: `Hi, ${state.user?.name} I'd love to chat with you and ask a few questions to help create your personalized meal plan. 😊`,
+              phoneNumber,
+              nextStage: 'create-meal-plan/age',
+              state
+            })
+            await delay()
+            await sendWhatsAppText({ message: 'Please tell me your age', phoneNumber })
+            break;
+
           }
 
-          if (state.user?.subscriptionStatus !== 'active') return this.handlePaymentNotification({
-            phoneNumber,
-            state
-          })
-          await this.sendTextAndSetCache({
-            message: `Hi, ${state.user?.name} I'd love to chat with you and ask a few questions to help create your personalized meal plan. 😊`,
-            phoneNumber,
-            nextStage: 'create-meal-plan/age',
-            state
-          })
-          await delay()
-          await sendWhatsAppText({ message: 'Please tell me your age', phoneNumber })
-          break;
 
         case ROUTE.View_MEAL_PLAN:
           if (!state.user?.activityLevel) {
@@ -113,6 +118,31 @@ export class GenericService {
           }
           return this.generateAndSendMealPlan({
             phoneNumber,
+            requiredCalorie: state.user.requiredCalorie!,
+            state
+          })
+
+
+        case ROUTE.VIEW_RECIPE:
+          if (!state.user?.activityLevel) {
+            return this.sendTextAndSetCache({
+              message: 'Please create a meal plan to proceed',
+              phoneNumber,
+              nextStage: 'landing',
+              state
+            });
+          }
+          return this.sendTextAndSetCache({
+            message: `Kindly choose a specific day to view the meal recipe! 🍽️✨
+1. Monday
+2. Tuesday
+3. Wednesday
+4. Thursday
+5. Friday
+6. Saturday
+7. Sunday`,
+            phoneNumber,
+            nextStage: 'view-recipe/day',
             state
           })
 
@@ -198,7 +228,7 @@ Help us improve our service: Share your thoughts with us!
 7. Manage Subscription
 Saying goodbye to our subscription? we understand. But remember, we're always here to support you on your health journey`
       });
-      this.cacheManager.set(phoneNumber, { ...state, stage: 'landing', data: {} });
+      this.cacheManager.del(phoneNumber);
       return {
         status: 'success',
       };
@@ -305,11 +335,13 @@ ${text}
   async generateAndSendMealPlan({
     state,
     phoneNumber,
+    requiredCalorie
   }: {
     state: State;
     phoneNumber: string;
+    requiredCalorie: number
   }) {
-    const closestCalorie = await this.getClosestMealPlan(state!.user!.requiredCalorie as number);
+    const closestCalorie = await this.getClosestMealPlan(requiredCalorie);
     const subscription = await this.repo.fetchSubscription(state!.user!.id as unknown as string);
     const subscriptionEndDate = DateTime.fromISO(subscription!.endDate!.toISOString().split('T')[0]!);
     const currentDate = DateTime.fromISO(new Date().toISOString().split('T')[0]!);
@@ -332,7 +364,7 @@ ${text}
 
     const mealPlan = await this.cacheManager.get<MealPlan[]>(cacheKey);
 
-    if (mealPlan) {
+    if (mealPlan && mealPlan.length) {
       for await (const plan of mealPlan) {
         await sendPlanMessage(plan);
       }
@@ -343,7 +375,7 @@ ${text}
         });
       }
     } else {
-      if (remainingSubscriptionsDays! < 0) {
+      if (state.user?.subscriptionStatus === 'expired') {
         return this.handleNoState({
           phoneNumber,
           profileName: state!.user!.name,
@@ -359,8 +391,8 @@ ${text}
         })
       ).rows;
 
-      const SEVEN_DAYS_IN_SECONDS = 604800;
-      await this.cacheManager.set(cacheKey, fetchedMealPlan, SEVEN_DAYS_IN_SECONDS);
+      const ttl = +remainingSubscriptionsDays! * 24 * 60 * 60
+      await this.cacheManager.set(cacheKey, fetchedMealPlan, ttl);
 
       for await (const plan of fetchedMealPlan) {
         await sendPlanMessage(plan);

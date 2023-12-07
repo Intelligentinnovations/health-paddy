@@ -184,4 +184,12 @@ export class AppRepo {
     `.execute(this.client)
 
   }
+
+  async fetchSubscriptionStatus(userId: string) {
+    return await this.client
+      .selectFrom('Subscription')
+      .select(['id', 'status'])
+      .where('userId', '=', userId)
+      .executeTakeFirst()
+  }
 }
