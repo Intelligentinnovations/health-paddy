@@ -8,7 +8,7 @@ import { AppService } from './app/app.service';
 import { SignupService } from './app/auth/signup'
 // import { CronService } from './cron/subscription';
 import { GenericService, } from './app/general';
-import { CreateMealPlanService, ViewMealPlanService } from './app/meal-plan';
+import { CreateMealPlanService, ViewMealPlanService, ViewRecipeService } from './app/meal-plan';
 import { SubscriptionService } from './app/subscription/subscription'
 import { LibrariesModule } from './libraries/libraries.module';
 import { SecretsModule } from './secrets/secrets.module';
@@ -41,6 +41,7 @@ import { PaymentService } from './services/paystack';
     PaymentService,
     CreateMealPlanService,
     ViewMealPlanService,
+    ViewRecipeService
     // CronService
   ],
 })
