@@ -4520,10 +4520,10 @@ export const recipe = [
     ]
   },
   {
-    "name": "Jollof Rice",
-    "servings": 6,
+    name: "Jollof Rice",
+    servings: 6,
     calorieNeedId: calorieNeed2300Id,
-    "ingredients": [
+    ingredients: [
       "Raw rice - 1¾ cups",
       "Chicken stock - 1 cup",
       "Cooking oil - 2½ tablespoons",
@@ -4557,10 +4557,10 @@ export const recipe = [
     ]
   },
   {
-    "name": "Chicken Pepper Soup with Potatoes",
-    "servings": 3,
+    name: "Chicken Pepper Soup with Potatoes",
+    servings: 3,
     calorieNeedId: calorieNeed2300Id,
-    "ingredients": [
+    ingredients: [
       "Chicken thigh with skin - 3 pieces",
       "Chicken drumstick with skin - 6 pieces",
       "Potatoes (Irish or sweet) - 6 cups diced",
@@ -4592,10 +4592,10 @@ export const recipe = [
     ]
   },
   {
-    "name": "Fish Pepper Soup with Potatoes",
-    "servings": 3,
+    name: "Fish Pepper Soup with Potatoes",
+    servings: 3,
     calorieNeedId: calorieNeed2300Id,
-    "ingredients": [
+    ingredients: [
       "Fish - 9 pieces (1 piece of the head, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
       "Potatoes (Irish or sweet) - 6 cups diced",
       "Pepper soup spice - 4 - 5 tablespoons",
@@ -4626,10 +4626,10 @@ export const recipe = [
     ]
   },
   {
-    "name": "Fish Sauce",
-    "servings": 3,
+    name: "Fish Sauce",
+    servings: 3,
     calorieNeedId: calorieNeed2300Id,
-    "ingredients": [
+    ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and 1½ tail-piece of a medium-sized titus (or weigh 265g without bone) (Alternatively, use 4 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 410g without bones)",
       "Tomatoes - 3 medium",
       "Red pepper (Tatashe) - 2 large",
@@ -4660,10 +4660,10 @@ export const recipe = [
     ]
   },
   {
-    "name": "Efo-riro with Beef",
-    "servings": 3,
+    name: "Efo-riro with Beef",
+    servings: 3,
     calorieNeedId: calorieNeed2300Id,
-    "ingredients": [
+    ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
       "Palm oil - 1 tablespoon (15mls)",
       "Tomatoes - 4 medium",
@@ -4697,10 +4697,10 @@ export const recipe = [
     ]
   },
   {
-    "name": "Efo-riro with Fish or Chicken",
-    "servings": 3,
+    name: "Efo-riro with Fish or Chicken",
+    servings: 3,
     calorieNeedId: calorieNeed2300Id,
-    "ingredients": [
+    ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
       "Palm oil - 1 tablespoon (15mls)",
       "Tomatoes - 4 medium",
@@ -4892,7 +4892,7 @@ export const recipe = [
       "Chop the onions and set aside",
       "Chop enough veggies to measure 2 cups. If using frozen veggies, simply measure 2 cups.",
       "Measure ½ cup of well-rinsed sweet corn and set aside",
-      "In a pan heat 15mls (a tablespoon) of oil, then add the onions and heat till it’s aromatic",
+      "In a pan heat 15mls (a tablespoon) of oil, then add the onions and heat till it's aromatic",
       "Add the diced vegetables and stir",
       "Season with seasoning powder, ginger and garlic powder or paste",
       "Add two tablespoons each, of sweet chilli sauce and oyster sauce (or teriyaki)",
