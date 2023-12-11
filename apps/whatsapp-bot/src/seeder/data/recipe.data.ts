@@ -913,10 +913,10 @@ export const recipe = [
     ],
   },
   {
-    "recipeName": "Oil-less Beans Pottage",
-    "servings": 3,
+    name: "Oil-less Beans Pottage",
+    servings: 3,
     calorieNeedId: calorieNeed1400Id,
-    "ingredients": [
+    ingredients: [
       "Raw beans - 1½ cups",
       "Tomatoes - 3 medium",
       "Red pepper (tatashe) - 2 large",
@@ -927,7 +927,7 @@ export const recipe = [
       "Seasoning cubes",
       "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower, and so on"
     ],
-    "instructions": [
+    instructions: [
       "Boil the beans till soft",
       "Roughly blend the tomatoes, red pepper, and scotch bonnet, with little water",
       "Chop the onions and set aside",
@@ -941,10 +941,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Efo-riro with Beef",
-    "servings": 3,
+    name: "Efo-riro with Beef",
+    servings: 3,
     calorieNeedId: calorieNeed1400Id,
-    "ingredients": [
+    ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
       "Palm oil - 1 tablespoon (15mls)",
       "Tomatoes - 4 medium",
@@ -961,7 +961,7 @@ export const recipe = [
       "Spices- Curry, Thyme, Garlic powder",
       "*Lean- this means beef with little to zero fat. When shopping, be selective with the meat you choose and get the butcher to trim off any fat"
     ],
-    "instructions": [
+    instructions: [
       "Chop the beef and ponmo into smaller pieces of equal size",
       "Roughly blend the tomatoes, pepper, and scotch bonnet. Blend as dry as possible, add in very little water",
       "Chop the onions and wash the chopped leaves",
@@ -978,10 +978,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Efo-riro with Fish or Chicken",
-    "servings": 3,
+    name: "Efo-riro with Fish or Chicken",
+    servings: 3,
     calorieNeedId: calorieNeed1400Id,
-    "ingredients": [
+    ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
       "Palm oil - 1 tablespoon (15mls)",
       "Tomatoes - 4 medium",
@@ -997,7 +997,7 @@ export const recipe = [
       "Salt",
       "Spices- Curry, Thyme, Garlic powder"
     ],
-    "instructions": [
+    instructions: [
       "Chop and ponmo into smaller pieces of equal size. You can chop the fish (or chicken) as well or leave it intact",
       "Roughly blend the tomatoes, pepper and scotch bonnet. Blend as dry as possible, add in very little water",
       "Chop the onions and wash the chopped leaves",
@@ -1015,10 +1015,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Okra Soup with Beef",
-    "servings": 3,
+    name: "Okra Soup with Beef",
+    servings: 3,
     calorieNeedId: calorieNeed1400Id,
-    "ingredients": [
+    ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
       "Palm oil - 1 tablespoon (15mls)",
       "Scotch bonnet (ata-rodo) - 1 or 2 large",
@@ -1035,7 +1035,7 @@ export const recipe = [
       "Garlic",
       "*Lean- this means beef with little to zero fat. When shopping, be selective with the meat you choose and get the butcher to trim off any fat"
     ],
-    "instructions": [
+    instructions: [
       "Chop the beef and ponmo into smaller pieces of equal size",
       "Measure 1 cup of beef stock (you can use chicken stock as well). Ensure you remove any floating oil from the stock before use",
       "Chop enough okra to fill one cup. Slice each okra down the middle then chop them",
@@ -1052,10 +1052,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Fish Sauce",
-    "servings": 3,
+    name: "Fish Sauce",
+    servings: 3,
     calorieNeedId: calorieNeed1400Id,
-    "ingredients": [
+    ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and a tail-piece of a medium-sized titus (or weigh 200g without bone) (Alternatively, use 3 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 310g without bones)",
       "Tomatoes - 3 medium",
       "Red pepper (Tatashe) - 2 large",
@@ -1070,7 +1070,7 @@ export const recipe = [
       "Cooking oil - 5mls (1 teaspoon)",
       "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower and so on"
     ],
-    "instructions": [
+    instructions: [
       "Remove the bones of the fish and shred them into small pieces.",
       "Roughly blend tomatoes, pepper and scotch bonnet",
       "Chop the onions and set aside",
@@ -1086,10 +1086,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Yam Pottage",
-    "servings": 3,
+    name: "Yam Pottage",
+    servings: 3,
     calorieNeedId: calorieNeed1400Id,
-    "ingredients": [
+    ingredients: [
       "Yam - 650g or 4⅓ cups diced",
       "Tomatoes - 3 medium",
       "Red pepper (Tatashe) - 2 medium",
@@ -1104,7 +1104,7 @@ export const recipe = [
       "Thyme",
       "Garlic"
     ],
-    "instructions": [
+    instructions: [
       "Peel and dice enough yam cubes that measure up to 4⅓ cups (or weigh 650g) and set aside in a bowl of water",
       "Chop the carrots and green leaves",
       "Blend the tomatoes, and peppers roughly and chop the onion",
@@ -1120,10 +1120,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Ugwu Stir-fry",
-    "servings": 3,
+    name: "Ugwu Stir-fry",
+    servings: 3,
     calorieNeedId: calorieNeed1400Id,
-    "ingredients": [
+    ingredients: [
       "Chopped ugwu - 5 cups",
       "Mixed veggies (fresh or frozen) - 2 cups",
       "Onions - 2 medium",
@@ -1136,7 +1136,7 @@ export const recipe = [
       "Oyster sauce (or teriyaki sauce) - 2 tablespoons",
       "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower and so on"
     ],
-    "instructions": [
+    instructions: [
       "Measure and wash 5 cups of chopped ugwu, kale or spinach",
       "Chop the onions and set aside",
       "Chop enough veggies to measure 2 cups. If using frozen veggies, simply measure 2 cups.",
@@ -1150,10 +1150,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Oil-less Beans Pottage",
-    "servings": 3,
+    name: "Oil-less Beans Pottage",
+    servings: 3,
     calorieNeedId: calorieNeed1400Id,
-    "ingredients": [
+    ingredients: [
       "Raw beans - 1½ cups",
       "Tomatoes - 3 medium",
       "Red pepper (tatashe) - 2 large",
@@ -1164,7 +1164,7 @@ export const recipe = [
       "Seasoning cubes",
       "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower and so on"
     ],
-    "instructions": [
+    instructions: [
       "Boil the beans till soft",
       "Roughly blend the tomatoes, red pepper and scotch bonnet, with little water",
       "Chop the onions and set aside",
@@ -1178,10 +1178,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Moi-Moi",
-    "servings": 3,
+    name: "Moi-Moi",
+    servings: 3,
     calorieNeedId: calorieNeed1400Id,
-    "ingredients": [
+    ingredients: [
       "Raw beans - 3 cups",
       "Red pepper (tatashe) - 4 medium (or 7 pieces of long re pepper, aka shobo)",
       "Onions - 1 large onion",
@@ -1191,7 +1191,7 @@ export const recipe = [
       "Salt",
       "Water - 3 cups"
     ],
-    "instructions": [
+    instructions: [
       "Put the beans into a bowl, add enough water to cover them, and leave to soak for 15-20minutes.",
       "To peel the beans, place a handful at a time into the blender along with some water. Using the pulse section, blend for no more than 3 seconds at a time, this will help remove the skin from the beans.",
       "Pour the content of the blender into another bowl, then repeat the process for the rest of the unpeeled beans.",
@@ -1210,10 +1210,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Jollof Rice",
-    "servings": 6,
+    name: "Jollof Rice",
+    servings: 6,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Raw rice - 1¾ cups",
       "Chicken stock - 1 cup",
       "Cooking oil - 1½ tablespoons",
@@ -1229,7 +1229,7 @@ export const recipe = [
       "Curry powder",
       "Salt"
     ],
-    "instructions": [
+    instructions: [
       "Roughly blend the tomatoes, red pepper, scotch bonnet and one of the onions",
       "Chop the onions, garlic and ginger",
       "Measure out the tomato paste",
@@ -1247,10 +1247,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Chicken Pepper Soup with Potatoes",
-    "servings": 3,
+    name: "Chicken Pepper Soup with Potatoes",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Chicken drumsticks with skin - 3 pieces",
       "Chicken thigh with skin - 3 pieces",
       "Potatoes (Irish or sweet) - 3 cups diced",
@@ -1264,7 +1264,7 @@ export const recipe = [
       "Seasoning cubes",
       "Salt"
     ],
-    "instructions": [
+    instructions: [
       "Wash, dice and measure 3 cups of potatoes and set aside submerged in water",
       "Chop the scent leaves",
       "Blend the onions, garlic, ginger and scotch bonnet with little water",
@@ -1282,10 +1282,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Fish Pepper Soup with Potatoes",
-    "servings": 3,
+    name: "Fish Pepper Soup with Potatoes",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Fish - 6 pieces (1 piece of the head piece, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
       "Potatoes (Irish or sweet) - 4½ cups diced",
       "Pepper soup spice - 4 - 5 tablespoons",
@@ -1298,7 +1298,7 @@ export const recipe = [
       "Seasoning cubes",
       "Salt"
     ],
-    "instructions": [
+    instructions: [
       "Wash, dice and measure 4½ cups of potatoes and set aside submerged in water",
       "Chop the scent leaves",
       "Blend the onions, garlic, ginger and scotch bonnet with little water",
@@ -1316,10 +1316,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Efo-riro with Beef",
-    "servings": 3,
+    name: "Efo-riro with Beef",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
       "Palm oil - 1 tablespoon (15mls)",
       "Tomatoes - 4 medium",
@@ -1335,7 +1335,7 @@ export const recipe = [
       "Salt",
       "Spices- Curry, Thyme, Garlic powder"
     ],
-    "instructions": [
+    instructions: [
       "Chop the beef and ponmo into smaller pieces of equal size.",
       "Roughly blend the tomatoes, pepper and scotch bonnet. Blend as dry as possible, add in very little water",
       "Chop the onions and wash the chopped leaves",
@@ -1352,10 +1352,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Efo-riro with Fish or Chicken",
-    "servings": 3,
+    name: "Efo-riro with Fish or Chicken",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
       "Palm oil - 1 tablespoon (15mls)",
       "Tomatoes - 4 medium",
@@ -1371,7 +1371,7 @@ export const recipe = [
       "Salt",
       "Spices- Curry, Thyme, Garlic powder"
     ],
-    "instructions": [
+    instructions: [
       "Chop and ponmo into smaller pieces of equal size. You can chop the fish (or chicken) as well or leave it intact",
       "Roughly blend the tomatoes, pepper and scotch bonnet. Blend as dry as possible, add in very little water",
       "Chop the onions and wash the chopped leaves",
@@ -1389,10 +1389,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Okra Soup with Beef",
-    "servings": 3,
+    name: "Okra Soup with Beef",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
       "Palm oil - 1 tablespoon (15mls)",
       "Scotch bonnet (ata-rodo) - 1 or 2 large",
@@ -1409,7 +1409,7 @@ export const recipe = [
       "Garlic",
       "Lean- this means beef with little to zero fat. When shopping, be selective with the meat you choose and get the butcher to trim off any fat."
     ],
-    "instructions": [
+    instructions: [
       "Chop the beef and ponmo into smaller pieces of equal size.",
       "Measure 1 cup of beef stock (you can use chicken stock as well). Ensure you remove any floating oil from the stock before use.",
       "Chop enough okra to fill one cup. Slice each okra down the middle then chop them.",
@@ -1426,10 +1426,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Okra Soup with Fish (or Chicken)",
-    "servings": 3,
+    name: "Okra Soup with Fish (or Chicken)",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
       "Scotch bonnet (ata-rodo) - 1 or 2 large",
       "Locust beans (Iru) - 1/8 cup",
@@ -1444,7 +1444,7 @@ export const recipe = [
       "Thyme",
       "Garlic"
     ],
-    "instructions": [
+    instructions: [
       "Chop and ponmo into smaller pieces of equal size. You can chop the fish (or chicken) as well or leave it intact",
       "Measure 1 cup of chicken stock. Ensure you remove any floating oil from the stock before use.",
       "Chop enough okra to fill one cup. Slice each okra down the middle then chop them.",
@@ -1461,10 +1461,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Fish Sauce",
-    "servings": 3,
+    name: "Fish Sauce",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and a tail-piece of a medium-sized titus (or weigh 200g without bone) (Alternatively, use 3 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 310g without bones)",
       "Tomatoes - 3 medium",
       "Red pepper (Tatashe) - 2 large",
@@ -1479,7 +1479,7 @@ export const recipe = [
       "Cooking oil - 5mls (1 teaspoon)",
       "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower and so on"
     ],
-    "instructions": [
+    instructions: [
       "Remove the bones of the fish and shred them into small pieces.",
       "Roughly blend tomatoes, pepper and scotch bonnet",
       "Chop the onions and set aside",
@@ -1495,10 +1495,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Oil-less Beans Pottage",
-    "servings": 3,
+    name: "Oil-less Beans Pottage",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Raw beans - 1½ cups",
       "Tomatoes - 3 medium",
       "Red pepper (tatashe) - 2 large",
@@ -1509,7 +1509,7 @@ export const recipe = [
       "Seasoning cubes",
       "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower and so on"
     ],
-    "instructions": [
+    instructions: [
       "Boil the beans till soft",
       "Roughly blend the tomatoes, red pepper and scotch bonnet, with little water",
       "Chop the onions and set aside",
@@ -1523,10 +1523,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Yam Pottage",
-    "servings": 3,
+    name: "Yam Pottage",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Yam - 830g or 5½ cups diced",
       "Tomatoes - 3 medium",
       "Red pepper (Tatashe) - 2 medium",
@@ -1541,7 +1541,7 @@ export const recipe = [
       "Thyme",
       "Garlic"
     ],
-    "instructions": [
+    instructions: [
       "Peel and dice enough yam cubes that measure up to 5½ cups (or weigh 830g) and set aside in a bowl of water",
       "Chop the carrots and green leaves",
       "Blend the tomatoes, and peppers roughly and chop the onion",
@@ -1557,10 +1557,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Ugwu Stir-fry",
-    "servings": 3,
+    name: "Ugwu Stir-fry",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Chopped ugwu - 5 cups",
       "Mixed veggies (fresh or frozen) - 2 cups",
       "Onions - 2 medium",
@@ -1573,7 +1573,7 @@ export const recipe = [
       "Oyster sauce (or teriyaki sauce) - 2 tablespoons",
       "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower and so on"
     ],
-    "instructions": [
+    instructions: [
       "Measure and wash 5 cups of chopped ugwu, kale or spinach",
       "Chop the onions and set aside",
       "Chop enough veggies to measure 2 cups. If using frozen veggies, simply measure 2 cups.",
@@ -1587,10 +1587,10 @@ export const recipe = [
     ]
   },
   {
-    "recipeName": "Moi-Moi",
-    "servings": 3,
+    name: "Moi-Moi",
+    servings: 3,
     calorieNeedId: calorieNeed1500Id,
-    "ingredients": [
+    ingredients: [
       "Raw beans - 3 cups",
       "Red pepper (tatashe) - 4 medium (or 7 pieces of long re pepper, aka shobo)",
       "Onions - 1 large onion",
@@ -1600,7 +1600,7 @@ export const recipe = [
       "Salt",
       "Water - 3 cups"
     ],
-    "instructions": [
+    instructions: [
       "Put the beans into a bowl, add enough water to cover them, and leave to soak for 15-20minutes.",
       "To peel the beans, place a handful at a time into the blender along with some water. Using the pulse section, blend for no more than 3 seconds at a time, this will help remove the skin from the beans.",
       "Pour the content of the blender into another bowl, then repeat the process for the rest of the unpeeled beans.",
@@ -1616,6 +1616,421 @@ export const recipe = [
       "Repeat the process until you have used the entire mixture, cover the pot, and turn the heat from low to medium-high.",
       "As it “steams”, the water will evaporate. Ensure you keep adding water to the pot to avoid it drying out.",
       "Cook for about 30-35 minutes or until the moi-moi is ready (and you will know that it is ready by opening one of them and cutting right through. It will be firm and the color will have intensified a bit"
+    ]
+  },
+
+
+  {
+    name: "Jollof Rice",
+    servings: 6,
+    calorieNeedId: calorieNeed1600Id,
+    "caloriesPerServing": 450,
+    ingredients: [
+      "Raw rice - 1¾ cups",
+      "Chicken stock - 1 cup",
+      "Cooking oil - 2½ tablespoons",
+      "Tomatoes - 4 hard medium",
+      "Red pepper (Tatashe) - 4 medium",
+      "Onion - 2 medium",
+      "Scotch bonnet (Rodo) - 3 - 5 medium",
+      "Garlic - 4 cloves",
+      "Ginger - 3 inches",
+      "Tomato paste - 3 tablespoons",
+      "Seasoning cubes or powder",
+      "Thyme",
+      "Curry powder",
+      "Salt"
+    ],
+    instructions: [
+      "Roughly blend the tomatoes, red pepper, scotch bonnet, and one of the onions",
+      "Chop the onions, garlic, and ginger",
+      "Measure out the tomato paste",
+      "Heat the oil in a pot, and add the chopped onions till they are aromatic",
+      "Add the tomato paste, and fry for a few minutes on low heat",
+      "Add the ginger and garlic and cook for another couple of minutes",
+      "Add the thyme, curry powder, salt, and seasoning.",
+      "Add the blended pepper and cook till the pepper thickens",
+      "Taste and adjust the seasoning at this point if there is a need to.",
+      "Stir in the washed rice and stir well",
+      "Add the chicken stock and stir again. Be sure to remove as much oil floating on top of the stock.",
+      "Cover the pot, and ensure no steam is escaping. If the lid does not fit well, use foil to cover the entire pot before placing the cover on it.",
+      "Once the rice comes to a boil, lower the heat and continue to cook until the rice is done",
+      "Split into 6 equal portions. Each portion is a serving"
+    ]
+  },
+  {
+    name: "Efo-riro with Beef",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
+      "Palm oil - 1 tablespoon (15mls)",
+      "Tomatoes - 4 medium",
+      "Red pepper (Tatashe) - 4 medium",
+      "Scotch bonnet (ata-rodo) - 1 or 2 large",
+      "Onions - 1 medium",
+      "Locust beans (Iru) - 1/8 cup (optional)",
+      "Cow skin (Ponmo), cooked - 3 medium, 2 inches in length (optional)",
+      "Protein, cooked - 3 pieces of lean* beef, each piece 67g cooked weight.",
+      "Beef stock - 2/3 cup",
+      "Crayfish powder - 1½ tablespoons (optional)",
+      "Seasoning cubes",
+      "Salt",
+      "Spices- Curry, Thyme, Garlic powder",
+      "Lean- this means beef with little to zero fat. When shopping, be selective with the meat you choose and get the butcher to trim off any fat."
+    ],
+    instructions: [
+      "Chop the beef and ponmo into smaller pieces of equal size.",
+      "Roughly blend the tomatoes, pepper, and scotch bonnet. Blend as dry as possible, add in very little water",
+      "Chop the onions and wash the chopped leaves",
+      "Place the washed vegetables in a strainer to drain the water",
+      "Wash 1/8 cup iru (locust beans) if you would like to include it",
+      "Measure 2/3 cup of the stock, ensure you remove any floating oil from the stock before use.",
+      "In a pot, heat the cooking oil then add the onions and locust beans. Allow frying till the onions are aromatic.",
+      "Then add the beef stock and blended pepper, stir and taste.",
+      "Adjust taste, with some all-purpose seasoning and/ or salt. Add ¼ tsp curry, ¼ tsp thyme, ¼ tsp garlic powder, the crayfish powder, and the beef and ponmo pieces.",
+      "Stir well and allow simmering on low heat till the sauce thickens",
+      "Add the leafy greens, stir and allow simmering on low heat for a few minutes",
+      "Divide the content of the pot into 3 equal servings, remember to share the protein equally as well.",
+      "Serve or store in the fridge or freezer."
+    ]
+  },
+  {
+    name: "Efo-riro with Fish or Chicken",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
+      "Palm oil - 1 tablespoon (15mls)",
+      "Tomatoes - 4 medium",
+      "Red pepper (Tatashe) - 4 medium",
+      "Scotch bonnet (ata-rodo) - 1 or 2 large",
+      "Onions - 1 medium",
+      "Locust beans (Iru) - 1/8 cup (optional)",
+      "Cow skin (Ponmo), cooked - 3 medium, 2 inches in length (optional)",
+      "Protein, cooked - 3 pieces of fish or 3 pieces of skinless chicken",
+      "Chicken stock - 2/3 cup",
+      "Crayfish powder - 1½ tablespoons (optional)",
+      "Seasoning cubes",
+      "Salt",
+      "Spices- Curry, Thyme, Garlic powder"
+    ],
+    instructions: [
+      "Chop and ponmo into smaller pieces of equal size. You can chop the fish (or chicken) as well or leave it intact",
+      "Roughly blend the tomatoes, pepper, and scotch bonnet. Blend as dry as possible, add in very little water",
+      "Chop the onions and wash the chopped leaves",
+      "Place the washed vegetables in a strainer to drain the water",
+      "Wash 1/8 cup iru (locust beans) if you would like to include it",
+      "Measure 2/3 cup of the stock, ensure you remove any floating oil from the stock before use.",
+      "In a pot, heat the cooking oil then add the onions and locust beans. Allow frying till the onions are aromatic.",
+      "Then add the chicken stock and blended pepper, stir and taste.",
+      "Adjust taste, with some all-purpose seasoning and/ or salt.",
+      "Add ¼ tsp curry, ¼ tsp thyme, ¼ tsp garlic powder, the crayfish powder, and the fish (or chicken) and ponmo pieces.",
+      "Stir well and allow simmering on low heat till the sauce thickens",
+      "Add the leafy greens, stir and allow simmering on low heat for a few minutes",
+      "Divide the content of the pot into 3 equal portions, including the protein, remember to share the protein equally as well.",
+      "Store in the fridge or freezer."
+    ]
+  },
+  {
+    name: "Okra Soup with Beef",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Okra - 1 cup chopped and 1 cup grated",
+      "Palm oil - 1 tablespoon (15mls)",
+      "Scotch bonnet (ata-rodo) - 1 or 2 large",
+      "Locust beans (Iru) - 1/8 cup",
+      "Cow skin (Ponmo), cooked - 3 medium, 2 inches in length (optional)",
+      "Protein, cooked - 3 pieces of lean* beef, each piece 67g cooked weight.",
+      "Beef stock - 1 cup",
+      "Onions - 1 medium",
+      "Crayfish powder - 1½ tablespoon",
+      "Seasoning cubes",
+      "Salt",
+      "Curry",
+      "Thyme",
+      "Garlic",
+      "Lean- this means beef with little to zero fat. When shopping, be selective with the meat you choose and get the butcher to trim off any fat."
+    ],
+    instructions: [
+      "Chop the beef and ponmo into smaller pieces of equal size.",
+      "Measure 1 cup of beef stock (you can use chicken stock as well). Ensure you remove any floating oil from the stock before use.",
+      "Chop enough okra to fill one cup. Slice each okra down the middle then chop them.",
+      "Using a grater, grate enough okra to also fill up 1 cup",
+      "Wash 1/8 cup iru (locust beans) if you would like to include it",
+      "Chop one medium onion and 3 pieces of scotch bonnet (rodo)",
+      "In a pot, heat the cooking oil then add the onions and locust beans. Allow to fry till the onions are aromatic.",
+      "Then add the beef stock and scotch bonnet, and stir.",
+      "Now add the chopped and grated okra, and stir very well to get a uniform mix",
+      "Add seasoning cube or powder, crayfish powder, beef and ponmo. Stir well.",
+      "Taste, and adjust with salt",
+      "Allow to simmer for a few minutes till it tastes ready.",
+      "Divide the content of the pot into 3 equal portions. Each portion is a serving, store in the fridge or freezer."
+    ]
+  },
+  {
+    name: "Okra Soup with Fish (or Chicken)",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Okra - 1 cup chopped and 1 cup grated",
+      "Scotch bonnet (ata-rodo) - 1 or 2 large",
+      "Locust beans (Iru) - 1/8 cup",
+      "Cow skin (Ponmo), cooked - 3 medium, 2 inches in length (optional)",
+      "Protein, cooked - 3 pieces of fish or 3 pieces of skinless chicken",
+      "Chicken stock - 1 cup",
+      "Onions - 1 medium",
+      "Crayfish powder - 1½ tablespoons",
+      "Seasoning cubes or powder",
+      "Salt",
+      "Curry",
+      "Thyme",
+      "Garlic"
+    ],
+    instructions: [
+      "Chop and ponmo into smaller pieces of equal size. You can chop the fish (or chicken) as well or leave it intact",
+      "Measure 1 cup of chicken stock. Ensure you remove any floating oil from the stock before use.",
+      "Chop enough okra to fill one cup. Slice each okra down the middle then chop them.",
+      "Using a grater, grate enough okra to also fill up 1 cup",
+      "Wash 1/8 cup iru (locust beans) if you would like to include it",
+      "Chop one medium onion and 3 pieces of scotch bonnet (rodo)",
+      "In a pot, heat the cooking oil then add the onions and locust beans. Allow to fry till the onions are aromatic.",
+      "Then add the chicken stock and scotch bonnet, and stir.",
+      "Now add the chopped and grated okra, and stir very well to get a uniform mix",
+      "Add seasoning cube or powder, crayfish powder, chicken and ponmo. Stir well.",
+      "Taste, and adjust with salt",
+      "Allow to simmer for a few minutes till it tastes ready.",
+      "Divide the content of the pot into 3 equal portions, each portion is a serving. Store in the fridge or freezer."
+    ]
+  },
+  {
+    name: "Fish Sauce",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and a tail-piece of a medium-sized titus (or weigh 200g without bone) (Alternatively, use 3 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 310g without bones)",
+      "Tomatoes - 3 medium",
+      "Red pepper (Tatashe) - 2 large",
+      "Scotch bonnet (ata-rodo) - 2 small",
+      "Mixed veggies (fresh or frozen) - 2 to 3 cups",
+      "Onion- 1 medium",
+      "Sweet corn - 1/3 cup (optional)",
+      "Thyme- ½ teaspoon",
+      "Curry- ½ teaspoon",
+      "Seasoning cube - 1",
+      "Garlic powder- ½ teaspoon",
+      "Cooking oil - 5mls (1 teaspoon)",
+      "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower and so on"
+    ],
+    instructions: [
+      "Remove the bones of the fish and shred them into small pieces.",
+      "Roughly blend tomatoes, pepper and scotch bonnet",
+      "Chop the onions and set aside",
+      "Chop enough veggies to measure 2 to 3 cups. If using frozen veggies, simply measure 3 cups.",
+      "Heat 5mls (one teaspoon) of cooking oil, in a non-stick pan and add the chopped onions. Heat till onions are transparent-looking.",
+      "Add the roughly blended pepper, and heat for about a minute on low to medium fire.",
+      "Crush in a seasoning cube, add the curry, thyme and garlic powder",
+      "Stir well, and allow to heat for another 2 minutes.",
+      "Now, pour in the fish and stir in",
+      "Add all the chopped vegetables and sweet corn, stir well, then allow to cook on low heat for about 5 minutes.",
+      "Split the content of the pan into 3 equal portions and store in your fridge or freezer",
+      "Each portion is one serving."
+    ]
+  },
+  {
+    name: "Chicken Pepper Soup with Potatoes",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Chicken thigh with skin - 6 pieces",
+      "Potatoes (Irish or sweet) - 5¼ cups diced",
+      "Pepper soup spice",
+      "Scotch bonnets (rodo) - 4 medium",
+      "Scent leaves (optional) - 6 leaves",
+      "Onion - 2 medium",
+      "Garlic - 10 cloves",
+      "Ginger - 2 inches",
+      "Carrots - 4 medium",
+      "Seasoning cubes",
+      "Salt"
+    ],
+    instructions: [
+      "Wash, dice and measure 5¼ cups of potatoes and set aside submerged in water",
+      "Chop the scent leaves",
+      "Blend the onions, garlic, ginger and scotch bonnet with little water",
+      "Chop the carrots into rings and set aside",
+      "Place the washed and skinned chicken in a pot",
+      "Pour the blended mix over the chicken",
+      "Add seasoning, some salt and 5 cups of water, and bring the contents of the pot to a boil",
+      "Now add 4 tablespoons of pepper soup spice and the chopped scent leaves",
+      "Taste for salt, and adjust if needed",
+      "Add the potatoes",
+      "Cook till the chicken is tender enough, and take the soup off the fire",
+      "Add the chopped carrots to the soup after",
+      "Split the content of the pot into 3 equal portions",
+      "Each portion is one serving."
+    ]
+  },
+  {
+    name: "Fish Pepper Soup with Potatoes",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Fish - 6 pieces (1 piece of the head, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
+      "Potatoes (Irish or sweet) - 6 cups diced",
+      "Pepper soup spice - 4 - 5 tablespoons",
+      "Scotch bonnets (rodo) - 4 medium",
+      "Scent leaves (optional) - 6 leaves",
+      "Onion - 2 medium",
+      "Garlic - 10 cloves",
+      "Ginger - 2 inches",
+      "Carrots - 4 medium",
+      "Seasoning cubes",
+      "Salt"
+    ],
+    instructions: [
+      "Wash, dice and measure 6 cups of potatoes and set aside submerged in water",
+      "Chop the scent leaves",
+      "Blend the onions, garlic, ginger and scotch bonnet with little water",
+      "Chop the carrots into rings and set aside",
+      "Place the washed fish in a pot",
+      "Pour the blended mix over the fish",
+      "Add seasoning, some salt and 8 cups of water, and bring the contents of the pot to a boil",
+      "Now add the pepper soup spice and the chopped scent leaves",
+      "Taste for salt, and adjust if needed",
+      "Add the potatoes",
+      "Cook till the fish is done, and take the soup off the fire",
+      "Add the chopped carrots to the soup after",
+      "Split the content of the pot into 3 equal portions",
+      "Each portion is one serving."
+    ]
+  },
+  {
+    name: "Beans Pottage",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Raw beans - 1½ cups",
+      "Palm oil - 1 tablespoon",
+      "Tomatoes - 3 medium",
+      "Red pepper (tatashe) - 2 large",
+      "Scotch bonnets (rodo) - 2 medium",
+      "Onion - 1 medium",
+      "Mixed veggies* (fresh or frozen) - 2 cups",
+      "Sweet chilli sauce - 2 tablespoons",
+      "Seasoning cubes",
+      "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower and so on"
+    ],
+    instructions: [
+      "Boil the beans till soft",
+      "Rough blend the tomatoes, red pepper and scotch bonnet, with little water",
+      "Chop the onions and set aside",
+      "Chop enough veggies to measure 2 cups. If using frozen veggies, simply measure 2 cups.",
+      "Measure 15mls (1 tablespoon) of palm oil into a pot and heat",
+      "Add in the chopped onions, and heat till they are translucent",
+      "Add in the blended pepper, 1 seasoning cube, some salt, ½ teaspoon curry, ½ teaspoon garlic powder and 2 tablespoons of sweet chilli sauce, then stir",
+      "Allow to simmer for 3 minutes or till the pepper thickens",
+      "Add 3 cups of boiled beans and stir well.",
+      "Add a little amount of water if the pottage is too dry, then add the veggies",
+      "Allow to simmer on low heat till the veggies are a little tender, and the pottage is ready",
+      "Split the content of the pot into three equal portions and store in your refrigerator or freezer."
+    ]
+  },
+  {
+    name: "Yam Pottage",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Yam - 900g or 7 cups diced",
+      "Tomatoes - 3 medium",
+      "Red pepper (Tatashe) - 2 medium",
+      "Scotch bonnet (ata-rodo) - 1 or 2 large",
+      "Onions - 1 medium",
+      "3 cups of sliced leafy green (ugwu or spinach or kale)",
+      "Carrot - 2 medium or 20 stalks of green beans (optional)",
+      "Palm oil - 1½ tablespoons",
+      "Seasoning cubes",
+      "Salt",
+      "Curry",
+      "Thyme",
+      "Garlic"
+    ],
+    instructions: [
+      "Peel and dice enough yam cubes that measure up to 7 cups (or weigh 900g) and set aside in a bowl of water",
+      "Chop the carrots and green leaves",
+      "Blend the tomatoes, and peppers roughly and chop the onion",
+      "In a pot, heat the palm oil, then add the chopped onions, allow to heat till transparent, then add the blended pepper.",
+      "Add 1 seasoning cube of choice, curry, thyme, ginger and garlic powder.",
+      "Allow to simmer for 3-5 minutes.",
+      "Add the diced yam, stir, then pour enough water just to cover the content of the pot.",
+      "Cover the pot, and allow to cook till the yam is cooked halfway through",
+      "Add the chopped carrots (or green beans), mix and allow to cook till the yam is soft",
+      "Taste and adjust with salt if need",
+      "Add the chopped leafy greens, mix and allow to cook on low heat for 1 minute.",
+      "Divide contents into 3 equal servings, each one is a serving."
+    ]
+  },
+  {
+    name: "Ugwu Stir-fry",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Chopped ugwu - 5 cups",
+      "Mixed veggies (fresh or frozen) - 2 cups",
+      "Onions - 2 medium",
+      "Sweet corn - ½ cup",
+      "Cooking oil - 1 tablespoon",
+      "Seasoning powder",
+      "Ginger powder or paste",
+      "Garlic powder or paste",
+      "Sweet chilli sauce - 2 tablespoons",
+      "Oyster sauce (or teriyaki sauce) - 2 tablespoons",
+      "*Mixed veggies - a mix of any vegetables of your choice, such as carrots, bell peppers (green, red, yellow), green beans, spinach, broccoli, cauliflower and so on"
+    ],
+    instructions: [
+      "Measure and wash 5 cups of chopped ugwu, kale or spinach",
+      "Chop the onions and set aside",
+      "Chop enough veggies to measure 2 cups. If using frozen veggies, simply measure 2 cups.",
+      "Measure ½ cup of well-rinsed sweet corn and set aside",
+      "In a pan heat 15mls (a tablespoon) of oil, then add the onions and heat till it’s aromatic",
+      "Add the diced vegetables and stir",
+      "Season with seasoning powder, ginger and garlic powder or paste",
+      "Add two tablespoons each, of sweet chilli sauce and oyster sauce (or teriyaki)",
+      "Allow to simmer for 2 minutes then add the washed ugwu",
+      "Mix well and allow to simmer for about a minute. Allow to cool then split the content into three equal portions."
+    ]
+  },
+  {
+    name: "Moi-Moi",
+    servings: 3,
+    calorieNeedId: calorieNeed1600Id,
+    ingredients: [
+      "Raw beans - 3 cups",
+      "Red pepper (tatashe) - 4 medium (or 7 pieces of long red pepper, aka shobo)",
+      "Onions - 1 large onion",
+      "Garlic - 2 cloves",
+      "Palm oil - ¼ cup",
+      "Seasoning cubes",
+      "Salt",
+      "Water - 3 cups"
+    ],
+    instructions: [
+      "Put the beans into a bowl, add enough water to cover them, and leave to soak for 15-20 minutes.",
+      "To peel the beans, place a handful at a time into the blender along with some water. Using the pulse section, blend for no more than 3 seconds at a time, this will help remove the skin from the beans.",
+      "Pour the content of the blender into another bowl, then repeat the process for the rest of the unpeeled beans.",
+      "Add enough water to the bowl of beans with peel, the peels should float to the top, so you can gently pour it out.",
+      "Pour more water, pour out the floating peel, and repeat the process till all the peel is out.",
+      "Wash and chop the onions, red pepper, and garlic and set aside.",
+      "In batches, add the now peeled beans, along with of the pepper, onions and, garlic, to the blender and blend, till smooth, and pour in a mixing bowl",
+      "For the whole blending process, use about 3 cups of water. You can add extra water if it is too thick.",
+      "In a big pot add 1½ cups of water, and place on the stove on low heat",
+      "Now add salt and seasoning to taste, and give it a very good stir, till the seasoning is well incorporated",
+      "Using a foil, create a pouch, and pour in just a little less than one cup of the beans mix. You can use ceramic cups instead of foil if available",
+      "Close each foil pouch tightly, then place them in the pot of water on the stove",
+      "Repeat the process until you have used the entire mixture, cover the pot, and turn the heat from low to medium-high.",
+      "As it steams, the water will evaporate. Ensure you keep adding water to the pot to avoid it drying out.",
+      "Cook for about 30 - 35 minutes or until the moi-moi is ready (and you will know that it is ready by opening one of them and cutting right through. It will be firm and the colour will have intensified a bit."
     ]
   }
 ]
