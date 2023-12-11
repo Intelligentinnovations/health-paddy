@@ -103,7 +103,20 @@ export const recipe = [
       "Salt"
     ],
     instructions: [
-      // Add instructions for Fish Pepper Soup with Potatoes
+      "Wash, dice and measure 3 cups of potatoes and set aside submerged in water",
+      "Chop the scent leaves",
+      "Blend the onions, garlic, ginger and scotch bonnet with little water",
+      "Chop the carrots into rings and set aside",
+      "Place the washed fish in a pot",
+      "Pour the blended mix over the fish",
+      "Add seasoning, some salt and 5 cups of water, bring the contents of the pot to a boil",
+      "Now add 4 tablespoons of pepper soup spice and the chopped scent leaves",
+      "Taste for salt, and adjust if needed",
+      "Add the potatoes",
+      "Cook till the fish is done, and take the soup off the fire",
+      "Add the chopped carrots to the soup after",
+      "Split the content of the pot into 3 equal portions",
+      "Each portion is one serving"
     ],
   },
   {
@@ -500,8 +513,20 @@ export const recipe = [
       "Salt"
     ],
     instructions: [
-      // Add instructions for Fish Pepper Soup with Potatoes
-    ],
+      "Wash, dice and measure 3 cups of potatoes and set aside submerged in water",
+      "Chop the scent leaves",
+      "Blend the onions, garlic, ginger and scotch bonnet with little water",
+      "Chop the carrots into rings and set aside",
+      "Place the washed fish in a pot",
+      "Pour the blended mix over the fish",
+      "Add seasoning, some salt and 5 cups of water, bring the contents of the pot to a boil",
+      "Now add 4 tablespoons of pepper soup spice and the chopped scent leaves",
+      "Taste for salt, and adjust if needed",
+      "Add the potatoes",
+      "Cook till the fish is done, and take the soup off the fire",
+      "Add the chopped carrots to the soup after",
+      "Split the content of the pot into 3 equal portions",
+      "Each portion is one serving"],
   },
   {
     name: "Oil-less Efo-riro Recipe with Beef",
