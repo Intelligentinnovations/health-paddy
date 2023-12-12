@@ -192,4 +192,11 @@ export class AppRepo {
       .where('userId', '=', userId)
       .executeTakeFirst()
   }
+
+  async getRecipe({ calorieNeedId, mealName }: { calorieNeedId: string, mealName: string }) {
+    return await this.client
+      .selectFrom('Recipe').selectAll()
+      .where('calorieNeedId', '=', calorieNeedId).where("name", "ilike", mealName)
+      .executeTakeFirst()
+  }
 }

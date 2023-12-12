@@ -64,13 +64,11 @@ export class SignupService {
         return this.helper.handleNoState({
           phoneNumber,
           profileName,
-          state,
           customHeader: `Hey! 🎉🎉 Thank you for signing up to Health Paddy!Get started on your wellness journey by creating your personalized meal plan and get a free day meal plan`
         })
       }
       return this.helper.handleNoState({
         phoneNumber,
-        state,
         profileName,
         customHeader: 'Could not understand your request, lets start again'
       });
