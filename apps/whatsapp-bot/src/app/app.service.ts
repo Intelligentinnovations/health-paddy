@@ -5,7 +5,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { DateTime } from 'luxon';
 
-import { delay, sendWhatsAppText } from '../helpers';
 import { SecretsService } from "../secrets/secrets.service";
 import { PaymentService } from '../services/paystack';
 import { State } from '../types';
@@ -65,7 +64,6 @@ export class AppService {
             return await this.generalResponse.handleNoState({
               phoneNumber: sender,
               profileName,
-              state: state!
             });
           }
           console.log(state.stage);
@@ -120,7 +118,6 @@ export class AppService {
           return this.generalResponse.handleNoState({
             phoneNumber: sender,
             profileName,
-            state,
             customHeader: 'I could not understand your request, lets start afresh'
           });
         }
@@ -185,7 +182,6 @@ export class AppService {
       });
       await this.generalResponse.handleNoState({
         phoneNumber,
-        state: { stage: '', user, data: {} },
         profileName: user!.name, customHeader: `Your card has been added 🎉, you can now access your free one-day meal Plan. Get ready to start your wellness journey!" 💪`
       })
     }

@@ -5,7 +5,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { DateTime } from 'luxon';
 
-import { delay, generateDaysOfWeek, sendWhatsAppText } from '../helpers';
+import { delay, sendWhatsAppText } from '../helpers';
 import { SecretsService } from '../secrets/secrets.service';
 import { MealPlan, State } from '../types';
 import { privacyMessage } from '../utils/textMessages';
@@ -51,7 +51,6 @@ export class GenericService {
         return this.handleNoState({
           phoneNumber,
           profileName,
-          state,
           customHeader: `Looks like you do not have an account as I could not find any account matching your phone number. please select 1 to signup`,
         });
       }
@@ -62,7 +61,6 @@ export class GenericService {
             await this.handleNoState({
               phoneNumber,
               profileName,
-              state,
               customHeader:
                 'You are already signed up, How else can i be of service',
             });
@@ -80,7 +78,7 @@ export class GenericService {
 
             });
           } else {
-            const subscription = await this.repo.fetchSubscriptionStatus(state!.user!.id as string)
+            const subscription = await this.repo.fetchSubscriptionStatus(state!.user!.id as unknown as string)
             if (subscription?.status !== 'active') {
               return this.handlePaymentNotification({
                 phoneNumber,
@@ -168,7 +166,6 @@ export class GenericService {
           await this.handleNoState({
             phoneNumber,
             profileName,
-            state,
             customHeader: `😔😔 I'm sorry, but you don't currently have an active subscription. To enjoy all the benefits, please consider subscribing. How else can I be of service?`
           })
           break;
@@ -176,7 +173,6 @@ export class GenericService {
           return this.handleNoState({
             phoneNumber,
             profileName,
-            state,
             customHeader: 'I could not understand your request, lets start again'
           })
       }
@@ -194,12 +190,10 @@ export class GenericService {
     phoneNumber,
     profileName,
     customHeader,
-    state
   }: {
     phoneNumber: string;
     profileName: string;
     customHeader?: string;
-    state: State
   }) => {
     try {
       const heading = customHeader
@@ -219,7 +213,7 @@ See what's cooking on your plate today
 4. Swap Meal Items 🔀
 Don't like a meal item? Shake things up with a variety of interesting alternatives
 
-5. View your recipe list 📖🍽️
+5. View Your Recipe List 📖🍽️
 Your path to wellness starts here
 
 6. Log a Complaint 📢
@@ -263,7 +257,6 @@ Saying goodbye to our subscription? we understand. But remember, we're always he
         return this.handleNoState({
           phoneNumber,
           profileName,
-          state,
           customHeader: 'We respect your decision regarding our privacy policy. If you have any concerns or questions about specific aspects of the policy, please feel free to reach out to our support team'
         });
       }
@@ -351,7 +344,7 @@ ${text}
     const numberOfMealPlanToFetch = remainingSubscriptionsDays! > 7 ? 7 : remainingSubscriptionsDays;
     const cacheKey = `${phoneNumber}-meal-plan`;
 
-    const sendPlanMessage = async (plan: MealPlan) => {
+    const sendPlanMessage = async (plan: MealPlan & { snack?: string }) => {
       let message = `*${plan.day}*\n\n`;
       message += `*Breakfast*: ${plan.breakfast}\n\n`;
       message += `*Snack*: ${plan.snack}\n\n`;
@@ -379,7 +372,6 @@ ${text}
         return this.handleNoState({
           phoneNumber,
           profileName: state!.user!.name,
-          state,
           customHeader: `You don't have any active subscription, please subscribe to continue enjoying our service`,
         });
       }

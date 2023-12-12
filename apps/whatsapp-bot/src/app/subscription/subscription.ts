@@ -7,7 +7,7 @@ import { Cache } from 'cache-manager';
 import { capitalizeString, formatCurrency, formatDate } from '../../helpers';
 import { SecretsService } from '../../secrets/secrets.service';
 import { PaymentService } from '../../services/paystack';
-import { State, User } from '../../types';
+import { State } from '../../types';
 import { AppRepo } from '../app.repo';
 import { GenericService } from '../general';
 
@@ -40,7 +40,7 @@ export class SubscriptionService {
       const { stage, user } = state;
       if (stage === 'subscription-acceptance') {
         if (input == DECLINE) {
-          return this.helper.handleNoState({ phoneNumber, profileName, state });
+          return this.helper.handleNoState({ phoneNumber, profileName });
         }
         if (input == ACCEPT) {
           const paymentLink = await this.payment.initializePaystackPayment({
@@ -68,10 +68,7 @@ export class SubscriptionService {
 
       if (stage === 'subscription-management') {
         if (input == ACCEPT) {
-          const { id: userId } = user as User;
-          const subscription = await this.repo.fetchSubscription(
-            userId as unknown as string
-          );
+          const subscription = await this.repo.fetchSubscription(user!.id);
 
           const message = `Subscription Status\n
 Dear ${user?.name}
@@ -90,7 +87,6 @@ Best regards`;
           });
           return this.helper.handleNoState({
             phoneNumber,
-            state,
             profileName: user!.name,
             customHeader: `Hi, how else can I be of service to you?`
           })
@@ -109,31 +105,27 @@ Best regards`;
         }
         return this.helper.handleNoState({
           phoneNumber,
-          state,
           profileName,
           customHeader: 'Could not understand your request, Lets start this again'
         });
       }
 
       if (stage === 'subscription-cancel') {
-        const { id: userId } = user as User;
-        const subscriptionStatus = await this.repo.fetchSubscription((userId as unknown as string))
+        const subscriptionStatus = await this.repo.fetchSubscription((user!.id))
         const message = subscriptionStatus?.status !== 'active' ? `Your subscription has either expired or canceled ` : `We respect your decision to unsubscribe. 😢 Thank you for being a part of our community. If you ever decide to return, we'll be here. 🙌`
         if (input == ACCEPT) {
-          subscriptionStatus?.status === 'active' ?? await this.repo.unSubscribe(userId as unknown as string);
+          subscriptionStatus?.status === 'active' ?? await this.repo.unSubscribe(user!.id);
           return this.helper.handleNoState({
             phoneNumber,
             profileName,
-            state,
             customHeader: message,
           });
         }
         if (input == DECLINE) {
-          return this.helper.handleNoState({ phoneNumber, state, profileName });
+          return this.helper.handleNoState({ phoneNumber, profileName });
         }
         return this.helper.handleNoState({
           phoneNumber,
-          state,
           profileName,
           customHeader: 'Could not understand your request, lets start this again'
         });

@@ -1,9 +1,10 @@
-import { SubscriptionStatus, User } from "./database";
+import { SubscriptionStatus } from "./database";
+import { IUser } from "./user";
 
 export interface State {
     data: any,
     stage: string,
-    user: User | undefined;
+    user: IUser | undefined;
 }
 
 

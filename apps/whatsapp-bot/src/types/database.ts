@@ -54,13 +54,22 @@ export type MealPlan = {
   day: string;
   breakfast: string;
   breakfastCalories: number;
-  snack: string;
   snackCalories: number;
   lunch: string;
   lunchCalories: number;
   dinner: string;
   dinnerCalories: number;
   calorieNeedId: string;
+};
+export type Recipe = {
+  id: Generated<string>;
+  name: string;
+  servings: number;
+  ingredients: string[];
+  instructions: string[];
+  calorieNeedId: string;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Timestamp;
 };
 export type Snack = {
   id: Generated<string>;
@@ -102,15 +111,16 @@ export type User = {
   activityLevel: string | null;
   healthCondition: string | null;
   requiredCalorie: number | null;
-  hasUsedFreeTrial: Generated<boolean> | boolean;
-  createdAt: Generated<Timestamp> | Date;
-  updatedAt: Timestamp | Date;
+  hasUsedFreeTrial: Generated<boolean>;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Timestamp;
 };
 export type DB = {
   CalorieNeed: CalorieNeed;
   Card: Card;
   FoodItems: FoodItems;
   MealPlan: MealPlan;
+  Recipe: Recipe;
   Snack: Snack;
   Subscription: Subscription;
   Transaction: Transaction;

@@ -116,9 +116,8 @@ model Recipe {
   id            String      @id @default(dbgenerated("gen_random_uuid()"))
   name          String
   servings      Int
-  instructions  String
-  ingredients   String
-  instruction   String
+  ingredients   String[]
+  instructions   String[]
   calorieNeedId String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
