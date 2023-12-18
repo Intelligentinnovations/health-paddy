@@ -14,5 +14,6 @@ export const schema = {
   PAYSTACK_WEBHOOK: z.string(),
   THIRTY_MINUTES_IN_SECONDS: z.coerce.number().optional(),
   FREE_PLAN_DAYS: z.coerce.number(),
+  WHATSAPP_BOT_START_DATE: z.string()
 } as const;
 export const objectSchema = z.object(schema);

@@ -137,8 +137,8 @@ export class AppRepo {
     return await this.client.updateTable('User').set(payload).where('id', '=', userId).executeTakeFirst()
   }
 
-  async fetchCalorieRange() {
-    return await this.client.selectFrom('CalorieNeed').selectAll().execute()
+  async fetchCalorieRange(planNo: number) {
+    return await this.client.selectFrom('CalorieNeed').selectAll().where('planNo', '=', planNo).execute()
   }
 
   async fetchMealPlanByCalorieNeedId({ calorieNeedId, limit }: { calorieNeedId: string, limit: number }) {

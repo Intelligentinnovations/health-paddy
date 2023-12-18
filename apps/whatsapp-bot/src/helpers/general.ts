@@ -73,3 +73,21 @@ export function generateDaysOfWeek(): string[] {
 
   return next7Days as string[];
 }
+
+export function generateMealHeading(weekDay: string): string {
+  switch (weekDay.toLowerCase()) {
+    case 'monday': return `New week, new goals, new meals! Let's conquer Monday together. #MunchiesMonday 🌱🔛`
+    case 'tuesday': return `Rise and Shine #TastyTuesday is here! 🌅🍳🍽️`
+    case 'wednesday': return `#WholesomeWednesdays Yaay! You made it halfway through the week, it's time to pit stop and reward yourself with delicious and nourishing meals that will keep you going for the rest of the week. ⛽️🥗😋`
+    case 'thursday': return `Fuel your body and mind with delightful meals from your #ThursdayTakeoff meal plan. 💪🚀✨`
+    case 'friday': return `Cheers to #FoodieFriday!🍗🥗🍝. We’ve crafted exciting dishes to ignite your weekend and satisfy every craving.`
+    case 'saturday': return `Ladies and gentlemen. It's the weekend! #Weekendvibes 🧱🎉🍎 Embrace the weekend and enjoy the good life, one healthy bite at a time.`
+    case 'sunday': return `#SundayFunday! It's cheat day, but remember, balance is key 🌞🎉💃 Today's meal plan includes a special wildcard for you to enjoy your favorite meal without derailing your health goals.`
+    default:
+      return weekDay
+  }
+}
+
+export function alternatePlanNumbers(inputNumber: number) {
+  return Math.floor((inputNumber - 1) / 2) % 2 + 1;
+}

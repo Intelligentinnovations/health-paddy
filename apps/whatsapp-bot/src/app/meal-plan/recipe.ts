@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
-import { SecretsService } from '../../secrets/secrets.service';
 import { MealPlan, State } from '../../types';
 import { AppRepo } from '../app.repo';
 import { GenericService } from '../general';
@@ -14,8 +12,6 @@ export class ViewRecipeService {
   constructor(
     private repo: AppRepo,
     private helper: GenericService,
-    private secrets: SecretsService,
-    @Inject(MESSAGE_MANAGER) private messaging: Messaging,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
@@ -74,7 +70,14 @@ export class ViewRecipeService {
               extractedPortions.push(extractedPortion);
             }
           }
-          if (!extractedPortions.length) return this.helper.sendTextAndSetCache({ message: 'You have no meal with recipe for this day', phoneNumber, nextStage: '', state })
+          if (!extractedPortions.length) {
+            return this.helper.sendTextAndSetCache({
+              message: 'You have no meal with recipe for this day',
+              phoneNumber,
+              nextStage: '',
+              state
+            })
+          }
           return this.helper.sendTextAndSetCache({
             message: `Please select a meal\n${extractedPortions
               .map((portion, index) => `${index + 1}. ${portion}`)
@@ -89,14 +92,18 @@ export class ViewRecipeService {
       if (state.stage === `${baseUrl}/day/meal`) {
         const { mealsWithRecipe } = state.data;
         const selectedMeal = mealsWithRecipe[Number(input) - 1];
-        const parsedMeal = selectedMeal.split('of')[1].trim();
+        console.log({ selectedMeal });
+
+        const parsedMeal = selectedMeal.split(' of ')[1].trim();
         const closestCalorie = await this.helper.getClosestMealPlan(
           state!.user!.requiredCalorie as number
         );
+
         const recipe = await this.repo.getRecipe({
           calorieNeedId: closestCalorie!.id,
           mealName: parsedMeal,
         });
+
         if (recipe) {
           const message = `*${recipe?.name} (${recipe?.servings} Servings)*\n
 *Instructions*:${recipe?.instructions.map(instruction => `\n* ${instruction}`).join('')}\n
