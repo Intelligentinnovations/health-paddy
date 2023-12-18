@@ -86,6 +86,7 @@ model FoodItems {
 model CalorieNeed {
   id       String     @id @default(dbgenerated("gen_random_uuid()"))
   calories Int
+  planNo   Int        @default(1)
   MealPlan MealPlan[]
   Recipe   Recipe[]
 }
@@ -117,7 +118,7 @@ model Recipe {
   name          String
   servings      Int
   ingredients   String[]
-  instructions   String[]
+  instructions  String[]
   calorieNeedId String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt

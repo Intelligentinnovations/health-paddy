@@ -24,6 +24,7 @@ export type FoodCategory = typeof FoodCategory[keyof typeof FoodCategory];
 export type CalorieNeed = {
   id: Generated<string>;
   calories: number;
+  planNo: Generated<number>;
 };
 export type Card = {
   id: Generated<string>;
@@ -99,7 +100,7 @@ export type Transaction = {
   cardId: string;
 };
 export type User = {
-  id: Generated<string> | string;
+  id: Generated<string>;
   email: string;
   phone: string;
   name: string;

@@ -5,7 +5,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { DateTime } from 'luxon';
 
-import { delay, sendWhatsAppText } from '../helpers';
+import { alternatePlanNumbers, delay, generateMealHeading, getWeeksBetweenDates, sendWhatsAppText } from '../helpers';
 import { SecretsService } from '../secrets/secrets.service';
 import { MealPlan, State } from '../types';
 import { privacyMessage } from '../utils/textMessages';
@@ -310,8 +310,13 @@ ${text}
   };
 
   async getClosestMealPlan(userCalorie: number) {
-    const mealPlans = await this.repo.fetchCalorieRange();
-
+    const appWeek = getWeeksBetweenDates({
+      startDate: new Date(this.secrets.get('WHATSAPP_BOT_START_DATE')),
+      endDate: new Date()
+    })
+    
+    const planNo = alternatePlanNumbers(appWeek)
+    const mealPlans = await this.repo.fetchCalorieRange(planNo);
     let closestMealPlan = mealPlans[0];
     let minDifference = Math.abs(+userCalorie - closestMealPlan!.calories);
 
@@ -345,7 +350,8 @@ ${text}
     const cacheKey = `${phoneNumber}-meal-plan`;
 
     const sendPlanMessage = async (plan: MealPlan & { snack?: string }) => {
-      let message = `*${plan.day}*\n\n`;
+      const heading = generateMealHeading(plan.day)
+      let message = `*${heading}*\n\n`;
       message += `*Breakfast*: ${plan.breakfast}\n\n`;
       message += `*Snack*: ${plan.snack}\n\n`;
       message += `*Lunch*: ${plan.lunch}\n\n`;
@@ -384,7 +390,7 @@ ${text}
       ).rows;
 
       const ttl = +remainingSubscriptionsDays! * 24 * 60 * 60
-      await this.cacheManager.set(cacheKey, fetchedMealPlan, ttl);
+      await this.cacheManager.set(cacheKey, fetchedMealPlan);
 
       for await (const plan of fetchedMealPlan) {
         await sendPlanMessage(plan);

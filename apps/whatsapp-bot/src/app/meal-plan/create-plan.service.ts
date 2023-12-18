@@ -357,7 +357,7 @@ export class CreateMealPlanService {
               healthCondition: 'none',
               requiredCalorie,
             },
-            userId: state.user!.id as unknown as string,
+            userId: state.user!.id,
           });
           const weightDifference = Math.abs(weight - targetWeight);
           await this.helper.sendTextAndSetCache({
