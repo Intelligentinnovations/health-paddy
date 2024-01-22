@@ -68,7 +68,7 @@ export type Recipe = {
   servings: number;
   ingredients: string[];
   instructions: string[];
-  calorieNeedId: string;
+  totalCalorie: number;
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
 };
@@ -116,6 +116,13 @@ export type User = {
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
 };
+export type UserMealPlan = {
+  id: Generated<string>;
+  plan: string;
+  startDate: Generated<Timestamp>;
+  endDate: Timestamp;
+  userId: string;
+};
 export type DB = {
   CalorieNeed: CalorieNeed;
   Card: Card;
@@ -126,4 +133,5 @@ export type DB = {
   Subscription: Subscription;
   Transaction: Transaction;
   User: User;
+  UserMealPlan: UserMealPlan;
 };

@@ -3,6 +3,7 @@ import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { DateTime } from 'luxon';
 
 import { capitalizeString, formatCurrency, formatDate } from '../../helpers';
 import { SecretsService } from '../../secrets/secrets.service';
@@ -43,21 +44,64 @@ export class SubscriptionService {
           return this.helper.handleNoState({ phoneNumber, profileName });
         }
         if (input == ACCEPT) {
-          const paymentLink = await this.payment.initializePaystackPayment({
-            email: user!.email,
-            amountInNaira: 100,
-            metaData: { phoneNumber },
-            callbackUrl: this.secrets.get('PAYSTACK_WEBHOOK'),
-          });
-          const { data, status } = paymentLink;
-          if (status) {
-            const message = `Please follow the link ${data.data.authorization_url} to add your card and enjoy our free 1-day meal plan.`;
-            return this.helper.sendTextAndSetCache({
-              phoneNumber,
-              message,
-              nextStage: 'subscription-payment-option',
-              state
+          if (user?.subscriptionStatus === 'expired') {
+            // if the user subscription has expired, charge his last used card
+            const card = await this.repo.fetchUserDefaultCard(user!.id);
+            const { email: cardEmail, token: authorizationCode } = card;
+            const amount = this.secrets.get('SUBSCRIPTION_AMOUNT');
+            const chargeAttempt = await this.payment.chargePaystackCard({
+              amount,
+              cardEmail,
+              authorizationCode
             });
+            const { data } = chargeAttempt;            
+            if (chargeAttempt.status !== 200 || data?.data.status !== 'success') {
+              return this.helper.handleNoState({
+                customHeader: "Could not complete payment, please try again with another card",
+                phoneNumber,
+                profileName
+              })
+            }
+            const today = DateTime.now();
+            await this.repo.createSubscription({
+              userId: user!.id,
+              amount: amount.toString(),
+              date: new Date(),
+              email: user!.email,
+              endDate: today.plus({ month: 1 }).toJSDate(),
+              first6Digits: card.first6Digits,
+              issuer: card.issuer,
+              last4Digits: card.last4Digits,
+              processor: card.processor,
+              reference: data.reference,
+              token: card.token,
+              transactionStatus: "success",
+              type: card.type
+            })
+
+            return this.helper.handleNoState({
+              phoneNumber,
+              profileName,
+              customHeader: "Payment completed successfully 🙌, You can now continue to enjoy our service",
+            });
+          }
+          else {
+            const paymentLink = await this.payment.initializePaystackPayment({
+              email: user!.email,
+              amountInNaira: 100,
+              metaData: { phoneNumber },
+              callbackUrl: this.secrets.get('PAYSTACK_WEBHOOK'),
+            });
+            const { data, status } = paymentLink;
+            if (status) {
+              const message = `Please follow the link ${data.data.authorization_url} to add your card and enjoy our free 1-day meal plan.`;
+              return this.helper.sendTextAndSetCache({
+                phoneNumber,
+                message,
+                nextStage: 'subscription-payment-option',
+                state
+              });
+            }
           }
         } else {
           const message =
@@ -76,7 +120,7 @@ Here's a quick update on your subscription:\n
 Amount: ${formatCurrency(+subscription!.amount)}
 Status: ${capitalizeString(subscription!.subscriptionStatus)}
 ${subscription?.status === 'active' ? 'Next billing date' : 'Expires on'}: ${formatDate(subscription!.endDate)}
-Billed with: ${subscription?.issuer} ****${subscription?.last4Digits}\n         
+Billed with: ${subscription?.issuer} ****${subscription?.last4Digits}\n
 If you have any questions, contact our support team.
 Best regards`;
           await this.helper.sendTextAndSetCache({
@@ -130,6 +174,7 @@ Best regards`;
           customHeader: 'Could not understand your request, lets start this again'
         });
       }
+
     } catch (error) {
       console.log({ error });
     }
@@ -138,3 +183,4 @@ Best regards`;
     };
   };
 }
+

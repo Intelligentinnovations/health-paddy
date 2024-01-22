@@ -1,22 +1,8 @@
-const calorieNeed1200Id = "30e98b88-d61c-4293-9dd4-895719731d49";
-const calorieNeed1300Id = "a6d64e67-c459-4272-9a42-0bbdf179416e";
-const calorieNeed1400Id = "9b6152f8-0f91-4477-9986-8681b2751111";
-const calorieNeed1500Id = "c0d7f21e-b08d-47e9-a675-29fc0e375519";
-const calorieNeed1600Id = "41b7e277-9207-4e79-8126-7f823fd7920c";
-const calorieNeed1700Id = "4fe54943-be11-428e-b322-a3a436b476ba";
-const calorieNeed1800Id = "cc0206ef-a47f-4b6f-961c-734cb0982055";
-const calorieNeed1900Id = "1474191f-ebeb-4d45-a0c4-13476a03c73e";
-const calorieNeed2000Id = "33685042-9f0f-4517-b1ae-6650b572769d";
-const calorieNeed2100Id = "6e7dcbe4-f5b3-4238-9de4-59a2eea1284b";
-const calorieNeed2200Id = "dde3e3d8-83a8-493f-9f36-f310a0d694da";
-const calorieNeed2300Id = "0d9a9704-d93c-4323-b4bb-eedc5a461826";
-
-
 export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1⅓ cups",
@@ -54,7 +40,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Skinless chicken drumsticks - 3 pieces",
@@ -90,7 +76,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 6 pieces (1 piece of the head piece, mid-piece or tail-piece of a medium sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight",
@@ -125,7 +111,7 @@ export const recipe = [
   {
     name: "Oil-less Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
@@ -161,7 +147,7 @@ export const recipe = [
   {
     name: "Oil-less Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
@@ -198,7 +184,7 @@ export const recipe = [
   {
     name: "Oil-less Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -235,7 +221,7 @@ export const recipe = [
   {
     name: "Oil-less Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -271,7 +257,7 @@ export const recipe = [
   {
     name: "Oil-less Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -307,7 +293,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 525g or 3½ cups diced",
@@ -342,7 +328,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -373,7 +359,7 @@ export const recipe = [
   {
     name: "Oil-less Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -402,7 +388,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed1200Id,
+    totalCalorie: 1200,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -438,7 +424,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1⅓ cups",
@@ -476,7 +462,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Skinless chicken drumsticks - 3 pieces",
@@ -512,7 +498,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 6 pieces (1 piece of the head piece, mid-piece or tail-piece of a medium sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight",
@@ -546,7 +532,7 @@ export const recipe = [
   {
     name: "Oil-less Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
@@ -582,7 +568,7 @@ export const recipe = [
   {
     name: "Oil-less Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
@@ -619,7 +605,7 @@ export const recipe = [
   {
     name: "Oil-less Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -656,7 +642,7 @@ export const recipe = [
   {
     name: "Oil-less Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -692,7 +678,7 @@ export const recipe = [
   {
     name: "Oil-less Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -728,7 +714,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 525g or 3½ cups diced",
@@ -763,7 +749,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -794,7 +780,7 @@ export const recipe = [
   {
     name: "Oil-less Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -823,7 +809,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 1,
-    calorieNeedId: calorieNeed1300Id,
+    totalCalorie: 1300,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -856,7 +842,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1½ cups",
@@ -895,7 +881,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Skinless chicken drumsticks - 3 pieces",
@@ -932,7 +918,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 6 pieces (1 piece of the head piece, mid-piece, or tail-piece of a medium-sized tilapia, cote, hake, seabass, or croaker fish) If weighing each piece should be about 120g raw weight.",
@@ -967,7 +953,7 @@ export const recipe = [
   {
     name: "Oil-less Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -996,7 +982,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
@@ -1034,7 +1020,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -1072,7 +1058,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -1110,7 +1096,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and a tail-piece of a medium-sized titus (or weigh 200g without bone) (Alternatively, use 3 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 310g without bones)",
@@ -1145,7 +1131,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 650g or 4⅓ cups diced",
@@ -1180,7 +1166,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -1211,7 +1197,7 @@ export const recipe = [
   {
     name: "Oil-less Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -1240,7 +1226,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed1400Id,
+    totalCalorie: 1400,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -1273,7 +1259,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1¾ cups",
@@ -1311,7 +1297,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Chicken drumsticks with skin - 3 pieces",
@@ -1347,7 +1333,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 6 pieces (1 piece of the head piece, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
@@ -1382,7 +1368,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -1419,7 +1405,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -1457,7 +1443,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -1495,7 +1481,7 @@ export const recipe = [
   {
     name: "Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -1531,7 +1517,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and a tail-piece of a medium-sized titus (or weigh 200g without bone) (Alternatively, use 3 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 310g without bones)",
@@ -1566,7 +1552,7 @@ export const recipe = [
   {
     name: "Oil-less Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -1595,7 +1581,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 830g or 5½ cups diced",
@@ -1630,7 +1616,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -1661,7 +1647,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed1500Id,
+    totalCalorie: 1500,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -1696,7 +1682,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1¾ cups",
@@ -1734,7 +1720,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
@@ -1772,7 +1758,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
@@ -1810,7 +1796,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -1848,7 +1834,7 @@ export const recipe = [
   {
     name: "Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -1884,7 +1870,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and a tail-piece of a medium-sized titus (or weigh 200g without bone) (Alternatively, use 3 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 310g without bones)",
@@ -1919,7 +1905,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Chicken thigh with skin - 6 pieces",
@@ -1954,7 +1940,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 6 pieces (1 piece of the head, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
@@ -1989,7 +1975,7 @@ export const recipe = [
   {
     name: "Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -2021,7 +2007,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 900g or 7 cups diced",
@@ -2056,7 +2042,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -2087,7 +2073,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed1600Id,
+    totalCalorie: 1600,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -2120,7 +2106,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1¾ cups",
@@ -2158,7 +2144,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Chicken drumsticks with skin - 3 pieces",
@@ -2194,7 +2180,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 6 pieces (1 piece of the head piece, mid-piece or tail-piece of a medium sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece shold be about 120g raw weight.",
@@ -2229,7 +2215,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -2267,7 +2253,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -2306,7 +2292,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -2344,7 +2330,7 @@ export const recipe = [
   {
     name: "Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -2380,7 +2366,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and a tail-piece of a medium-sized titus (or weigh 200g without bone) (Alternatively, use 3 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 310g without bones)",
@@ -2415,7 +2401,7 @@ export const recipe = [
   {
     name: "Oil-less Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -2444,7 +2430,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 830g or 5½ cups diced",
@@ -2479,7 +2465,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -2510,7 +2496,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed1700Id,
+    totalCalorie: 1700,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -2542,7 +2528,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1¾ cups",
@@ -2580,7 +2566,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
@@ -2618,7 +2604,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko, or any other leafy green of choice) - 8 cups chopped",
@@ -2656,7 +2642,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -2694,7 +2680,7 @@ export const recipe = [
   {
     name: "Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -2730,7 +2716,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and a tail-piece of a medium-sized titus (or weigh 200g without bone)",
@@ -2765,7 +2751,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Chicken thigh with skin - 6 pieces",
@@ -2800,7 +2786,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 6 pieces (1 piece of the head, mid-piece, or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
@@ -2835,7 +2821,7 @@ export const recipe = [
   {
     name: "Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans- 1½ cups",
@@ -2867,7 +2853,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 900g or 7 cups diced",
@@ -2902,7 +2888,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -2933,7 +2919,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed1800Id,
+    totalCalorie: 1800,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -2967,7 +2953,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1¾ cups",
@@ -3005,7 +2991,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Chicken thigh with skin - 6 pieces",
@@ -3040,7 +3026,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 9 pieces (1 piece of the head, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
@@ -3075,7 +3061,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and 1½ tail-piece of a medium-sized titus (or weigh 265g without bone)",
@@ -3110,7 +3096,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -3147,7 +3133,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -3185,7 +3171,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -3222,7 +3208,7 @@ export const recipe = [
   {
     name: "Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -3258,7 +3244,7 @@ export const recipe = [
   {
     name: "Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -3290,7 +3276,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 1050g or 8 cups diced",
@@ -3325,7 +3311,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -3356,7 +3342,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed1900Id,
+    totalCalorie: 1900,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -3390,7 +3376,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1¾ cups",
@@ -3428,7 +3414,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -3466,7 +3452,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -3504,7 +3490,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -3542,7 +3528,7 @@ export const recipe = [
   {
     name: "Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -3578,7 +3564,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and a tail-piece of a medium-sized titus (or weigh 200g without bone) (Alternatively, use 3 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 310g without bones)",
@@ -3612,7 +3598,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Chicken thigh with skin - 6 pieces",
@@ -3648,7 +3634,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 6 pieces (1 piece of the head, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
@@ -3683,7 +3669,7 @@ export const recipe = [
   {
     name: "Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -3715,7 +3701,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 900g or 7 cups diced",
@@ -3750,7 +3736,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -3781,7 +3767,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed2000Id,
+    totalCalorie: 2000,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -3813,7 +3799,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1¾ cups",
@@ -3851,7 +3837,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Chicken thigh with skin - 6 pieces",
@@ -3886,7 +3872,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 9 pieces (1 piece of the head, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
@@ -3921,7 +3907,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and 1½ tail-piece of a medium-sized titus (or weigh 265g without bone) (Alternatively, use 4 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 410g without bones)",
@@ -3954,7 +3940,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -3991,7 +3977,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -4030,7 +4016,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -4067,7 +4053,7 @@ export const recipe = [
   {
     name: "Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -4103,7 +4089,7 @@ export const recipe = [
   {
     name: "Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 1½ cups",
@@ -4135,7 +4121,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 1050g or 8 cups diced",
@@ -4170,7 +4156,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -4200,7 +4186,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed2100Id,
+    totalCalorie: 2100,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -4233,7 +4219,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1¾ cups",
@@ -4271,7 +4257,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Chicken thigh with skin - 6 pieces",
@@ -4307,7 +4293,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 9 pieces (1 piece of the head, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
@@ -4342,7 +4328,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and 1½ tail-piece of a medium-sized titus (or weigh 265g without bone) (Alternatively, use 4 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 410g without bones)",
@@ -4377,7 +4363,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -4415,7 +4401,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -4453,7 +4439,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -4490,7 +4476,7 @@ export const recipe = [
   {
     name: "Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -4526,7 +4512,7 @@ export const recipe = [
   {
     name: "Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 2 cups",
@@ -4558,7 +4544,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 900g or 7 cups diced",
@@ -4593,7 +4579,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -4624,7 +4610,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed2200Id,
+    totalCalorie: 2200,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",
@@ -4657,7 +4643,7 @@ export const recipe = [
   {
     name: "Jollof Rice",
     servings: 6,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Raw rice - 1¾ cups",
@@ -4695,7 +4681,7 @@ export const recipe = [
   {
     name: "Chicken Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Chicken thigh with skin - 3 pieces",
@@ -4731,7 +4717,7 @@ export const recipe = [
   {
     name: "Fish Pepper Soup with Potatoes",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Fish - 9 pieces (1 piece of the head, mid-piece or tail-piece of a medium-sized tilapia, cote, hake, seabass or croaker fish) If weighing each piece should be about 120g raw weight.",
@@ -4766,7 +4752,7 @@ export const recipe = [
   {
     name: "Fish Sauce",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Smoked or boiled Titus (Mackerel Fish) - 1 mid-piece and 1½ tail-piece of a medium-sized titus (or weigh 265g without bone) (Alternatively, use 4 mid-pieces of croaker, cote, hake, tilapia or seabass fish or weigh 410g without bones)",
@@ -4801,7 +4787,7 @@ export const recipe = [
   {
     name: "Efo-riro with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -4839,7 +4825,7 @@ export const recipe = [
   {
     name: "Efo-riro with Fish or Chicken",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Leafy greens (Ugwu, spinach, kale, shoko or any other leafy green of choice) - 8 cups chopped",
@@ -4878,7 +4864,7 @@ export const recipe = [
   {
     name: "Okra Soup with Beef",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -4915,7 +4901,7 @@ export const recipe = [
   {
     name: "Okra Soup with Fish (or Chicken)",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Okra - 1 cup chopped and 1 cup grated",
@@ -4951,7 +4937,7 @@ export const recipe = [
   {
     name: "Beans Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 2 cups",
@@ -4983,7 +4969,7 @@ export const recipe = [
   {
     name: "Yam Pottage",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Yam - 900g or 7 cups diced",
@@ -5018,7 +5004,7 @@ export const recipe = [
   {
     name: "Ugwu Stir-fry",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Chopped ugwu - 5 cups",
@@ -5049,7 +5035,7 @@ export const recipe = [
   {
     name: "Moi-Moi",
     servings: 3,
-    calorieNeedId: calorieNeed2300Id,
+    totalCalorie: 2300,
     updatedAt: new Date(),
     ingredients: [
       "Raw beans - 3 cups",

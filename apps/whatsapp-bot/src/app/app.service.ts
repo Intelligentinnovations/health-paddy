@@ -66,7 +66,6 @@ export class AppService {
               profileName,
             });
           }
-          console.log(state.stage);
 
           if (state.stage === 'landing') {
             return this.generalResponse.handleLandingPageSelection({
@@ -175,7 +174,6 @@ export class AppService {
         first6Digits,
         email,
         endDate,
-        subscriptionStatus: 'active',
         transactionStatus,
         amount: `${amountInNaira}`,
         reference,

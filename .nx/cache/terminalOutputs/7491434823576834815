@@ -1,0 +1,41 @@
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 114 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+
+[1m[31mERROR[39m[22m in [1m./apps/whatsapp-bot/src/app/general.ts:[32m[1m116:13[22m[39m[1m[39m[22m
+[90mTS2345: [39mArgument of type '{ phoneNumber: string; requiredCalorie: number; state: State; }' is not assignable to parameter of type '{ state: State; phoneNumber: string; }'.
+  Object literal may only specify known properties, and 'requiredCalorie' does not exist in type '{ state: State; phoneNumber: string; }'.
+  [0m [90m 114 |[39m           [36mreturn[39m [36mthis[39m[33m.[39mgenerateAndSendMealPlan({[0m
+  [0m [90m 115 |[39m             phoneNumber[33m,[39m[0m
+  [0m[31m[1m>[22m[39m[90m 116 |[39m             requiredCalorie[33m:[39m state[33m.[39muser[33m.[39mrequiredCalorie[33m![39m[33m,[39m[0m
+  [0m [90m     |[39m             [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[0m
+  [0m [90m 117 |[39m             state[0m
+  [0m [90m 118 |[39m           })[0m
+  [0m [90m 119 |[39m[0m
+
+[1m[31mERROR[39m[22m in [1m./apps/whatsapp-bot/src/app/meal-plan/create-plan.service.ts:[32m[1m379:13[22m[39m[1m[39m[22m
+[90mTS2345: [39mArgument of type '{ phoneNumber: string; state: State; requiredCalorie: number; }' is not assignable to parameter of type '{ phoneNumber: string; state: State; }'.
+  Object literal may only specify known properties, and 'requiredCalorie' does not exist in type '{ phoneNumber: string; state: State; }'.
+  [0m [90m 377 |[39m             phoneNumber[33m,[39m[0m
+  [0m [90m 378 |[39m             state[33m,[39m[0m
+  [0m[31m[1m>[22m[39m[90m 379 |[39m             requiredCalorie[33m,[39m[0m
+  [0m [90m     |[39m             [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[0m
+  [0m [90m 380 |[39m           })[33m;[39m[0m
+  [0m [90m 381 |[39m           [36mreturn[39m [36mthis[39m[33m.[39mhelper[33m.[39mhandleNoState({[0m
+  [0m [90m 382 |[39m             phoneNumber[33m,[39m[0m
+
+webpack compiled with [1m[31m2 errors[39m[22m (ce1ea66ef02958ab)
+[1m[31mBuild failed, waiting for changes to restart...[39m[22m
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 114 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+
+[1m[31mERROR[39m[22m in [1m./apps/whatsapp-bot/src/app/meal-plan/create-plan.service.ts:[32m[1m379:13[22m[39m[1m[39m[22m
+[90mTS2345: [39mArgument of type '{ phoneNumber: string; state: State; requiredCalorie: number; }' is not assignable to parameter of type '{ phoneNumber: string; state: State; }'.
+  Object literal may only specify known properties, and 'requiredCalorie' does not exist in type '{ phoneNumber: string; state: State; }'.
+  [0m [90m 377 |[39m             phoneNumber[33m,[39m[0m
+  [0m [90m 378 |[39m             state[33m,[39m[0m
+  [0m[31m[1m>[22m[39m[90m 379 |[39m             requiredCalorie[33m,[39m[0m
+  [0m [90m     |[39m             [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[0m
+  [0m [90m 380 |[39m           })[33m;[39m[0m
+  [0m [90m 381 |[39m           [36mreturn[39m [36mthis[39m[33m.[39mhelper[33m.[39mhandleNoState({[0m
+  [0m [90m 382 |[39m             phoneNumber[33m,[39m[0m
+
+webpack compiled with [1m[31m1 error[39m[22m (16eb5398c64ecbc2)
+[1m[31mBuild failed, waiting for changes to restart...[39m[22m

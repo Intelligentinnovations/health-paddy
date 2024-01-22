@@ -22,16 +22,13 @@ export class ViewMealPlanService {
 
   handleViewMealPlan = async ({
     phoneNumber,
-    state,
-    requiredCalorie
-
+    state
   }: {
     phoneNumber: string;
     state: State
-    requiredCalorie: number
   }) => {
-    try {
-      return this.helper.generateAndSendMealPlan({ state, phoneNumber, requiredCalorie })
+    try {      
+      return this.helper.generateAndSendMealPlan({ state, phoneNumber })
     } catch (err) {
       console.log(err);
 

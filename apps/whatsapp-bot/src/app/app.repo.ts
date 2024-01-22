@@ -32,7 +32,6 @@ export class AppRepo {
       const {
         userId,
         reference,
-        subscriptionStatus,
         transactionStatus,
         token,
         email,
@@ -79,7 +78,7 @@ export class AppRepo {
         .values({
           userId,
           transactionId: transaction.id,
-          status: subscriptionStatus,
+          status: "active",
           startDate: date,
           endDate,
           updatedAt: date
@@ -111,7 +110,10 @@ export class AppRepo {
   }
 
   async unSubscribe(userId: string) {
-    return await this.client.updateTable('Subscription').set({ status: 'canceled' }).where('userId', '=', userId).executeTakeFirst()
+    return await this.client.transaction().execute(async (trx) => {
+      await trx.updateTable('Subscription').set({ status: 'canceled' }).where('userId', '=', userId).executeTakeFirst()
+      await trx.updateTable('User').set({ subscriptionStatus: 'canceled' }).where('id', '=', userId).executeTakeFirst()
+    })
   }
 
   async updateSubscriptionStatus({ userId, status }: { userId: string, status: SubscriptionStatus }) {
@@ -131,6 +133,10 @@ export class AppRepo {
 
   async fetchUserCards(userId: string) {
     return await this.client.selectFrom('Card').selectAll().where('userId', '=', userId).execute()
+  }
+
+  async fetchUserDefaultCard(userId: string) {
+    return await this.client.selectFrom('Card').selectAll().where('userId', '=', userId).executeTakeFirstOrThrow()
   }
 
   async updateUser({ payload, userId }: { payload: any, userId: string }) {
@@ -185,18 +191,21 @@ export class AppRepo {
 
   }
 
-  async fetchSubscriptionStatus(userId: string) {
-    return await this.client
-      .selectFrom('Subscription')
-      .select(['id', 'status'])
-      .where('userId', '=', userId)
+  async getRecipe({ calorie, mealName }: { calorie: number, mealName: string }) {
+    return this.client
+      .selectFrom('Recipe').selectAll()
+      .where('totalCalorie', '=', calorie).where("name", "ilike", mealName)
       .executeTakeFirst()
   }
 
-  async getRecipe({ calorieNeedId, mealName }: { calorieNeedId: string, mealName: string }) {
-    return await this.client
-      .selectFrom('Recipe').selectAll()
-      .where('calorieNeedId', '=', calorieNeedId).where("name", "ilike", mealName)
-      .executeTakeFirst()
+  async saveUserMealPlan({ userId, plan, startDate, endDate }: { userId: string, plan: string, startDate: Date, endDate: Date }) {
+    return this.client
+      .insertInto('UserMealPlan').values({ endDate, plan, userId, startDate }).executeTakeFirst()
   }
+
+  async fetchCurrentMealPlan(userId: string) {
+    return this.client
+      .selectFrom('UserMealPlan').selectAll().where('endDate', '>=', new Date()).where('userId', '=', userId).executeTakeFirst()
+  }
+
 }

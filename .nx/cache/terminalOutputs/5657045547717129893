@@ -1,0 +1,9 @@
+
+[36m>[39m [7m[1m[36m Generating Client [39m[22m[27m
+
+[command]/home/abiodun/.nvm/versions/node/v20.10.0/bin/pnpm exec prisma generate --schema=apps/whatsapp-bot/prisma/schema.prisma
+[2mEnvironment variables loaded from .env[22m
+[2mPrisma schema loaded from apps/whatsapp-bot/prisma/schema.prisma[22m
+
+✔ Generated [1mKysely types[22m (1.7.1)[2m to ./apps/whatsapp-bot/src/types[22m in 1.58s
+

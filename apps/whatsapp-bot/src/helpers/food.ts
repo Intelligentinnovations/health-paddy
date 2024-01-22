@@ -216,7 +216,7 @@ export const foodData = [
   },
   {
     "s/n": 28,
-    "name": "fruit n’ fiber cereal",
+    "name": "fruit n' fiber cereal",
     "portion": "1 cup",
     "unit": "cup",
     "calories": 219,

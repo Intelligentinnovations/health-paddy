@@ -376,7 +376,6 @@ export class CreateMealPlanService {
           await this.viewMealPlan.handleViewMealPlan({
             phoneNumber,
             state,
-            requiredCalorie,
           });
           return this.helper.handleNoState({
             phoneNumber,

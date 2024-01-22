@@ -1,0 +1,46 @@
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 114 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+
+[1m[31mERROR[39m[22m in [1m./apps/whatsapp-bot/src/app/meal-plan/create-plan.service.ts:[32m[1m379:13[22m[39m[1m[39m[22m
+[90mTS2345: [39mArgument of type '{ phoneNumber: string; state: State; requiredCalorie: number; }' is not assignable to parameter of type '{ phoneNumber: string; state: State; }'.
+  Object literal may only specify known properties, and 'requiredCalorie' does not exist in type '{ phoneNumber: string; state: State; }'.
+  [0m [90m 377 |[39m             phoneNumber[33m,[39m[0m
+  [0m [90m 378 |[39m             state[33m,[39m[0m
+  [0m[31m[1m>[22m[39m[90m 379 |[39m             requiredCalorie[33m,[39m[0m
+  [0m [90m     |[39m             [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[0m
+  [0m [90m 380 |[39m           })[33m;[39m[0m
+  [0m [90m 381 |[39m           [36mreturn[39m [36mthis[39m[33m.[39mhelper[33m.[39mhandleNoState({[0m
+  [0m [90m 382 |[39m             phoneNumber[33m,[39m[0m
+
+webpack compiled with [1m[31m1 error[39m[22m (60c932e3aa50e5d4)
+[1m[31mBuild failed, waiting for changes to restart...[39m[22m
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 114 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (9835379af557eda5)
+[1m[31mDebugger listening on ws://localhost:9229/7d677608-aec2-48d6-b0a5-e55043c5f3ed[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 114 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (75d2c4df9e834562)
+[1m[31mDebugger listening on ws://localhost:9229/16335bb6-6b03-48aa-a95d-0a93dad77c73[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m/home/abiodun/projects/ich/healthpaddy-backend/node_modules/.pnpm/axios@1.6.0/node_modules/axios/lib/core/AxiosError.js:89[39m[22m
+[1m[31m  AxiosError.call(axiosError, error.message, code, config, request, response);[39m[22m
+[1m[31m             ^[39m[22m
+[1m[31m[39m[22m
+[1m[31mAggregateError: [39m[22m
+[1m[31m    at Function.AxiosError.from (/home/abiodun/projects/ich/healthpaddy-backend/node_modules/.pnpm/axios@1.6.0/node_modules/axios/lib/core/AxiosError.js:89:14)[39m[22m
+[1m[31m    at RedirectableRequest.handleRequestError (/home/abiodun/projects/ich/healthpaddy-backend/node_modules/.pnpm/axios@1.6.0/node_modules/axios/lib/adapters/http.js:606:25)[39m[22m
+[1m[31m    at RedirectableRequest.emit (node:events:514:28)[39m[22m
+[1m[31m    at ClientRequest.eventHandlers.<computed> (/home/abiodun/projects/ich/healthpaddy-backend/node_modules/.pnpm/follow-redirects@1.15.3/node_modules/follow-redirects/index.js:14:24)[39m[22m
+[1m[31m    at ClientRequest.emit (node:events:514:28)[39m[22m
+[1m[31m    at TLSSocket.socketErrorListener (node:_http_client:495:9)[39m[22m
+[1m[31m    at TLSSocket.emit (node:events:514:28)[39m[22m
+[1m[31m    at emitErrorNT (node:internal/streams/destroy:151:8)[39m[22m
+[1m[31m    at emitErrorCloseNT (node:internal/streams/destroy:116:3)[39m[22m
+[1m[31m    at processTicksAndRejections (node:internal/process/task_queues:82:21)[39m[22m
+[1m[31m[39m[22m
+
+[36m>[39m [7m[1m[36m NX [39m[22m[27m [1mProcess exited with code 1, waiting for changes to restart...[22m
+

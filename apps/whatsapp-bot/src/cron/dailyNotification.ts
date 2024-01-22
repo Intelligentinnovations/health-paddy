@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
+import * as cron from 'node-cron';
 
-// import * as cron from 'node-cron';
 import { AppRepo } from '../app/app.repo';
 import { PaymentService } from '../services/paystack';
 

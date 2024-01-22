@@ -24,6 +24,7 @@ export class ViewRecipeService {
     state: State;
     input: string;
   }) => {
+
     try {
       const baseUrl = `view-recipe`;
       if (state.stage === `${baseUrl}/day`) {
@@ -37,10 +38,7 @@ export class ViewRecipeService {
           'Sunday',
         ];
         const selectedDay = days[Number(input) - 1];
-
-        const cacheKey = `${phoneNumber}-meal-plan`;
-
-        const userMealPlan = await this.cacheManager.get<MealPlan[]>(cacheKey);
+        const userMealPlan = await this.helper.getMealPlan(state)
         if (userMealPlan && userMealPlan.length) {
           const selectedMealDay = userMealPlan.find(
             (meal) => meal.day === selectedDay
@@ -92,16 +90,14 @@ export class ViewRecipeService {
       if (state.stage === `${baseUrl}/day/meal`) {
         const { mealsWithRecipe } = state.data;
         const selectedMeal = mealsWithRecipe[Number(input) - 1];
-        console.log({ selectedMeal });
-
         const parsedMeal = selectedMeal.split(' of ')[1].trim();
         const closestCalorie = await this.helper.getClosestMealPlan(
           state!.user!.requiredCalorie as number
         );
 
         const recipe = await this.repo.getRecipe({
-          calorieNeedId: closestCalorie!.id,
-          mealName: parsedMeal,
+          calorie: closestCalorie!.calories,
+          mealName: parsedMeal.trim(),
         });
 
         if (recipe) {

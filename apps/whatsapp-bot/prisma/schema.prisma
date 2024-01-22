@@ -28,6 +28,7 @@ model User {
   Subscription       Subscription[]
   Card               Card[]
   Transaction        Transaction[]
+  UserMealPlan       UserMealPlan[]
 }
 
 model Card {
@@ -88,7 +89,6 @@ model CalorieNeed {
   calories Int
   planNo   Int        @default(1)
   MealPlan MealPlan[]
-  Recipe   Recipe[]
 }
 
 model MealPlan {
@@ -105,6 +105,15 @@ model MealPlan {
   calorieNeedId     String
 }
 
+model UserMealPlan {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  plan      String
+  startDate DateTime @default(now()) @db.Timestamptz()
+  endDate   DateTime @db.Date
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
 model Snack {
   id        String   @id @default(dbgenerated("gen_random_uuid()"))
   snack     String
@@ -114,15 +123,14 @@ model Snack {
 }
 
 model Recipe {
-  id            String      @id @default(dbgenerated("gen_random_uuid()"))
-  name          String
-  servings      Int
-  ingredients   String[]
-  instructions  String[]
-  calorieNeedId String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  CalorieNeed   CalorieNeed @relation(fields: [calorieNeedId], references: [id])
+  id           String   @id @default(dbgenerated("gen_random_uuid()"))
+  name         String
+  servings     Int
+  ingredients  String[]
+  instructions String[]
+  totalCalorie Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 enum SubscriptionStatus {

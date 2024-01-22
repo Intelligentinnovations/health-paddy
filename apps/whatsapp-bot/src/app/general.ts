@@ -78,8 +78,7 @@ export class GenericService {
 
             });
           } else {
-            const subscription = await this.repo.fetchSubscriptionStatus(state!.user!.id as unknown as string)
-            if (subscription?.status !== 'active') {
+            if (state.user?.subscriptionStatus === 'expired' || state.user?.subscriptionStatus === undefined) {
               return this.handlePaymentNotification({
                 phoneNumber,
                 state
@@ -96,8 +95,6 @@ export class GenericService {
             break;
 
           }
-
-
         case ROUTE.View_MEAL_PLAN:
           if (!state.user?.activityLevel) {
             return this.sendTextAndSetCache({
@@ -108,7 +105,7 @@ export class GenericService {
             });
           }
 
-          if (state.user?.subscriptionStatus !== 'active') {
+          if (state.user?.subscriptionStatus === 'expired' || state.user?.subscriptionStatus === undefined) {
             return this.handlePaymentNotification({
               phoneNumber,
               state
@@ -116,7 +113,6 @@ export class GenericService {
           }
           return this.generateAndSendMealPlan({
             phoneNumber,
-            requiredCalorie: state.user.requiredCalorie!,
             state
           })
 
@@ -274,17 +270,25 @@ Saying goodbye to our subscription? we understand. But remember, we're always he
   }: {
     phoneNumber: string; state: State
   }) => {
-    const subscription = await this.repo.fetchSubscription(state!.user!.id! as unknown as string)
-    const text = subscription?.subscriptionStatus === undefined
-      ? `We provide a complimentary one-day meal plan after which you can subscribe to gain full access to our services. To get your free one-day meal plan, we'd appreciate it if you could add your payment card.`
-      : 'Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.'
-    const message = `Subscription alert\n
-${text}
+    const firstTimeSubscriber = state?.user?.subscriptionStatus === undefined;
+    if (firstTimeSubscriber) {
+      return this.sendTextAndSetCache({
+        message: `Subscription alert\n We provide a complimentary one-day meal plan after which you can subscribe to gain full access to our services. To get your free one-day meal plan, we'd appreciate it if you could add your payment card.\n 1.Accept \n2. Decline`,
+        phoneNumber,
+        state,
+        nextStage: 'subscription-acceptance'
+      })
+    } else {
+      //   Check user cards and plan and ask the user to proceed;
+      // const jjd=  await this.repo.fetchSubscription
 
+      const message = `Subscription alert\n
+Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.\n
+Amount Due: ${this.secrets.get('SUBSCRIPTION_AMOUNT')}
 1. Accept
-2. Decline`;
-
-    return this.sendTextAndSetCache({ message, phoneNumber, state, nextStage: 'subscription-acceptance' })
+2. Decline`
+      return this.sendTextAndSetCache({ message, phoneNumber, state, nextStage: 'subscription-acceptance' })
+    }
   };
 
   handleUnknownRequest = async ({ phoneNumber, message }: { phoneNumber: string; message: string }) => {
@@ -314,7 +318,7 @@ ${text}
       startDate: new Date(this.secrets.get('WHATSAPP_BOT_START_DATE')),
       endDate: new Date()
     })
-    
+
     const planNo = alternatePlanNumbers(appWeek)
     const mealPlans = await this.repo.fetchCalorieRange(planNo);
     let closestMealPlan = mealPlans[0];
@@ -330,25 +334,54 @@ ${text}
     return closestMealPlan
   }
 
+  async getMealPlan(state: State) {
+    const cacheKey = `${state!.user!.phone}-meal-plan`;
+    const mealPlan = await this.cacheManager.get<MealPlan[]>(cacheKey);
+    if (mealPlan) {
+      return mealPlan
+    }
+    let fetchedMealPlan: MealPlan[];
+    const currentMealPlan = await this.repo.fetchCurrentMealPlan(state.user!.id);
+    if (currentMealPlan) {
+      fetchedMealPlan = JSON.parse(currentMealPlan.plan)
+    } else {
+      const closestCalorie = await this.getClosestMealPlan(state!.user!.requiredCalorie!);
+      const subscription = await this.repo.fetchSubscription(state!.user!.id as unknown as string);
+      const subscriptionEndDate = DateTime.fromISO(subscription!.endDate!.toISOString().split('T')[0]!);
+      const currentDate = DateTime.fromISO(new Date().toISOString().split('T')[0]!);
+
+      const remainingSubscriptionsDays = state!.user!.hasUsedFreeTrial
+        ? subscriptionEndDate.diff(currentDate, 'days').toObject().days
+        : this.secrets.get('FREE_PLAN_DAYS');
+
+      const numberOfMealPlanToFetch = remainingSubscriptionsDays! > 8 ? 8 : remainingSubscriptionsDays;
+
+      fetchedMealPlan = (
+        await this.repo.fetchMealPlanByCalorieNeedId({
+          calorieNeedId: closestCalorie!.id,
+          limit: numberOfMealPlanToFetch!,
+        })
+      ).rows;
+      const today = new Date();
+      await this.repo.saveUserMealPlan({
+        userId: state.user!.id,
+        plan: JSON.stringify(fetchedMealPlan),
+        startDate: today,
+        endDate: today
+      })
+      await this.cacheManager.set(cacheKey, fetchedMealPlan);
+    }
+    return fetchedMealPlan
+  }
+
+
   async generateAndSendMealPlan({
     state,
     phoneNumber,
-    requiredCalorie
   }: {
     state: State;
     phoneNumber: string;
-    requiredCalorie: number
   }) {
-    const closestCalorie = await this.getClosestMealPlan(requiredCalorie);
-    const subscription = await this.repo.fetchSubscription(state!.user!.id as unknown as string);
-    const subscriptionEndDate = DateTime.fromISO(subscription!.endDate!.toISOString().split('T')[0]!);
-    const currentDate = DateTime.fromISO(new Date().toISOString().split('T')[0]!);
-    const remainingSubscriptionsDays = state!.user!.hasUsedFreeTrial
-      ? subscriptionEndDate.diff(currentDate, 'days').toObject().days
-      : this.secrets.get('FREE_PLAN_DAYS');
-    const numberOfMealPlanToFetch = remainingSubscriptionsDays! > 7 ? 7 : remainingSubscriptionsDays;
-    const cacheKey = `${phoneNumber}-meal-plan`;
-
     const sendPlanMessage = async (plan: MealPlan & { snack?: string }) => {
       const heading = generateMealHeading(plan.day)
       let message = `*${heading}*\n\n`;
@@ -356,52 +389,21 @@ ${text}
       message += `*Snack*: ${plan.snack}\n\n`;
       message += `*Lunch*: ${plan.lunch}\n\n`;
       message += `*Dinner*: ${plan.dinner}\n\n`;
-      message += `\nTotal Calories: ${plan.breakfastCalories + plan.snackCalories + plan.lunchCalories + plan.dinnerCalories}`;
+      message += `\nTotal Calories: ${plan.breakfastCalories + plan.snackCalories + plan.lunchCalories + plan.dinnerCalories} `;
       await this.sendTextAndSetCache({ message, phoneNumber, nextStage: 'view-plan', state });
       await delay(300);
     };
-
-    const mealPlan = await this.cacheManager.get<MealPlan[]>(cacheKey);
-
-    if (mealPlan && mealPlan.length) {
-      for await (const plan of mealPlan) {
-        await sendPlanMessage(plan);
-      }
-      if (state!.user!.hasUsedFreeTrial) {
-        return this.repo.updateUser({
-          payload: { hasUsedFreeTrial: true },
-          userId: state!.user!.id as unknown as string
-        });
-      }
-    } else {
-      if (state.user?.subscriptionStatus === 'expired') {
-        return this.handleNoState({
-          phoneNumber,
-          profileName: state!.user!.name,
-          customHeader: `You don't have any active subscription, please subscribe to continue enjoying our service`,
-        });
-      }
-
-      const fetchedMealPlan = (
-        await this.repo.fetchMealPlanByCalorieNeedId({
-          calorieNeedId: closestCalorie!.id,
-          limit: numberOfMealPlanToFetch!,
-        })
-      ).rows;
-
-      const ttl = +remainingSubscriptionsDays! * 24 * 60 * 60
-      await this.cacheManager.set(cacheKey, fetchedMealPlan);
-
-      for await (const plan of fetchedMealPlan) {
-        await sendPlanMessage(plan);
-      }
-
-      if (!state.user!.hasUsedFreeTrial) {
-        return this.repo.updateUser({
-          payload: { hasUsedFreeTrial: true },
-          userId: state.user!.id as unknown as string
-        });
-      }
+    const mealPlan = await this.getMealPlan(state)
+    for await (const plan of mealPlan) {
+      await sendPlanMessage(plan);
     }
+
+    if (!state.user!.hasUsedFreeTrial) {
+      return this.repo.updateUser({
+        payload: { hasUsedFreeTrial: true },
+        userId: state.user!.id as unknown as string
+      });
+    }
+
   }
 }
