@@ -44,4 +44,5 @@ cdk.context.json
 #**/*.pem
 
 env.json
-.nx
+/.nx
+.nx/cache/d/daemon.log
