@@ -44,3 +44,4 @@ cdk.context.json
 #**/*.pem
 
 env.json
+.nx

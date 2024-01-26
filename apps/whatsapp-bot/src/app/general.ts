@@ -5,7 +5,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { DateTime } from 'luxon';
 
-import { alternatePlanNumbers, delay, generateMealHeading, getWeeksBetweenDates, sendWhatsAppText } from '../helpers';
+import { alternatePlanNumbers, delay, generateMealHeading, getPageSelectionOffset, getWeeksBetweenDates, sendWhatsAppText } from '../helpers';
 import { SecretsService } from '../secrets/secrets.service';
 import { MealPlan, State } from '../types';
 import { privacyMessage } from '../utils/textMessages';
@@ -36,33 +36,38 @@ export class GenericService {
   }) => {
     try {
       const ROUTE = {
-        SIGN_UP: '1',
-        CREATE_MEAL_PLAN: '2',
-        View_MEAL_PLAN: '3',
-        SWAP_MEAL_ITEMS: '4',
-        VIEW_RECIPE: '5',
-        SUPPORT: '6',
-        SUBSCRIPTION: '7'
+        SIGN_UP: 1,
+        CREATE_MEAL_PLAN: 2,
+        View_MEAL_PLAN: 3,
+        SWAP_MEAL_ITEMS: 4,
+        VIEW_RECIPE: 5,
+        SUPPORT: 6,
+        SUBSCRIPTION: 7
       }
 
       const protectedSelection = ['2', '3', '4', '5', '7']
+      const selectionOffset = getPageSelectionOffset(state);
+      const inputWithOffset = Number(input) + selectionOffset;
+
+      console.log({ selectionOffset });
 
       if (!state.user && protectedSelection.includes(input)) {
         return this.handleNoState({
           phoneNumber,
           profileName,
           customHeader: `Looks like you do not have an account as I could not find any account matching your phone number. please select 1 to signup`,
+          state
         });
       }
 
-      switch (input) {
+      switch (inputWithOffset) {
         case ROUTE.SIGN_UP:
           if (state.user) {
             await this.handleNoState({
               phoneNumber,
               profileName,
-              customHeader:
-                'You are already signed up, How else can i be of service',
+              customHeader: 'You are already signed up, How else can i be of service',
+              state,
             });
             break;
           }
@@ -75,7 +80,6 @@ export class GenericService {
               phoneNumber,
               nextStage: 'landing',
               state
-
             });
           } else {
             if (state.user?.subscriptionStatus === 'expired' || state.user?.subscriptionStatus === undefined) {
@@ -162,14 +166,16 @@ export class GenericService {
           await this.handleNoState({
             phoneNumber,
             profileName,
-            customHeader: `😔😔 I'm sorry, but you don't currently have an active subscription. To enjoy all the benefits, please consider subscribing. How else can I be of service?`
+            customHeader: `😔😔 I'm sorry, but you don't currently have an active subscription. To enjoy all the benefits, please consider subscribing. How else can I be of service?`,
+            state
           })
           break;
         default:
           return this.handleNoState({
             phoneNumber,
             profileName,
-            customHeader: 'I could not understand your request, lets start again'
+            customHeader: 'I could not understand your request, lets start again',
+            state
           })
       }
 
@@ -186,36 +192,38 @@ export class GenericService {
     phoneNumber,
     profileName,
     customHeader,
+    state
   }: {
     phoneNumber: string;
     profileName: string;
     customHeader?: string;
+    state: State
   }) => {
+      const selectionOffset = getPageSelectionOffset(state);
+
     try {
       const heading = customHeader
         ? customHeader
         : `Hi! ${profileName}, I am Health Paddy! Your personal meal planning assistant. How may I be of service to you today?`;
       await sendWhatsAppText({
         phoneNumber, message: `${heading}\n
-1. Signup 👤🔐
-Create an account with us
+${!state.user ? `1. Complete your profile with us 👤🔐
+Create an account with us\n` : ''}
+${!state.user?.activityLevel ? `${state.user ? 1 : 2}. Create Meal Plan 🍳📝 
+Chef Mode: Plan your personalized meal for your health journey in minutes\n`: ''}
+${`${3 - selectionOffset}. View My Meal Plan 🍽️📋
+See what's cooking on your plate today`}
 
-2. Create Meal Plan 🍳📝 
-Chef Mode: Plan your personalized meal for your health journey in minutes
-
-3. View My Meal Plan 🍽️📋
-See what's cooking on your plate today
-
-4. Swap Meal Items 🔀
+${4 - selectionOffset}. Swap Meal Items 🔀
 Don't like a meal item? Shake things up with a variety of interesting alternatives
 
-5. View Your Recipe List 📖🍽️
+${5 - selectionOffset}. View Your Recipe List 📖🍽️
 Your path to wellness starts here
 
-6. Log a Complaint 📢
+${6 - selectionOffset}. Log a Complaint 📢
 Help us improve our service: Share your thoughts with us!
 
-7. Manage Subscription
+${7 - selectionOffset}. Manage Subscription
 Saying goodbye to our subscription? we understand. But remember, we're always here to support you on your health journey`
       });
       this.cacheManager.del(phoneNumber);
@@ -253,7 +261,8 @@ Saying goodbye to our subscription? we understand. But remember, we're always he
         return this.handleNoState({
           phoneNumber,
           profileName,
-          customHeader: 'We respect your decision regarding our privacy policy. If you have any concerns or questions about specific aspects of the policy, please feel free to reach out to our support team'
+          customHeader: 'We respect your decision regarding our privacy policy. If you have any concerns or questions about specific aspects of the policy, please feel free to reach out to our support team',
+          state
         });
       }
       return {

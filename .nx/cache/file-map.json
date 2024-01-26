@@ -127,6 +127,36 @@
   },
   "nxJsonPlugins": [],
   "projectFileMap": {
+    "utils": [
+      {
+        "file": "libs/utils/.eslintrc.json",
+        "hash": "13800677001662881425"
+      },
+      {
+        "file": "libs/utils/README.md",
+        "hash": "7895454965472636336"
+      },
+      {
+        "file": "libs/utils/project.json",
+        "hash": "16014369796224081102"
+      },
+      {
+        "file": "libs/utils/src/index.ts",
+        "hash": "12566137188613743474"
+      },
+      {
+        "file": "libs/utils/src/lib/helper/getPromiseAttribute.ts",
+        "hash": "3389729051106783200"
+      },
+      {
+        "file": "libs/utils/tsconfig.json",
+        "hash": "14490782888307098276"
+      },
+      {
+        "file": "libs/utils/tsconfig.lib.json",
+        "hash": "8188472110264778699"
+      }
+    ],
     "database": [
       {
         "file": "libs/database/.eslintrc.json",
@@ -171,79 +201,6 @@
         "hash": "8188472110264778699"
       }
     ],
-    "cache": [
-      {
-        "file": "libs/cache/.eslintrc.json",
-        "hash": "13800677001662881425"
-      },
-      {
-        "file": "libs/cache/README.md",
-        "hash": "4805820437044825185"
-      },
-      {
-        "file": "libs/cache/project.json",
-        "hash": "13388298492474209291"
-      },
-      {
-        "file": "libs/cache/src/index.ts",
-        "hash": "2454279162604998713"
-      },
-      {
-        "file": "libs/cache/src/lib/cache.interceptor.ts",
-        "hash": "14813248948557688073",
-        "deps": [
-          "helpers",
-          "npm:@nestjs/cache-manager",
-          "npm:@nestjs/common",
-          "npm:cache-manager",
-          "npm:rxjs"
-        ]
-      },
-      {
-        "file": "libs/cache/tsconfig.json",
-        "hash": "14490782888307098276"
-      },
-      {
-        "file": "libs/cache/tsconfig.lib.json",
-        "hash": "8188472110264778699"
-      }
-    ],
-    "server": [
-      {
-        "file": "libs/server/.eslintrc.json",
-        "hash": "13800677001662881425"
-      },
-      {
-        "file": "libs/server/README.md",
-        "hash": "7496040986331863168"
-      },
-      {
-        "file": "libs/server/project.json",
-        "hash": "10505834281420511064"
-      },
-      {
-        "file": "libs/server/src/index.ts",
-        "hash": "16106285530069273774"
-      },
-      {
-        "file": "libs/server/src/lib/http.bootstrap.ts",
-        "hash": "8644764535764970677",
-        "deps": [
-          "helpers",
-          "npm:@nestjs/common",
-          "npm:@nestjs/core",
-          "npm:@nestjs/platform-fastify"
-        ]
-      },
-      {
-        "file": "libs/server/tsconfig.json",
-        "hash": "12957344669965185557"
-      },
-      {
-        "file": "libs/server/tsconfig.lib.json",
-        "hash": "8188472110264778699"
-      }
-    ],
     "secrets": [
       {
         "file": "libs/secrets/.eslintrc.json",
@@ -278,554 +235,6 @@
       {
         "file": "libs/secrets/tsconfig.lib.json",
         "hash": "8188472110264778699"
-      }
-    ],
-    "utils": [
-      {
-        "file": "libs/utils/.eslintrc.json",
-        "hash": "13800677001662881425"
-      },
-      {
-        "file": "libs/utils/README.md",
-        "hash": "7895454965472636336"
-      },
-      {
-        "file": "libs/utils/project.json",
-        "hash": "16014369796224081102"
-      },
-      {
-        "file": "libs/utils/src/index.ts",
-        "hash": "12566137188613743474"
-      },
-      {
-        "file": "libs/utils/src/lib/helper/getPromiseAttribute.ts",
-        "hash": "3389729051106783200"
-      },
-      {
-        "file": "libs/utils/tsconfig.json",
-        "hash": "14490782888307098276"
-      },
-      {
-        "file": "libs/utils/tsconfig.lib.json",
-        "hash": "8188472110264778699"
-      }
-    ],
-    "infra": [
-      {
-        "file": "apps/infra/.eslintrc.json",
-        "hash": "13800677001662881425"
-      },
-      {
-        "file": "apps/infra/project.json",
-        "hash": "14093400689348122578"
-      },
-      {
-        "file": "apps/infra/src/api-stack.ts",
-        "hash": "1110823694883772404",
-        "deps": [
-          "npm:@aws-cdk/aws-apigatewayv2-alpha",
-          "npm:@aws-cdk/aws-apigatewayv2-integrations-alpha",
-          "npm:aws-cdk-lib",
-          "npm:constructs"
-        ]
-      },
-      {
-        "file": "apps/infra/src/app-stack.ts",
-        "hash": "16187152912857606665",
-        "deps": [
-          "npm:aws-cdk-lib",
-          "npm:constructs"
-        ]
-      },
-      {
-        "file": "apps/infra/src/auth-stack.ts",
-        "hash": "6305615275336853689",
-        "deps": [
-          "npm:aws-cdk-lib",
-          "npm:constructs"
-        ]
-      },
-      {
-        "file": "apps/infra/src/constants.ts",
-        "hash": "1008893250257993585"
-      },
-      {
-        "file": "apps/infra/src/dependency-stack.ts",
-        "hash": "4488655995107628354",
-        "deps": [
-          "npm:aws-cdk-lib",
-          "npm:constructs"
-        ]
-      },
-      {
-        "file": "apps/infra/src/file-manager-stack.ts",
-        "hash": "2630626423014124977",
-        "deps": [
-          "npm:aws-cdk-lib",
-          "npm:constructs"
-        ]
-      },
-      {
-        "file": "apps/infra/src/main.ts",
-        "hash": "989720009968985806",
-        "deps": [
-          "npm:source-map-support",
-          "npm:dotenv",
-          "npm:aws-cdk-lib",
-          "npm:process"
-        ]
-      },
-      {
-        "file": "apps/infra/src/notification-stack.ts",
-        "hash": "12647621664841761599",
-        "deps": [
-          "npm:aws-cdk-lib",
-          "npm:constructs"
-        ]
-      },
-      {
-        "file": "apps/infra/src/secrets.ts",
-        "hash": "4141322158651553387",
-        "deps": [
-          "secrets",
-          "npm:zod"
-        ]
-      },
-      {
-        "file": "apps/infra/tsconfig.app.json",
-        "hash": "1558509971940032459"
-      },
-      {
-        "file": "apps/infra/tsconfig.json",
-        "hash": "3025378044812449119"
-      }
-    ],
-    "whatsapp-bot": [
-      {
-        "file": "apps/whatsapp-bot/.eslintrc.json",
-        "hash": "13800677001662881425"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231101214723_create_user/migration.sql",
-        "hash": "1116527266294744554"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231102130628_update/migration.sql",
-        "hash": "14941507982229727607"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231102150611_expand_users/migration.sql",
-        "hash": "17147233666135915410"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231103094339_create_subscription/migration.sql",
-        "hash": "17510729597818794101"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231103094437_create_subscription/migration.sql",
-        "hash": "14859257759712045338"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231103213938_create_transaction/migration.sql",
-        "hash": "2298834010687117971"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231103224436_update_card/migration.sql",
-        "hash": "13501821591402486559"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231103232052_update_card/migration.sql",
-        "hash": "6352774549286356067"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231104094400_update_amount/migration.sql",
-        "hash": "15739449772845158385"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231104110449_update_sub_status/migration.sql",
-        "hash": "2242735115708698440"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231104111730_update_sub_status/migration.sql",
-        "hash": "11972168206342408997"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231104230120_updates_to_subscription/migration.sql",
-        "hash": "12748626128063197784"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231106150540_expand_user/migration.sql",
-        "hash": "12189501309750313168"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231106233610_expand_user/migration.sql",
-        "hash": "5436942304648793956"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231113112337_expand/migration.sql",
-        "hash": "17305856105458119709"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231116131750_mealplan/migration.sql",
-        "hash": "11704791049283487671"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231116223621_expand/migration.sql",
-        "hash": "549266035611487782"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231117135124_changecalorietype/migration.sql",
-        "hash": "17277478950507479812"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231119140646_change_date/migration.sql",
-        "hash": "17809036653415623670"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231119140748_change_date/migration.sql",
-        "hash": "7143396470382285960"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231119141738_change_date/migration.sql",
-        "hash": "18296373741124048849"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231119143821_change_date/migration.sql",
-        "hash": "10703621068825371935"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231120073507_add/migration.sql",
-        "hash": "7535104903947154515"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231211211243_add/migration.sql",
-        "hash": "12255377700896628624"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231211211625_add/migration.sql",
-        "hash": "7344711984944333333"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/20231218085843_add/migration.sql",
-        "hash": "7670783084226342066"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/migrations/migration_lock.toml",
-        "hash": "11493296588214560035"
-      },
-      {
-        "file": "apps/whatsapp-bot/prisma/schema.prisma",
-        "hash": "14500335241406509458"
-      },
-      {
-        "file": "apps/whatsapp-bot/project.json",
-        "hash": "4440317178883978820"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app.module.ts",
-        "hash": "13591976968576028917",
-        "deps": [
-          "npm:@nestjs/cache-manager",
-          "npm:@nestjs/common",
-          "npm:cache-manager-redis-yet"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/app.controller.ts",
-        "hash": "10909643568543887612",
-        "deps": [
-          "helpers",
-          "npm:@nestjs/common",
-          "npm:fastify"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/app.repo.ts",
-        "hash": "9958910488279743737",
-        "deps": [
-          "database",
-          "npm:@nestjs/common",
-          "npm:kysely"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/app.service.ts",
-        "hash": "9025009651931280928",
-        "deps": [
-          "messaging",
-          "npm:@nestjs/cache-manager",
-          "npm:@nestjs/common",
-          "npm:cache-manager",
-          "npm:luxon"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/auth/signup.ts",
-        "hash": "11202467680830173041",
-        "deps": [
-          "messaging",
-          "npm:@nestjs/cache-manager",
-          "npm:@nestjs/common",
-          "npm:cache-manager"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/general.ts",
-        "hash": "18434170953533528974",
-        "deps": [
-          "messaging",
-          "npm:@nestjs/cache-manager",
-          "npm:@nestjs/common",
-          "npm:cache-manager",
-          "npm:luxon"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/meal-plan/create-plan.service.ts",
-        "hash": "7304916162997730801",
-        "deps": [
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/meal-plan/index.ts",
-        "hash": "14629107756369581758"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/meal-plan/recipe.ts",
-        "hash": "17116844199956335929",
-        "deps": [
-          "npm:@nestjs/cache-manager",
-          "npm:@nestjs/common",
-          "npm:cache-manager"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/meal-plan/view-plan.ts",
-        "hash": "13217359200335106838",
-        "deps": [
-          "messaging",
-          "npm:@nestjs/cache-manager",
-          "npm:@nestjs/common",
-          "npm:cache-manager"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/app/subscription/subscription.ts",
-        "hash": "8190399236764365040",
-        "deps": [
-          "messaging",
-          "npm:@nestjs/cache-manager",
-          "npm:@nestjs/common",
-          "npm:cache-manager",
-          "npm:luxon"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/cron/dailyNotification.ts",
-        "hash": "16735944887458235739",
-        "deps": [
-          "npm:@nestjs/common",
-          "npm:luxon",
-          "npm:node-cron"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/cron/subscription.ts",
-        "hash": "9084003674171378987",
-        "deps": [
-          "npm:@nestjs/common",
-          "npm:luxon"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/helpers/date.ts",
-        "hash": "16168625547444610105",
-        "deps": [
-          "npm:luxon"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/helpers/food.ts",
-        "hash": "9541911435605094225"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/helpers/general.ts",
-        "hash": "3636691839151993893"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/helpers/index.ts",
-        "hash": "4057681275971923579"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/helpers/send-message.ts",
-        "hash": "16026082801581133312",
-        "deps": [
-          "npm:axios"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/libraries/libraries.module.ts",
-        "hash": "10573827849373581475",
-        "deps": [
-          "database",
-          "messaging",
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/main.ts",
-        "hash": "10068167429700225094",
-        "deps": [
-          "microservice",
-          "server",
-          "npm:@fastify/aws-lambda",
-          "npm:aws-lambda",
-          "npm:rxjs"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/secrets/secrets.module.ts",
-        "hash": "3670518182334815229",
-        "deps": [
-          "secrets",
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/secrets/secrets.schema.ts",
-        "hash": "16564109408381079566",
-        "deps": [
-          "npm:zod"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/secrets/secrets.service.ts",
-        "hash": "9867563795730624008",
-        "deps": [
-          "npm:@nestjs/common",
-          "npm:zod"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/seeder/data/mealPlan.Data.ts",
-        "hash": "15883320035825190414"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/seeder/data/recipe.data.ts",
-        "hash": "7356526898284005723"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/seeder/data/snacks.data.ts",
-        "hash": "2628534950942174158"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/seeder/seeders/mealPlan.ts",
-        "hash": "2094723390218990632"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/seeder/seeders/recipe.ts",
-        "hash": "583990368858064130"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/seeder/seeders/seed.ts",
-        "hash": "12176873579514400210",
-        "deps": [
-          "npm:kysely",
-          "npm:pg"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/seeder/seeders/snack.ts",
-        "hash": "16642537910471238819"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/server.ts",
-        "hash": "13472748229010853439",
-        "deps": [
-          "server"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/services/paystack.ts",
-        "hash": "14680398979730447796",
-        "deps": [
-          "npm:@nestjs/common",
-          "npm:axios",
-          "npm:crypto"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/types/database.ts",
-        "hash": "10920046985994816586",
-        "deps": [
-          "npm:kysely"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/types/general.ts",
-        "hash": "4004197171935811003"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/types/index.ts",
-        "hash": "4128289002654118369"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/types/user.ts",
-        "hash": "12068027985292608116"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/utils/schema/auth.schema.ts",
-        "hash": "8139641961782824948",
-        "deps": [
-          "npm:zod"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/utils/schema/index.ts",
-        "hash": "10106897125260798826"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/utils/textMessages/general.ts",
-        "hash": "8757772831499906724"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/utils/textMessages/index.ts",
-        "hash": "7446572177221676411"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/utils/textMessages/meal.ts",
-        "hash": "10379603550629635122"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/utils/types/database.ts",
-        "hash": "4977142385958174074",
-        "deps": [
-          "npm:kysely"
-        ]
-      },
-      {
-        "file": "apps/whatsapp-bot/src/utils/types/general.ts",
-        "hash": "6383973995815069422"
-      },
-      {
-        "file": "apps/whatsapp-bot/src/utils/types/index.ts",
-        "hash": "2502579023189011009"
-      },
-      {
-        "file": "apps/whatsapp-bot/tsconfig.app.json",
-        "hash": "4600761399908555467"
-      },
-      {
-        "file": "apps/whatsapp-bot/tsconfig.json",
-        "hash": "117663998960348505"
-      },
-      {
-        "file": "apps/whatsapp-bot/webpack.config.js",
-        "hash": "10619490397189790225",
-        "deps": [
-          "npm:@nx/webpack"
-        ]
       }
     ],
     "notification-handler": [
@@ -965,57 +374,6 @@
         ]
       }
     ],
-    "microservice": [
-      {
-        "file": "libs/microservice/.eslintrc.json",
-        "hash": "13800677001662881425"
-      },
-      {
-        "file": "libs/microservice/README.md",
-        "hash": "17856314778450647615"
-      },
-      {
-        "file": "libs/microservice/project.json",
-        "hash": "12861596610096063459"
-      },
-      {
-        "file": "libs/microservice/src/index.ts",
-        "hash": "5252975302624831493"
-      },
-      {
-        "file": "libs/microservice/src/lib/aws.bootstrap.ts",
-        "hash": "5318316685672117471",
-        "deps": [
-          "helpers",
-          "npm:@nestjs/common",
-          "npm:@nestjs/core",
-          "npm:@nestjs/microservices"
-        ]
-      },
-      {
-        "file": "libs/microservice/src/lib/aws.service.ts",
-        "hash": "9266185677420313268",
-        "deps": [
-          "npm:aws-lambda"
-        ]
-      },
-      {
-        "file": "libs/microservice/src/lib/aws.transporter.ts",
-        "hash": "1089979899593503162",
-        "deps": [
-          "npm:@nestjs/common",
-          "npm:@nestjs/microservices"
-        ]
-      },
-      {
-        "file": "libs/microservice/tsconfig.json",
-        "hash": "14490782888307098276"
-      },
-      {
-        "file": "libs/microservice/tsconfig.lib.json",
-        "hash": "8188472110264778699"
-      }
-    ],
     "messaging": [
       {
         "file": "libs/messaging/.eslintrc.json",
@@ -1064,137 +422,6 @@
       },
       {
         "file": "libs/messaging/tsconfig.lib.json",
-        "hash": "8188472110264778699"
-      }
-    ],
-    "types": [
-      {
-        "file": "libs/types/.eslintrc.json",
-        "hash": "13800677001662881425"
-      },
-      {
-        "file": "libs/types/README.md",
-        "hash": "11134287303145928365"
-      },
-      {
-        "file": "libs/types/project.json",
-        "hash": "2640696245755504076"
-      },
-      {
-        "file": "libs/types/src/index.ts",
-        "hash": "7189289021683003092"
-      },
-      {
-        "file": "libs/types/src/lib/schema/auth.ts",
-        "hash": "5273834741893565331",
-        "deps": [
-          "npm:zod"
-        ]
-      },
-      {
-        "file": "libs/types/src/lib/schema/filemanager.ts",
-        "hash": "740516532803021494",
-        "deps": [
-          "npm:zod"
-        ]
-      },
-      {
-        "file": "libs/types/src/lib/types/database.ts",
-        "hash": "3337239352908077697",
-        "deps": [
-          "npm:kysely"
-        ]
-      },
-      {
-        "file": "libs/types/src/lib/types/default.ts",
-        "hash": "4595979742548113990"
-      },
-      {
-        "file": "libs/types/src/lib/types/event.ts",
-        "hash": "853780566617285091"
-      },
-      {
-        "file": "libs/types/src/lib/types/notification.ts",
-        "hash": "16552404723084018268"
-      },
-      {
-        "file": "libs/types/src/lib/types/user.ts",
-        "hash": "3714996012278022"
-      },
-      {
-        "file": "libs/types/tsconfig.json",
-        "hash": "14490782888307098276"
-      },
-      {
-        "file": "libs/types/tsconfig.lib.json",
-        "hash": "8188472110264778699"
-      }
-    ],
-    "authorizer": [
-      {
-        "file": "libs/authorizer/.eslintrc.json",
-        "hash": "13800677001662881425"
-      },
-      {
-        "file": "libs/authorizer/README.md",
-        "hash": "6927228366964424776"
-      },
-      {
-        "file": "libs/authorizer/project.json",
-        "hash": "13055152366726409714"
-      },
-      {
-        "file": "libs/authorizer/src/index.ts",
-        "hash": "2693255731536821725"
-      },
-      {
-        "file": "libs/authorizer/src/lib/authenticated.decorator.ts",
-        "hash": "10170658561227704135",
-        "deps": [
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "libs/authorizer/src/lib/authenticated.guard.ts",
-        "hash": "3553232458497246853",
-        "deps": [
-          "npm:@aws-sdk/client-cognito-identity-provider",
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "libs/authorizer/src/lib/cognito.service.ts",
-        "hash": "16131942809869063574",
-        "deps": [
-          "npm:@aws-sdk/client-cognito-identity-provider",
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "libs/authorizer/src/lib/seccurityBuilder.ts",
-        "hash": "12036084029132149737"
-      },
-      {
-        "file": "libs/authorizer/src/lib/token.decorator.ts",
-        "hash": "15227636603358508903",
-        "deps": [
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "libs/authorizer/src/utils/index.ts",
-        "hash": "7686140500415130773"
-      },
-      {
-        "file": "libs/authorizer/src/utils/types.ts",
-        "hash": "2711699936106981453"
-      },
-      {
-        "file": "libs/authorizer/tsconfig.json",
-        "hash": "14490782888307098276"
-      },
-      {
-        "file": "libs/authorizer/tsconfig.lib.json",
         "hash": "8188472110264778699"
       }
     ],
@@ -1345,212 +572,66 @@
         ]
       }
     ],
-    "auth": [
+    "types": [
       {
-        "file": "apps/auth/.eslintrc.json",
+        "file": "libs/types/.eslintrc.json",
         "hash": "13800677001662881425"
       },
       {
-        "file": "apps/auth/project.json",
-        "hash": "17787966320623415103"
+        "file": "libs/types/README.md",
+        "hash": "11134287303145928365"
       },
       {
-        "file": "apps/auth/src/app.module.ts",
-        "hash": "10360019660643845547",
-        "deps": [
-          "authorizer",
-          "npm:@nestjs/common",
-          "npm:@nestjs/core"
-        ]
+        "file": "libs/types/project.json",
+        "hash": "2640696245755504076"
       },
       {
-        "file": "apps/auth/src/app/app.controller.ts",
-        "hash": "10146511703381211164",
-        "deps": [
-          "authorizer",
-          "helpers",
-          "npm:@nestjs/common",
-          "npm:zod"
-        ]
+        "file": "libs/types/src/index.ts",
+        "hash": "7189289021683003092"
       },
       {
-        "file": "apps/auth/src/app/app.service.ts",
-        "hash": "791460186968779350",
-        "deps": [
-          "npm:@aws-sdk/client-cognito-identity-provider",
-          "authorizer",
-          "helpers",
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "apps/auth/src/assets/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "apps/auth/src/libraries/helper.service.ts",
-        "hash": "9046668616464919536",
-        "deps": [
-          "npm:@nestjs/common",
-          "npm:crypto"
-        ]
-      },
-      {
-        "file": "apps/auth/src/libraries/libraries.module.ts",
-        "hash": "7168204905802834699",
-        "deps": [
-          "authorizer",
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "apps/auth/src/main.ts",
-        "hash": "13392529380872270840",
-        "deps": [
-          "microservice",
-          "server",
-          "npm:@fastify/aws-lambda",
-          "npm:aws-lambda",
-          "npm:rxjs"
-        ]
-      },
-      {
-        "file": "apps/auth/src/secrets/secrets.module.ts",
-        "hash": "101669842917987791",
-        "deps": [
-          "secrets",
-          "npm:@nestjs/common"
-        ]
-      },
-      {
-        "file": "apps/auth/src/secrets/secrets.schema.ts",
-        "hash": "4121012594644493516",
+        "file": "libs/types/src/lib/schema/auth.ts",
+        "hash": "5273834741893565331",
         "deps": [
           "npm:zod"
         ]
       },
       {
-        "file": "apps/auth/src/secrets/secrets.service.ts",
-        "hash": "6371552515852552813",
-        "deps": [
-          "npm:@nestjs/common",
-          "npm:zod"
-        ]
-      },
-      {
-        "file": "apps/auth/src/server.ts",
-        "hash": "15994364129434184201",
-        "deps": [
-          "server"
-        ]
-      },
-      {
-        "file": "apps/auth/src/utils/schema/auth.schema.ts",
-        "hash": "8352038775044658500",
+        "file": "libs/types/src/lib/schema/filemanager.ts",
+        "hash": "740516532803021494",
         "deps": [
           "npm:zod"
         ]
       },
       {
-        "file": "apps/auth/src/utils/schema/index.ts",
-        "hash": "9741426342785966473"
-      },
-      {
-        "file": "apps/auth/tsconfig.app.json",
-        "hash": "3171572500325445971"
-      },
-      {
-        "file": "apps/auth/tsconfig.json",
-        "hash": "3025378044812449119"
-      },
-      {
-        "file": "apps/auth/webpack.config.js",
-        "hash": "10619490397189790225",
+        "file": "libs/types/src/lib/types/database.ts",
+        "hash": "3337239352908077697",
         "deps": [
-          "npm:@nx/webpack"
-        ]
-      }
-    ],
-    "helpers": [
-      {
-        "file": "libs/helpers/.eslintrc.json",
-        "hash": "13800677001662881425"
-      },
-      {
-        "file": "libs/helpers/README.md",
-        "hash": "3410811359920849874"
-      },
-      {
-        "file": "libs/helpers/project.json",
-        "hash": "3802649293329279307"
-      },
-      {
-        "file": "libs/helpers/src/index.ts",
-        "hash": "5384297995979867286"
-      },
-      {
-        "file": "libs/helpers/src/lib/custom-res.filter.ts",
-        "hash": "7294948219649670575",
-        "deps": [
-          "npm:@nestjs/common"
+          "npm:kysely"
         ]
       },
       {
-        "file": "libs/helpers/src/lib/custom-res.ts",
-        "hash": "612292398622744619",
-        "deps": [
-          "npm:@nestjs/common"
-        ]
+        "file": "libs/types/src/lib/types/default.ts",
+        "hash": "4595979742548113990"
       },
       {
-        "file": "libs/helpers/src/lib/default.interceptor.ts",
-        "hash": "2281801050130393831",
-        "deps": [
-          "npm:@nestjs/common",
-          "npm:rxjs"
-        ]
+        "file": "libs/types/src/lib/types/event.ts",
+        "hash": "853780566617285091"
       },
       {
-        "file": "libs/helpers/src/lib/encryption.ts",
-        "hash": "15540524132427467857",
-        "deps": [
-          "npm:crypto"
-        ]
+        "file": "libs/types/src/lib/types/notification.ts",
+        "hash": "16552404723084018268"
       },
       {
-        "file": "libs/helpers/src/lib/optional.ts",
-        "hash": "1794376151186356128"
+        "file": "libs/types/src/lib/types/user.ts",
+        "hash": "3714996012278022"
       },
       {
-        "file": "libs/helpers/src/lib/updatePagination.ts",
-        "hash": "12826078870151906365"
-      },
-      {
-        "file": "libs/helpers/src/lib/zod-validator.pipe.ts",
-        "hash": "6676422208180959780",
-        "deps": [
-          "npm:@nestjs/common",
-          "npm:zod"
-        ]
-      },
-      {
-        "file": "libs/helpers/src/utils/constants.ts",
-        "hash": "5167732277763320864"
-      },
-      {
-        "file": "libs/helpers/src/utils/index.ts",
-        "hash": "10396915597617233529"
-      },
-      {
-        "file": "libs/helpers/src/utils/types.ts",
-        "hash": "3917344741329423276"
-      },
-      {
-        "file": "libs/helpers/tsconfig.json",
+        "file": "libs/types/tsconfig.json",
         "hash": "14490782888307098276"
       },
       {
-        "file": "libs/helpers/tsconfig.lib.json",
+        "file": "libs/types/tsconfig.lib.json",
         "hash": "8188472110264778699"
       }
     ],
@@ -1730,6 +811,941 @@
         "deps": [
           "npm:@nx/webpack"
         ]
+      }
+    ],
+    "server": [
+      {
+        "file": "libs/server/.eslintrc.json",
+        "hash": "13800677001662881425"
+      },
+      {
+        "file": "libs/server/README.md",
+        "hash": "7496040986331863168"
+      },
+      {
+        "file": "libs/server/project.json",
+        "hash": "10505834281420511064"
+      },
+      {
+        "file": "libs/server/src/index.ts",
+        "hash": "16106285530069273774"
+      },
+      {
+        "file": "libs/server/src/lib/http.bootstrap.ts",
+        "hash": "8644764535764970677",
+        "deps": [
+          "helpers",
+          "npm:@nestjs/common",
+          "npm:@nestjs/core",
+          "npm:@nestjs/platform-fastify"
+        ]
+      },
+      {
+        "file": "libs/server/tsconfig.json",
+        "hash": "12957344669965185557"
+      },
+      {
+        "file": "libs/server/tsconfig.lib.json",
+        "hash": "8188472110264778699"
+      }
+    ],
+    "cache": [
+      {
+        "file": "libs/cache/.eslintrc.json",
+        "hash": "13800677001662881425"
+      },
+      {
+        "file": "libs/cache/README.md",
+        "hash": "4805820437044825185"
+      },
+      {
+        "file": "libs/cache/project.json",
+        "hash": "13388298492474209291"
+      },
+      {
+        "file": "libs/cache/src/index.ts",
+        "hash": "2454279162604998713"
+      },
+      {
+        "file": "libs/cache/src/lib/cache.interceptor.ts",
+        "hash": "14813248948557688073",
+        "deps": [
+          "helpers",
+          "npm:@nestjs/cache-manager",
+          "npm:@nestjs/common",
+          "npm:cache-manager",
+          "npm:rxjs"
+        ]
+      },
+      {
+        "file": "libs/cache/tsconfig.json",
+        "hash": "14490782888307098276"
+      },
+      {
+        "file": "libs/cache/tsconfig.lib.json",
+        "hash": "8188472110264778699"
+      }
+    ],
+    "infra": [
+      {
+        "file": "apps/infra/.eslintrc.json",
+        "hash": "13800677001662881425"
+      },
+      {
+        "file": "apps/infra/project.json",
+        "hash": "14093400689348122578"
+      },
+      {
+        "file": "apps/infra/src/api-stack.ts",
+        "hash": "1110823694883772404",
+        "deps": [
+          "npm:@aws-cdk/aws-apigatewayv2-alpha",
+          "npm:@aws-cdk/aws-apigatewayv2-integrations-alpha",
+          "npm:aws-cdk-lib",
+          "npm:constructs"
+        ]
+      },
+      {
+        "file": "apps/infra/src/app-stack.ts",
+        "hash": "16187152912857606665",
+        "deps": [
+          "npm:aws-cdk-lib",
+          "npm:constructs"
+        ]
+      },
+      {
+        "file": "apps/infra/src/auth-stack.ts",
+        "hash": "6305615275336853689",
+        "deps": [
+          "npm:aws-cdk-lib",
+          "npm:constructs"
+        ]
+      },
+      {
+        "file": "apps/infra/src/constants.ts",
+        "hash": "1008893250257993585"
+      },
+      {
+        "file": "apps/infra/src/dependency-stack.ts",
+        "hash": "4488655995107628354",
+        "deps": [
+          "npm:aws-cdk-lib",
+          "npm:constructs"
+        ]
+      },
+      {
+        "file": "apps/infra/src/file-manager-stack.ts",
+        "hash": "2630626423014124977",
+        "deps": [
+          "npm:aws-cdk-lib",
+          "npm:constructs"
+        ]
+      },
+      {
+        "file": "apps/infra/src/main.ts",
+        "hash": "989720009968985806",
+        "deps": [
+          "npm:source-map-support",
+          "npm:dotenv",
+          "npm:aws-cdk-lib",
+          "npm:process"
+        ]
+      },
+      {
+        "file": "apps/infra/src/notification-stack.ts",
+        "hash": "12647621664841761599",
+        "deps": [
+          "npm:aws-cdk-lib",
+          "npm:constructs"
+        ]
+      },
+      {
+        "file": "apps/infra/src/secrets.ts",
+        "hash": "4141322158651553387",
+        "deps": [
+          "secrets",
+          "npm:zod"
+        ]
+      },
+      {
+        "file": "apps/infra/tsconfig.app.json",
+        "hash": "1558509971940032459"
+      },
+      {
+        "file": "apps/infra/tsconfig.json",
+        "hash": "3025378044812449119"
+      }
+    ],
+    "microservice": [
+      {
+        "file": "libs/microservice/.eslintrc.json",
+        "hash": "13800677001662881425"
+      },
+      {
+        "file": "libs/microservice/README.md",
+        "hash": "17856314778450647615"
+      },
+      {
+        "file": "libs/microservice/project.json",
+        "hash": "12861596610096063459"
+      },
+      {
+        "file": "libs/microservice/src/index.ts",
+        "hash": "5252975302624831493"
+      },
+      {
+        "file": "libs/microservice/src/lib/aws.bootstrap.ts",
+        "hash": "5318316685672117471",
+        "deps": [
+          "helpers",
+          "npm:@nestjs/common",
+          "npm:@nestjs/core",
+          "npm:@nestjs/microservices"
+        ]
+      },
+      {
+        "file": "libs/microservice/src/lib/aws.service.ts",
+        "hash": "9266185677420313268",
+        "deps": [
+          "npm:aws-lambda"
+        ]
+      },
+      {
+        "file": "libs/microservice/src/lib/aws.transporter.ts",
+        "hash": "1089979899593503162",
+        "deps": [
+          "npm:@nestjs/common",
+          "npm:@nestjs/microservices"
+        ]
+      },
+      {
+        "file": "libs/microservice/tsconfig.json",
+        "hash": "14490782888307098276"
+      },
+      {
+        "file": "libs/microservice/tsconfig.lib.json",
+        "hash": "8188472110264778699"
+      }
+    ],
+    "helpers": [
+      {
+        "file": "libs/helpers/.eslintrc.json",
+        "hash": "13800677001662881425"
+      },
+      {
+        "file": "libs/helpers/README.md",
+        "hash": "3410811359920849874"
+      },
+      {
+        "file": "libs/helpers/project.json",
+        "hash": "3802649293329279307"
+      },
+      {
+        "file": "libs/helpers/src/index.ts",
+        "hash": "5384297995979867286"
+      },
+      {
+        "file": "libs/helpers/src/lib/custom-res.filter.ts",
+        "hash": "7294948219649670575",
+        "deps": [
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "libs/helpers/src/lib/custom-res.ts",
+        "hash": "612292398622744619",
+        "deps": [
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "libs/helpers/src/lib/default.interceptor.ts",
+        "hash": "2281801050130393831",
+        "deps": [
+          "npm:@nestjs/common",
+          "npm:rxjs"
+        ]
+      },
+      {
+        "file": "libs/helpers/src/lib/encryption.ts",
+        "hash": "15540524132427467857",
+        "deps": [
+          "npm:crypto"
+        ]
+      },
+      {
+        "file": "libs/helpers/src/lib/optional.ts",
+        "hash": "1794376151186356128"
+      },
+      {
+        "file": "libs/helpers/src/lib/updatePagination.ts",
+        "hash": "12826078870151906365"
+      },
+      {
+        "file": "libs/helpers/src/lib/zod-validator.pipe.ts",
+        "hash": "6676422208180959780",
+        "deps": [
+          "npm:@nestjs/common",
+          "npm:zod"
+        ]
+      },
+      {
+        "file": "libs/helpers/src/utils/constants.ts",
+        "hash": "5167732277763320864"
+      },
+      {
+        "file": "libs/helpers/src/utils/index.ts",
+        "hash": "10396915597617233529"
+      },
+      {
+        "file": "libs/helpers/src/utils/types.ts",
+        "hash": "3917344741329423276"
+      },
+      {
+        "file": "libs/helpers/tsconfig.json",
+        "hash": "14490782888307098276"
+      },
+      {
+        "file": "libs/helpers/tsconfig.lib.json",
+        "hash": "8188472110264778699"
+      }
+    ],
+    "auth": [
+      {
+        "file": "apps/auth/.eslintrc.json",
+        "hash": "13800677001662881425"
+      },
+      {
+        "file": "apps/auth/project.json",
+        "hash": "17787966320623415103"
+      },
+      {
+        "file": "apps/auth/src/app.module.ts",
+        "hash": "10360019660643845547",
+        "deps": [
+          "authorizer",
+          "npm:@nestjs/common",
+          "npm:@nestjs/core"
+        ]
+      },
+      {
+        "file": "apps/auth/src/app/app.controller.ts",
+        "hash": "10146511703381211164",
+        "deps": [
+          "authorizer",
+          "helpers",
+          "npm:@nestjs/common",
+          "npm:zod"
+        ]
+      },
+      {
+        "file": "apps/auth/src/app/app.service.ts",
+        "hash": "791460186968779350",
+        "deps": [
+          "npm:@aws-sdk/client-cognito-identity-provider",
+          "authorizer",
+          "helpers",
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "apps/auth/src/assets/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "apps/auth/src/libraries/helper.service.ts",
+        "hash": "9046668616464919536",
+        "deps": [
+          "npm:@nestjs/common",
+          "npm:crypto"
+        ]
+      },
+      {
+        "file": "apps/auth/src/libraries/libraries.module.ts",
+        "hash": "7168204905802834699",
+        "deps": [
+          "authorizer",
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "apps/auth/src/main.ts",
+        "hash": "13392529380872270840",
+        "deps": [
+          "microservice",
+          "server",
+          "npm:@fastify/aws-lambda",
+          "npm:aws-lambda",
+          "npm:rxjs"
+        ]
+      },
+      {
+        "file": "apps/auth/src/secrets/secrets.module.ts",
+        "hash": "101669842917987791",
+        "deps": [
+          "secrets",
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "apps/auth/src/secrets/secrets.schema.ts",
+        "hash": "4121012594644493516",
+        "deps": [
+          "npm:zod"
+        ]
+      },
+      {
+        "file": "apps/auth/src/secrets/secrets.service.ts",
+        "hash": "6371552515852552813",
+        "deps": [
+          "npm:@nestjs/common",
+          "npm:zod"
+        ]
+      },
+      {
+        "file": "apps/auth/src/server.ts",
+        "hash": "15994364129434184201",
+        "deps": [
+          "server"
+        ]
+      },
+      {
+        "file": "apps/auth/src/utils/schema/auth.schema.ts",
+        "hash": "8352038775044658500",
+        "deps": [
+          "npm:zod"
+        ]
+      },
+      {
+        "file": "apps/auth/src/utils/schema/index.ts",
+        "hash": "9741426342785966473"
+      },
+      {
+        "file": "apps/auth/tsconfig.app.json",
+        "hash": "3171572500325445971"
+      },
+      {
+        "file": "apps/auth/tsconfig.json",
+        "hash": "3025378044812449119"
+      },
+      {
+        "file": "apps/auth/webpack.config.js",
+        "hash": "10619490397189790225",
+        "deps": [
+          "npm:@nx/webpack"
+        ]
+      }
+    ],
+    "whatsapp-bot": [
+      {
+        "file": "apps/whatsapp-bot/.eslintrc.json",
+        "hash": "13800677001662881425"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231101214723_create_user/migration.sql",
+        "hash": "1116527266294744554"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231102130628_update/migration.sql",
+        "hash": "14941507982229727607"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231102150611_expand_users/migration.sql",
+        "hash": "17147233666135915410"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231103094339_create_subscription/migration.sql",
+        "hash": "17510729597818794101"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231103094437_create_subscription/migration.sql",
+        "hash": "14859257759712045338"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231103213938_create_transaction/migration.sql",
+        "hash": "2298834010687117971"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231103224436_update_card/migration.sql",
+        "hash": "13501821591402486559"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231103232052_update_card/migration.sql",
+        "hash": "6352774549286356067"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231104094400_update_amount/migration.sql",
+        "hash": "15739449772845158385"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231104110449_update_sub_status/migration.sql",
+        "hash": "2242735115708698440"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231104111730_update_sub_status/migration.sql",
+        "hash": "11972168206342408997"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231104230120_updates_to_subscription/migration.sql",
+        "hash": "12748626128063197784"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231106150540_expand_user/migration.sql",
+        "hash": "12189501309750313168"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231106233610_expand_user/migration.sql",
+        "hash": "5436942304648793956"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231113112337_expand/migration.sql",
+        "hash": "17305856105458119709"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231116131750_mealplan/migration.sql",
+        "hash": "11704791049283487671"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231116223621_expand/migration.sql",
+        "hash": "549266035611487782"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231117135124_changecalorietype/migration.sql",
+        "hash": "17277478950507479812"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231119140646_change_date/migration.sql",
+        "hash": "17809036653415623670"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231119140748_change_date/migration.sql",
+        "hash": "7143396470382285960"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231119141738_change_date/migration.sql",
+        "hash": "18296373741124048849"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231119143821_change_date/migration.sql",
+        "hash": "10703621068825371935"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231120073507_add/migration.sql",
+        "hash": "7535104903947154515"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231211211243_add/migration.sql",
+        "hash": "12255377700896628624"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231211211625_add/migration.sql",
+        "hash": "7344711984944333333"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20231218085843_add/migration.sql",
+        "hash": "7670783084226342066"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20240122020301_add_user_meal_plan/migration.sql",
+        "hash": "12685259932831857792"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20240122021436_update_user_meal_plan/migration.sql",
+        "hash": "13348459606496298533"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20240122115926_update_user_meal_plan_table/migration.sql",
+        "hash": "1291650841227767388"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/20240122125157_update_recipe/migration.sql",
+        "hash": "4177785046659202834"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/migrations/migration_lock.toml",
+        "hash": "11493296588214560035"
+      },
+      {
+        "file": "apps/whatsapp-bot/prisma/schema.prisma",
+        "hash": "14500335241406509458"
+      },
+      {
+        "file": "apps/whatsapp-bot/project.json",
+        "hash": "4440317178883978820"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app.module.ts",
+        "hash": "13591976968576028917",
+        "deps": [
+          "npm:@nestjs/cache-manager",
+          "npm:@nestjs/common",
+          "npm:cache-manager-redis-yet"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/app.controller.ts",
+        "hash": "10909643568543887612",
+        "deps": [
+          "helpers",
+          "npm:@nestjs/common",
+          "npm:fastify"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/app.repo.ts",
+        "hash": "9958910488279743737",
+        "deps": [
+          "database",
+          "npm:@nestjs/common",
+          "npm:kysely"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/app.service.ts",
+        "hash": "11534351335532277629",
+        "deps": [
+          "messaging",
+          "npm:@nestjs/cache-manager",
+          "npm:@nestjs/common",
+          "npm:cache-manager",
+          "npm:luxon"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/auth/signup.ts",
+        "hash": "8814264235172800698",
+        "deps": [
+          "messaging",
+          "npm:@nestjs/cache-manager",
+          "npm:@nestjs/common",
+          "npm:cache-manager"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/general.ts",
+        "hash": "14616753031211482711",
+        "deps": [
+          "messaging",
+          "npm:@nestjs/cache-manager",
+          "npm:@nestjs/common",
+          "npm:cache-manager",
+          "npm:luxon"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/meal-plan/create-plan.service.ts",
+        "hash": "7522864557914919468",
+        "deps": [
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/meal-plan/index.ts",
+        "hash": "14629107756369581758"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/meal-plan/recipe.ts",
+        "hash": "13939101435563735822",
+        "deps": [
+          "npm:@nestjs/cache-manager",
+          "npm:@nestjs/common",
+          "npm:cache-manager"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/meal-plan/view-plan.ts",
+        "hash": "13217359200335106838",
+        "deps": [
+          "messaging",
+          "npm:@nestjs/cache-manager",
+          "npm:@nestjs/common",
+          "npm:cache-manager"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/app/subscription/subscription.ts",
+        "hash": "477742059210547319",
+        "deps": [
+          "messaging",
+          "npm:@nestjs/cache-manager",
+          "npm:@nestjs/common",
+          "npm:cache-manager",
+          "npm:luxon"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/cron/dailyNotification.ts",
+        "hash": "16735944887458235739",
+        "deps": [
+          "npm:@nestjs/common",
+          "npm:luxon",
+          "npm:node-cron"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/cron/subscription.ts",
+        "hash": "9084003674171378987",
+        "deps": [
+          "npm:@nestjs/common",
+          "npm:luxon"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/helpers/date.ts",
+        "hash": "16168625547444610105",
+        "deps": [
+          "npm:luxon"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/helpers/food.ts",
+        "hash": "9541911435605094225"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/helpers/general.ts",
+        "hash": "16556150043749325917"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/helpers/index.ts",
+        "hash": "4057681275971923579"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/helpers/send-message.ts",
+        "hash": "16026082801581133312",
+        "deps": [
+          "npm:axios"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/libraries/libraries.module.ts",
+        "hash": "10573827849373581475",
+        "deps": [
+          "database",
+          "messaging",
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/main.ts",
+        "hash": "10068167429700225094",
+        "deps": [
+          "microservice",
+          "server",
+          "npm:@fastify/aws-lambda",
+          "npm:aws-lambda",
+          "npm:rxjs"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/secrets/secrets.module.ts",
+        "hash": "3670518182334815229",
+        "deps": [
+          "secrets",
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/secrets/secrets.schema.ts",
+        "hash": "16564109408381079566",
+        "deps": [
+          "npm:zod"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/secrets/secrets.service.ts",
+        "hash": "9867563795730624008",
+        "deps": [
+          "npm:@nestjs/common",
+          "npm:zod"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/seeder/data/mealPlan.Data.ts",
+        "hash": "13444833605382336539"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/seeder/data/recipe.data.ts",
+        "hash": "7356526898284005723"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/seeder/data/snacks.data.ts",
+        "hash": "2628534950942174158"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/seeder/seeders/mealPlan.ts",
+        "hash": "2094723390218990632"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/seeder/seeders/recipe.ts",
+        "hash": "583990368858064130"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/seeder/seeders/seed.ts",
+        "hash": "12176873579514400210",
+        "deps": [
+          "npm:kysely",
+          "npm:pg"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/seeder/seeders/snack.ts",
+        "hash": "16642537910471238819"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/server.ts",
+        "hash": "13472748229010853439",
+        "deps": [
+          "server"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/services/paystack.ts",
+        "hash": "14680398979730447796",
+        "deps": [
+          "npm:@nestjs/common",
+          "npm:axios",
+          "npm:crypto"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/types/database.ts",
+        "hash": "10920046985994816586",
+        "deps": [
+          "npm:kysely"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/types/general.ts",
+        "hash": "4004197171935811003"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/types/index.ts",
+        "hash": "4128289002654118369"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/types/user.ts",
+        "hash": "12068027985292608116"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/utils/schema/auth.schema.ts",
+        "hash": "8139641961782824948",
+        "deps": [
+          "npm:zod"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/utils/schema/index.ts",
+        "hash": "10106897125260798826"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/utils/textMessages/general.ts",
+        "hash": "8757772831499906724"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/utils/textMessages/index.ts",
+        "hash": "7446572177221676411"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/utils/textMessages/meal.ts",
+        "hash": "10379603550629635122"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/utils/types/database.ts",
+        "hash": "4977142385958174074",
+        "deps": [
+          "npm:kysely"
+        ]
+      },
+      {
+        "file": "apps/whatsapp-bot/src/utils/types/general.ts",
+        "hash": "6383973995815069422"
+      },
+      {
+        "file": "apps/whatsapp-bot/src/utils/types/index.ts",
+        "hash": "2502579023189011009"
+      },
+      {
+        "file": "apps/whatsapp-bot/tsconfig.app.json",
+        "hash": "4600761399908555467"
+      },
+      {
+        "file": "apps/whatsapp-bot/tsconfig.json",
+        "hash": "117663998960348505"
+      },
+      {
+        "file": "apps/whatsapp-bot/webpack.config.js",
+        "hash": "10619490397189790225",
+        "deps": [
+          "npm:@nx/webpack"
+        ]
+      }
+    ],
+    "authorizer": [
+      {
+        "file": "libs/authorizer/.eslintrc.json",
+        "hash": "13800677001662881425"
+      },
+      {
+        "file": "libs/authorizer/README.md",
+        "hash": "6927228366964424776"
+      },
+      {
+        "file": "libs/authorizer/project.json",
+        "hash": "13055152366726409714"
+      },
+      {
+        "file": "libs/authorizer/src/index.ts",
+        "hash": "2693255731536821725"
+      },
+      {
+        "file": "libs/authorizer/src/lib/authenticated.decorator.ts",
+        "hash": "10170658561227704135",
+        "deps": [
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "libs/authorizer/src/lib/authenticated.guard.ts",
+        "hash": "3553232458497246853",
+        "deps": [
+          "npm:@aws-sdk/client-cognito-identity-provider",
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "libs/authorizer/src/lib/cognito.service.ts",
+        "hash": "16131942809869063574",
+        "deps": [
+          "npm:@aws-sdk/client-cognito-identity-provider",
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "libs/authorizer/src/lib/seccurityBuilder.ts",
+        "hash": "12036084029132149737"
+      },
+      {
+        "file": "libs/authorizer/src/lib/token.decorator.ts",
+        "hash": "15227636603358508903",
+        "deps": [
+          "npm:@nestjs/common"
+        ]
+      },
+      {
+        "file": "libs/authorizer/src/utils/index.ts",
+        "hash": "7686140500415130773"
+      },
+      {
+        "file": "libs/authorizer/src/utils/types.ts",
+        "hash": "2711699936106981453"
+      },
+      {
+        "file": "libs/authorizer/tsconfig.json",
+        "hash": "14490782888307098276"
+      },
+      {
+        "file": "libs/authorizer/tsconfig.lib.json",
+        "hash": "8188472110264778699"
       }
     ]
   }

@@ -58,12 +58,11 @@ export class AppService {
             await this.cacheManager.set(sender, state);
           }
 
-
-
-          if (!state || ['hi', 'hey'].includes(msg_body.toLowerCase())) {
+          if (!state || ['hey', 'hello', 'hi', 'good morning', 'good afternoon', 'good evening', 'hi health paddy', 'hello health paddy'].includes(msg_body.toLowerCase())) {
             return await this.generalResponse.handleNoState({
               phoneNumber: sender,
               profileName,
+              state
             });
           }
 
@@ -117,7 +116,8 @@ export class AppService {
           return this.generalResponse.handleNoState({
             phoneNumber: sender,
             profileName,
-            customHeader: 'I could not understand your request, lets start afresh'
+            customHeader: 'I could not understand your request, lets start afresh',
+            state
           });
         }
       } else {
@@ -180,7 +180,8 @@ export class AppService {
       });
       await this.generalResponse.handleNoState({
         phoneNumber,
-        profileName: user!.name, customHeader: `Your card has been added 🎉, you can now access your free one-day meal Plan. Get ready to start your wellness journey!" 💪`
+        profileName: user!.name, customHeader: `Your card has been added 🎉, you can now access your free one-day meal Plan. Get ready to start your wellness journey!" 💪`,
+        state: { user, data: {}, stage: '' }
       })
     }
   }

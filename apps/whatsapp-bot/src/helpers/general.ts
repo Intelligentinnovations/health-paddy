@@ -1,4 +1,4 @@
-import { ActivityLevel, CalorieCalculator } from "../types";
+import { ActivityLevel, CalorieCalculator, State } from "../types";
 
 export function formatCurrency(amount: number, currencyCode = 'NGN') {
   const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -90,4 +90,14 @@ export function generateMealHeading(weekDay: string): string {
 
 export function alternatePlanNumbers(inputNumber: number) {
   return Math.floor((inputNumber - 1) / 2) % 2 + 1;
+}
+
+
+export function getPageSelectionOffset(state: State) {
+  let offset = 0;
+  if (state.user && !state.user.activityLevel) offset = 1
+  if (state.user && state.user.activityLevel) offset = 2
+
+  return offset
+
 }

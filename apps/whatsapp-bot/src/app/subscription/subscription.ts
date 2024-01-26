@@ -41,7 +41,7 @@ export class SubscriptionService {
       const { stage, user } = state;
       if (stage === 'subscription-acceptance') {
         if (input == DECLINE) {
-          return this.helper.handleNoState({ phoneNumber, profileName });
+          return this.helper.handleNoState({ phoneNumber, profileName, state });
         }
         if (input == ACCEPT) {
           if (user?.subscriptionStatus === 'expired') {
@@ -59,7 +59,8 @@ export class SubscriptionService {
               return this.helper.handleNoState({
                 customHeader: "Could not complete payment, please try again with another card",
                 phoneNumber,
-                profileName
+                profileName,
+                state
               })
             }
             const today = DateTime.now();
@@ -83,6 +84,7 @@ export class SubscriptionService {
               phoneNumber,
               profileName,
               customHeader: "Payment completed successfully 🙌, You can now continue to enjoy our service",
+              state
             });
           }
           else {
@@ -132,7 +134,8 @@ Best regards`;
           return this.helper.handleNoState({
             phoneNumber,
             profileName: user!.name,
-            customHeader: `Hi, how else can I be of service to you?`
+            customHeader: `Hi, how else can I be of service to you?`,
+            state
           })
         }
 
@@ -150,7 +153,8 @@ Best regards`;
         return this.helper.handleNoState({
           phoneNumber,
           profileName,
-          customHeader: 'Could not understand your request, Lets start this again'
+          customHeader: 'Could not understand your request, Lets start this again',
+          state
         });
       }
 
@@ -163,15 +167,17 @@ Best regards`;
             phoneNumber,
             profileName,
             customHeader: message,
+            state
           });
         }
         if (input == DECLINE) {
-          return this.helper.handleNoState({ phoneNumber, profileName });
+          return this.helper.handleNoState({ phoneNumber, profileName, state });
         }
         return this.helper.handleNoState({
           phoneNumber,
           profileName,
-          customHeader: 'Could not understand your request, lets start this again'
+          customHeader: 'Could not understand your request, lets start this again',
+          state
         });
       }
 

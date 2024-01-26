@@ -61,16 +61,19 @@ export class SignupService {
           };
         }
         await delay()
+        const user = await this.repo.findUserByPhoneNumber(phoneNumber);
         return this.helper.handleNoState({
           phoneNumber,
           profileName,
-          customHeader: `Hey! 🎉🎉 Thank you for signing up to Health Paddy!Get started on your wellness journey by creating your personalized meal plan and get a free day meal plan`
+          customHeader: `Hey! 🎉🎉 Thank you for signing up to Health Paddy!Get started on your wellness journey by creating your personalized meal plan and get a free day meal plan`,
+          state: {...state, user}
         })
       }
       return this.helper.handleNoState({
         phoneNumber,
         profileName,
-        customHeader: 'Could not understand your request, lets start again'
+        customHeader: 'Could not understand your request, lets start again',
+        state
       });
     }
     catch (e) {

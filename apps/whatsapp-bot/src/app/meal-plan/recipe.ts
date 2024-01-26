@@ -102,8 +102,8 @@ export class ViewRecipeService {
 
         if (recipe) {
           const message = `*${recipe?.name} (${recipe?.servings} Servings)*\n
-*Instructions*:${recipe?.instructions.map(instruction => `\n* ${instruction}`).join('')}\n
-*Ingredients*:${recipe?.ingredients.map(ingredient => `\n* ${ingredient}`).join('')}`;
+*Instructions*:${recipe?.instructions.map(instruction => `\n\n* ${instruction}`).join('')}\n
+*Ingredients*:${recipe?.ingredients.map(ingredient => `\n\n* ${ingredient}`).join('')}`;
           return this.helper.sendTextAndSetCache({
             message,
             phoneNumber,

@@ -254,7 +254,7 @@ export const mealPlanData = {
       snackCalories: 250,
       lunch: `1 serving of yam pottage (see recipe) + 2 pieces of chicken with skin`,
       lunchCalories: 750,
-      dinner: `1 large plantain (230g without peel) + 1 serving of spinach stir-fy (see recipe) + 1 piece of fish + 1 boiled egg`,
+      dinner: `1 large plantain (230g without peel) + 1 serving of spinach stir-fry (see recipe) + 1 piece of fish + 1 boiled egg`,
       dinnerCalories: 600,
       calorieNeedId: calorieNeed2200ForPlan2
     },
@@ -298,7 +298,7 @@ export const mealPlanData = {
       snackCalories: 250,
       lunch: `1 serving of yam pottage (see recipe) + 2 pieces of chicken with skin`,
       lunchCalories: 750,
-      dinner: `1 large plantain (230g without peel) + 1 serving of spinach stir-fy (see recipe) + 1 piece of fish + 1 boiled egg`,
+      dinner: `1 large plantain (230g without peel) + 1 serving of spinach stir-fry (see recipe) + 1 piece of fish + 1 boiled egg`,
       dinnerCalories: 600,
       calorieNeedId: calorieNeed2200ForPlan2
     },
@@ -408,7 +408,7 @@ export const mealPlanData = {
       breakfast: 'Sandwich (3 slices of white or wheat bread + ½ cup of coleslaw',
       breakfastCalories: 500,
       snackCalories: 200,
-      lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with 1 medium plantain (180g without peel) + 1 serving of ugwu stir-fy (see boiled egg white + 1 skinless piece of chicken, shredded + 1 dressing)',
+      lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with 1 medium plantain (180g without peel) + 1 serving of ugwu stir-fry (see boiled egg white + 1 skinless piece of chicken, shredded + 1 dressing)',
       lunchCalories: 700,
       dinner: '1 cup diced pawpaw skin recipe) + 5 chicken gizzards',
       dinnerCalories: 500,
@@ -453,7 +453,7 @@ export const mealPlanData = {
       breakfast: 'Sandwich (3 slices of white or wheat bread + ½ cup of coleslaw',
       breakfastCalories: 500,
       snackCalories: 200,
-      lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with 1 medium plantain (180g without peel) + 1 serving of ugwu stir-fy (see boiled egg white + 1 skinless piece of chicken, shredded + 1 dressing)',
+      lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with 1 medium plantain (180g without peel) + 1 serving of ugwu stir-fry (see boiled egg white + 1 skinless piece of chicken, shredded + 1 dressing)',
       lunchCalories: 700,
       dinner: '1 cup diced pawpaw skin recipe) + 5 chicken gizzards',
       dinnerCalories: 500,
@@ -566,7 +566,7 @@ export const mealPlanData = {
       snackCalories: 150,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 550,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fy (see recipe) + 5 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fry (see recipe) + 5 chicken gizzards',
       dinnerCalories: 500,
       calorieNeedId: calorieNeed1700ForPlan2,
     },
@@ -610,7 +610,7 @@ export const mealPlanData = {
       snackCalories: 150,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 550,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fy (see recipe) + 5 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fry (see recipe) + 5 chicken gizzards',
       dinnerCalories: 500,
       calorieNeedId: calorieNeed1700ForPlan2,
     },
@@ -1006,7 +1006,6 @@ export const mealPlanData = {
       dinner: 'Pepper soup + 1 cup of diced sweet potatoes + 1 piece of chicken thigh with skin + 1 piece of chicken drumstick with skin',
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1400ForPlan1,
-
     },
     {
       day: 'Saturday',
@@ -1049,7 +1048,7 @@ export const mealPlanData = {
       snackCalories: 150,
       lunch: '1 serving of yam pottage (see recipe) + 1 skinless piece of chicken',
       lunchCalories: 450,
-      dinner: '1 medium plantain or 180g without peel (boiled, grilled or air-fried) + 1 serving ugwu stir-fry (see recipe) + 3 chicken gizzards',
+      dinner: '1 medium plantain or 180g without peel (boiled, grilled or air-fried) + 1 serving of ugwu stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1400ForPlan2,
     },
@@ -1093,7 +1092,7 @@ export const mealPlanData = {
       snackCalories: 150,
       lunch: '1 cup of cooked white rice (or spaghetti) + 1 serving of efo-riro (see recipe) + 1 piece of skinless chicken',
       lunchCalories: 450,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fy (see recipe) + 3 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1400ForPlan2,
     },
@@ -1206,7 +1205,7 @@ export const mealPlanData = {
       snackCalories: 200,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 600,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fy (see recipe) + 3 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1600ForPlan2
 
@@ -1252,7 +1251,7 @@ export const mealPlanData = {
       snackCalories: 200,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 600,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fy (see recipe) + 3 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1600ForPlan2
     },
@@ -1363,7 +1362,7 @@ export const mealPlanData = {
       snackCalories: 100,
       lunch: '1 serving of yam pottage (see recipe) + 1 skinless piece of chicken',
       lunchCalories: 400,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fy (see recipe) + 3 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1300ForPlan2
     },
@@ -1407,7 +1406,7 @@ export const mealPlanData = {
       snackCalories: 100,
       lunch: '1 serving of yam pottage (see recipe) + 1 skinless piece of chicken',
       lunchCalories: 400,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fy (see recipe) + 3 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of ugwu stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1300ForPlan2
     },
@@ -1441,7 +1440,7 @@ export const mealPlanData = {
       breakfast: '1½ cups of cornflakes + 1 milk + 1 boiled egg (or 1 medium chicken drumstick without skin) + 1 small orange',
       breakfastCalories: 400,
       snackCalories: 150,
-      lunch: '1 serving of eba (see size in index) + 1 serving of efo-riro (see recipe) + 1 piece of lean beef (120g cooked)',        
+      lunch: '1 serving of eba (see size in index) + 1 serving of efo-riro (see recipe) + 1 piece of lean beef (120g cooked)',
       lunchCalories: 550,
       dinner: 'Fruit bowl (1 small apple + 1½ cups of diced watermelon + 2 medium bananas) + 4 chicken gizzards',
       dinnerCalories: 400,
@@ -1525,7 +1524,7 @@ export const mealPlanData = {
       snackCalories: 150,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 550,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of spinach stir-fy (see recipe) + 3 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of spinach stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1500ForPlan2
     },
@@ -1570,7 +1569,7 @@ export const mealPlanData = {
       snackCalories: 150,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 550,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of spinach stir-fy (see recipe) + 3 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of spinach stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1500ForPlan2
     },
@@ -1681,7 +1680,7 @@ export const mealPlanData = {
       snackCalories: 200,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 600,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of spinach stir-fy (see recipe) + 5 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of spinach stir-fry (see recipe) + 5 chicken gizzards',
       dinnerCalories: 500,
       calorieNeedId: calorieNeed1800ForPlan2
     },
@@ -1725,7 +1724,7 @@ export const mealPlanData = {
       snackCalories: 200,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 600,
-      dinner: '1 medium plantain (180g without peel) + 1 serving of spinach stir-fy (see recipe) + 5 chicken gizzards',
+      dinner: '1 medium plantain (180g without peel) + 1 serving of spinach stir-fry (see recipe) + 5 chicken gizzards',
       dinnerCalories: 500,
       calorieNeedId: calorieNeed1800ForPlan2
     },
@@ -1844,7 +1843,7 @@ export const mealPlanData = {
       snackCalories: 200,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 700,
-      dinner: '1 large plantain (230g without peel) + 1 serving of spinach stir-fy (see recipe) + 1 piece of fish + 1 boiled egg',
+      dinner: '1 large plantain (230g without peel) + 1 serving of spinach stir-fry (see recipe) + 1 piece of fish + 1 boiled egg',
       dinnerCalories: 600,
       calorieNeedId: calorieNeed2100ForPlan2
     },
@@ -1888,7 +1887,7 @@ export const mealPlanData = {
       snackCalories: 200,
       lunch: '1 serving of yam pottage (see recipe) + 1 piece of chicken with skin',
       lunchCalories: 700,
-      dinner: '1 large plantain (230g without peel) + 1 serving of spinach stir-fy (see recipe) + 1 piece of fish + 1 boiled egg',
+      dinner: '1 large plantain (230g without peel) + 1 serving of spinach stir-fry (see recipe) + 1 piece of fish + 1 boiled egg',
       dinnerCalories: 600,
       calorieNeedId: calorieNeed2100ForPlan2
 
@@ -2004,7 +2003,7 @@ export const mealPlanData = {
       snackCalories: 100,
       lunch: '1 small pack of noodles (70g) + 1 cup of mixed veggies + 1 boiled egg',
       lunchCalories: 400,
-      dinner: '1 small plantain (130g without peel) + 1 serving of spinach stir-fy (see recipe) + 3 chicken gizzards',
+      dinner: '1 small plantain (130g without peel) + 1 serving of spinach stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 350,
       calorieNeedId: calorieNeed1200ForPlan2
 
@@ -2050,7 +2049,7 @@ export const mealPlanData = {
       snackCalories: 100,
       lunch: '1 serving of yam pottage (see recipe) + 1 skinless piece of chicken',
       lunchCalories: 400,
-      dinner: '1 small plantain (130g without peel) + 1 serving of spinach stir-fy (see recipe) + 3 chicken gizzards',
+      dinner: '1 small plantain (130g without peel) + 1 serving of spinach stir-fry (see recipe) + 3 chicken gizzards',
       dinnerCalories: 350,
       calorieNeedId: calorieNeed1200ForPlan2
 

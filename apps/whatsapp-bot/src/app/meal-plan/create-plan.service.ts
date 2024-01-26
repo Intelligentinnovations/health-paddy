@@ -381,7 +381,8 @@ export class CreateMealPlanService {
             phoneNumber,
             profileName: state.user!.name,
             customHeader: `Congratulations on creating your personalized meal plan with Health Paddy! You have taken the first step to a healthier and happier you 🌱🥗
-Is there anything else I may assist you with ?`
+Is there anything else I may assist you with ?`,
+            state
           })
         }
         return this.helper.sendTextAndSetCache({
