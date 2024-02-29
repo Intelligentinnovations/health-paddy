@@ -6,7 +6,9 @@ import { SecretsService } from '../secrets/secrets.service';
 
 @Injectable()
 export class PaymentService {
-  constructor(private readonly secretsService: SecretsService) { }
+  constructor(
+    private readonly secretsService: SecretsService
+  ) { }
 
   private readonly instance = axios.create({
     baseURL: 'https://api.paystack.co/transaction/',
@@ -20,12 +22,12 @@ export class PaymentService {
     email,
     amountInNaira,
     metaData,
-    callbackUrl,
+    callbackUrl = this.secretsService.get('PAYSTACK_WEBHOOK'),
   }: {
     email: string;
     amountInNaira: number;
     metaData: object;
-    callbackUrl: string;
+    callbackUrl?: string;
   }) {
     const url = 'initialize';
     return this.instance.post(url, {

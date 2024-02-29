@@ -5,6 +5,7 @@
   "scripts": {
     "generate-app": ". scripts/new-app.sh",
     "whatsapp-bot": "nx serve whatsapp-bot",
+    "whatsapp-bot:seed": "apps/whatsapp-bot/src/seeder/seeders/seed.ts",
     "build": "nx run-many --t build --exclude app-template",
     "build:dependencies": ". scripts/create-dependency-output.sh",
     "deploy": "pnpm run build && cdk deploy app api --previous-parameters=false --asset-parallelism --outputs-file ./env.json --require-approval never",

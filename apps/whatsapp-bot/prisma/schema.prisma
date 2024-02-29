@@ -22,7 +22,7 @@ model User {
   activityLevel      String?
   healthCondition    String?
   requiredCalorie    Float?
-  hasUsedFreeTrial   Boolean             @default(false)
+  isCreateMealPlanReminderSent Boolean             @default(false)
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   Subscription       Subscription[]
@@ -61,16 +61,40 @@ model Transaction {
   cardId    String
 }
 
+model SubscriptionPlan {
+  id                            String         @id @default(dbgenerated("gen_random_uuid()"))
+  planName                      String
+  amount                        Decimal        @db.Decimal(9, 2)
+  isSpecialPlan                 Boolean        @default(false)
+  hasCalorieCalculator          Boolean
+  timetablePerMonth             Int
+  hasSwapMealItem               Boolean
+  noOfRecipes                   Int
+  mealPlanGuideLines            Boolean
+  hasPreventHungerResources     Boolean
+  hasMealPreppingResources      Boolean
+  hasHandlingCheatMealResources Boolean
+  hasPostPurchaseSupport        Boolean
+  hasCommunity                  Boolean
+  hasQuickMealOptions           Boolean
+  hasProgressReport             Boolean
+  createdAt                     DateTime       @default(now())
+  updatedAt                     DateTime       @updatedAt
+  Subscription                  Subscription[]
+}
+
 model Subscription {
-  id            String             @id @default(dbgenerated("gen_random_uuid()"))
-  userId        String
-  user          User               @relation(fields: [userId], references: [id])
-  transactionId String
-  status        SubscriptionStatus
-  startDate     DateTime           @default(now()) @db.Timestamptz()
-  endDate       DateTime           @db.Timestamptz()
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
+  id                 String             @id @default(dbgenerated("gen_random_uuid()"))
+  userId             String
+  user               User               @relation(fields: [userId], references: [id])
+  transactionId      String
+  subscriptionPlanId String
+  subscriptionPlan   SubscriptionPlan   @relation(fields: [subscriptionPlanId], references: [id])
+  status             SubscriptionStatus
+  startDate          DateTime           @default(now()) @db.Timestamptz()
+  endDate            DateTime           @db.Timestamptz()
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
 }
 
 model FoodItems {

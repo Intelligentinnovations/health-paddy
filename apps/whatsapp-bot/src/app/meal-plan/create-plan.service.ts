@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@nestjs/common';
 
-import { calculateRequireCalorie, delay, sendWhatsAppText, validFeetAndInches, } from '../../helpers';
+import { calculateRequireCalorie, delay, formatCurrency, sendWhatsAppText, validFeetAndInches } from '../../helpers';
+import { SecretsService } from '../../secrets/secrets.service';
+import { PaymentService } from '../../services/paystack';
 import { HealthGoal, State } from '../../types';
 import {
   extremeGainWeightText,
@@ -9,6 +11,7 @@ import {
   getActivityLevelText,
   getCalorieGoalText,
   healthConditionText,
+  weightGainDurationText,
   weightLossDurationText
 } from '../../utils/textMessages';
 import { AppRepo } from '../app.repo';
@@ -20,7 +23,9 @@ export class CreateMealPlanService {
   constructor(
     private repo: AppRepo,
     private helper: GenericService,
-    private viewMealPlan: ViewMealPlanService
+    private viewMealPlan: ViewMealPlanService,
+    private paymentService: PaymentService,
+    private secrets: SecretsService,
   ) {
   }
 
@@ -56,7 +61,7 @@ export class CreateMealPlanService {
           phoneNumber,
           nextStage: `${basePath}/gender`,
           state,
-          data: { age: input },
+          data: { ...state.data, age: input },
         });
       }
       if (stage === `${basePath}/gender`) {
@@ -90,11 +95,11 @@ export class CreateMealPlanService {
             status: 'success',
           };
         }
-        const message = `Excellent! Would you be willing to tell me your weight in kilograms?`;
+        const message = `Excellent! Would you be willing to tell me your weight in KG? (e.g 70)`;
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
-          nextStage: 'create-meal-plan/weight',
+          nextStage: `${basePath}/weight`,
           state,
           data: { ...state.data, height: input },
         });
@@ -103,47 +108,82 @@ export class CreateMealPlanService {
         const parsedWeight = Number(input);
         if (isNaN(parsedWeight)) {
           await sendWhatsAppText({
-            message: `Please enter a valid weight in kilograms`,
+            message: `Please enter a valid weight in KG (e.g 70)`,
             phoneNumber,
           });
           return {
             status: 'success',
           };
         }
-        const message = `What health goal do you want to achieve ?\n
-1) Maintain Weight
-2) Loose Weight
-3) Gain Weight`;
-        return this.helper.sendTextAndSetCache({
-          message,
-          phoneNumber,
-          nextStage: `${basePath}/goal`,
-          state,
-          data: { ...state.data, weight: input },
-        });
+        const selectedGoal = state.data.goal;
+        if (selectedGoal) {
+          if (selectedGoal == 'Maintain Weight') {
+            return this.helper.sendTextAndSetCache({
+              message: getActivityLevelText(),
+              phoneNumber,
+              state,
+              nextStage: `${basePath}/activity-level`,
+              data: { ...state.data, weight: input },
+            });
+          }
+          if (selectedGoal == 'Loose Weight' || selectedGoal == 'Gain Weight') {
+            const initialMessage = selectedGoal == 'Loose Weight'
+              ? `You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you `
+              : `Enjoy delicious and nourishing meals that promote muscle growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫`
+            await sendWhatsAppText({
+              message: initialMessage, phoneNumber
+            })
+            await delay()
+            const message = 'What is your target weight in KG? (e.g 50)';
+            return this.helper.sendTextAndSetCache({
+              phoneNumber,
+              message,
+              nextStage: `${basePath}/target-weight`,
+              state,
+              data: {
+                ...state.data,
+                weight: input
+              },
+            });
+          }
+        }
+        else {
+          const message = `What health goal do you want to achieve ?\n
+1. Maintain Weight
+2. Loose Weight
+3. Gain Weight`;
+          return this.helper.sendTextAndSetCache({
+            message,
+            phoneNumber,
+            nextStage: `${basePath}/goal`,
+            state,
+            data: { ...state.data, weight: input },
+          });
+        }
       }
 
       if (stage === `${basePath}/goal`) {
-        if (input === HealthGoal['Maintain Weight']) {
+        if (input == HealthGoal['Maintain Weight']) {
           return this.helper.sendTextAndSetCache({
-            message: getActivityLevelText("Maintain Weight"),
+            message: getActivityLevelText(),
             phoneNumber,
             state,
             nextStage: `${basePath}/activity-level`,
-            data: { ...state.data, goal: 'maintain weight' },
+            data: { ...state.data, goal: 'Maintain Weight' },
           });
         }
         if (
           input == HealthGoal['Loose Weight'] ||
           input == HealthGoal['Gain Weight']
         ) {
-          const initialMessage = input == HealthGoal['Loose Weight'] ? `You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you ` : `Enjoy delicious and nourishing meals that promote muscle 
-          growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫`
+          const initialMessage = input == HealthGoal['Loose Weight']
+            ? `You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you `
+            : `Enjoy delicious and nourishing meals that promote muscle growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫`
           await sendWhatsAppText({
             message: initialMessage, phoneNumber
           })
           await delay()
-          const message = 'What is your target weight in Kilograms';
+          const message = 'What is your target weight in KG (e.g 50)';
           const goal = Object.keys(HealthGoal).find(
             (key) => HealthGoal[key] == input
           );
@@ -172,7 +212,7 @@ export class CreateMealPlanService {
         const parseTargetWeight = Number(input);
         if (isNaN(parseTargetWeight)) {
           await sendWhatsAppText({
-            message: `Please enter a valid weight in kilograms`,
+            message: `Please enter a valid weight in KG (e.g 70)`,
             phoneNumber,
           });
           return {
@@ -199,7 +239,7 @@ export class CreateMealPlanService {
 
         return this.helper.sendTextAndSetCache({
           phoneNumber,
-          message: weightLossDurationText,
+          message: state.data.goal === 'Gain Weight' ? weightGainDurationText : weightLossDurationText,
           nextStage: `${basePath}/goal-duration`,
           state,
           data: { ...state.data, targetWeight: Number(input) },
@@ -217,9 +257,8 @@ export class CreateMealPlanService {
           };
         }
         const { targetWeight, weight: currentWeight } = state.data;
-        if (state.data.goal === 'Loose Weight') {
+        if (state.data.goal == 'Loose Weight') {
           const weightToLoose = currentWeight - targetWeight;
-
           const weightLossPerMonth = weightToLoose / Number(input);
           if (weightLossPerMonth > 8)
             return this.helper.sendTextAndSetCache({
@@ -243,7 +282,7 @@ export class CreateMealPlanService {
         }
         return this.helper.sendTextAndSetCache({
           phoneNumber,
-          message: getActivityLevelText(state.data.goal),
+          message: getActivityLevelText(),
           nextStage: `${basePath}/activity-level`,
           state,
           data: { ...state.data, durationInMonth: Number(input) },
@@ -254,7 +293,7 @@ export class CreateMealPlanService {
         if (input == 1) {
           return this.helper.sendTextAndSetCache({
             phoneNumber,
-            message: `Please re - enter a duration in months`,
+            message: `Please re - enter a duration in months (e.g 2)`,
             nextStage: `${basePath}/goal-duration`,
             state,
             data: state.data
@@ -264,7 +303,7 @@ export class CreateMealPlanService {
         if (input == 2) {
           return this.helper.sendTextAndSetCache({
             phoneNumber,
-            message: `Please re - enter your target weight`,
+            message: `Please re - enter your target weight in KG (e.g 70)`,
             nextStage: `${basePath}/target-weight`,
             state,
             data: state.data
@@ -309,11 +348,11 @@ export class CreateMealPlanService {
             : input == 2
               ? 'hypertension'
               : input == 3
-                ? 'diabetes'
+                ? 'diabetes/pre-diabetes'
                 : input == 4
-                  ? 'diabetes'
+                  ? 'high cholesterol'
                   : input == 5
-                    ? 'highCholesterol'
+                    ? 'polycystic Ovary Syndrome (PCOS)'
                     : '';
         if (healthCondition === 'none') {
           const {
@@ -340,9 +379,8 @@ export class CreateMealPlanService {
             targetWeight,
             durationInMonth,
           });
-
           if (requiredCalorie < 1200) return this.helper.sendTextAndSetCache({
-            message: `Your calorie requirement  of ${requiredCalorie} is too low.The recommended minimum is 1200cal per day to meet your body's nutritional needs`,
+            message: `Your calorie requirement of ${requiredCalorie} is too low. The recommended minimum is 1200 cal per day to meet your body's nutritional needs`,
             phoneNumber,
             nextStage: 'landing',
             state
@@ -354,7 +392,7 @@ export class CreateMealPlanService {
               sex: gender,
               height,
               weight,
-              healthCondition: 'none',
+              healthCondition,
               requiredCalorie,
             },
             userId: state.user!.id,
@@ -364,34 +402,67 @@ export class CreateMealPlanService {
             message: getCalorieGoalText({
               goal,
               requiredCalorie,
-              userName: state.user!.name,
               durationInMonth,
-              weightDifference
+              weightDifference: Math.trunc(weightDifference)
             }),
             phoneNumber,
-            nextStage: `${basePath}/view`,
+            nextStage: '',
             state,
             data: { ...state.data, healthCondition },
           });
+          await this.helper.sendTextAndSetCache({
+            message: `Would you like us to create a Nigerian meal plan that will provide you ${requiredCalorie} cal per day towards achieving your goal?\n
+1. Absolutely
+2. No, thank you, I'm good`,
+            phoneNumber,
+            state,
+            nextStage: `${basePath}/should-generate-meal-plan`,
+          })
+        } else {
+          const specialHealthPlan = await this.repo.fetchSpecialSubscriptionPlan();
+          const paymentLink = await this.paymentService.initializePaystackPayment({
+            email: state!.user!.email,
+            amountInNaira: Number(specialHealthPlan!.amount),
+            metaData: { phoneNumber, planPaidFor: specialHealthPlan },
+          })
+
+          const { data, status } = paymentLink;
+          if (status) {
+            const message = `We are here to support you on your health journey ensuring you stay and keep you healthy, We understand that some of our clients face health challenges, and we want to accommodate their needs.
+            A form will be sent to you to collect more specific information Click on the pay now button below to pay ${formatCurrency(+specialHealthPlan!.amount)}.`;
+            return this.helper.sendCallToActionAndSetCache({
+              phoneNumber,
+              message,
+              nextStage: 'landing',
+              state,
+              callToActionText: 'Pay now',
+              link: data.data.authorization_url,
+              data: { ...state.data, healthCondition },
+            });
+          }
+        }
+      }
+
+      const ACCEPT = 1;
+      const DECLINE = 2;
+
+      if (stage == `${basePath}/should-generate-meal-plan`) {
+        if (input == ACCEPT) {
           await this.viewMealPlan.handleViewMealPlan({
             phoneNumber,
             state,
           });
+        }
+
+        if (input == DECLINE) {
           return this.helper.handleNoState({
             phoneNumber,
             profileName: state.user!.name,
-            customHeader: `Congratulations on creating your personalized meal plan with Health Paddy! You have taken the first step to a healthier and happier you 🌱🥗
-Is there anything else I may assist you with ?`,
-            state
-          })
+            customHeader: `Thank you for using Health Paddy, we look forward to helping you on your health journey soon, How else can i be of service ?`,
+            state,
+          });
         }
-        return this.helper.sendTextAndSetCache({
-          message: `Please contact support`,
-          phoneNumber,
-          nextStage: 'landing',
-          state,
-          data: { ...state.data, healthCondition },
-        });
+
       }
     } catch (err) {
       console.log(err);

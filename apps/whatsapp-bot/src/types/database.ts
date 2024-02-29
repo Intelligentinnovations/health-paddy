@@ -10,7 +10,7 @@ export const SubscriptionStatus = {
   canceled: 'canceled',
 } as const;
 export type SubscriptionStatus =
-  typeof SubscriptionStatus[keyof typeof SubscriptionStatus];
+  (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus];
 export const FoodCategory = {
   starch: 'starch',
   fruit: 'fruit',
@@ -20,7 +20,7 @@ export const FoodCategory = {
   fat_and_oil: 'fat_and_oil',
   snack: 'snack',
 } as const;
-export type FoodCategory = typeof FoodCategory[keyof typeof FoodCategory];
+export type FoodCategory = (typeof FoodCategory)[keyof typeof FoodCategory];
 export type CalorieNeed = {
   id: Generated<string>;
   calories: number;
@@ -83,9 +83,30 @@ export type Subscription = {
   id: Generated<string>;
   userId: string;
   transactionId: string;
+  subscriptionPlanId: string;
   status: SubscriptionStatus;
   startDate: Generated<Timestamp>;
   endDate: Timestamp;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Timestamp;
+};
+export type SubscriptionPlan = {
+  id: Generated<string>;
+  planName: string;
+  amount: string;
+  isSpecialPlan: Generated<boolean>;
+  hasCalorieCalculator: boolean;
+  timetablePerMonth: number;
+  hasSwapMealItem: boolean;
+  noOfRecipes: number;
+  mealPlanGuideLines: boolean;
+  hasPreventHungerResources: boolean;
+  hasMealPreppingResources: boolean;
+  hasHandlingCheatMealResources: boolean;
+  hasPostPurchaseSupport: boolean;
+  hasCommunity: boolean;
+  hasQuickMealOptions: boolean;
+  hasProgressReport: boolean;
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
 };
@@ -112,7 +133,7 @@ export type User = {
   activityLevel: string | null;
   healthCondition: string | null;
   requiredCalorie: number | null;
-  hasUsedFreeTrial: Generated<boolean>;
+  isCreateMealPlanReminderSent: Generated<boolean>;
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
 };
@@ -131,6 +152,7 @@ export type DB = {
   Recipe: Recipe;
   Snack: Snack;
   Subscription: Subscription;
+  SubscriptionPlan: SubscriptionPlan;
   Transaction: Transaction;
   User: User;
   UserMealPlan: UserMealPlan;

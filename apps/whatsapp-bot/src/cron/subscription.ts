@@ -18,7 +18,7 @@ export class CronService {
 
       if (dueSubscriptions.length) {
         for await (const dueSubscription of dueSubscriptions) {
-          const { userId, status: subscriptionStatus } = dueSubscription;
+          const { userId, status: subscriptionStatus, subscriptionPlanId } = dueSubscription;
           const cards = await this.repo.fetchUserCards(userId);
           if (cards.length) {
             for await (const card of cards) {
@@ -35,6 +35,7 @@ export class CronService {
                   const today = DateTime.now();
                   await this.repo.createSubscription({
                     userId,
+                    subscriptionPlanId,
                     reference: charge.data.data.reference,
                     token: card.token,
                     email: card.email,

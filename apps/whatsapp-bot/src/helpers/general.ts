@@ -18,19 +18,23 @@ function feetAndInchesToCm({ feet, inches }: { feet: number; inches: number }) {
 
 
 export const calculateRequireCalorie = ({ age, weight, feet, inches, gender, activityLevel, goal, targetWeight, durationInMonth }: CalorieCalculator) => {
-  const commonCalories = (10 * weight) + (6.25 * feetAndInchesToCm({ feet, inches })) - (5 * age);
+  const heightInInches = feetAndInchesToCm({ feet, inches });
+  const commonCalories = gender === 'male' 
+  ? (10 * Number(weight)) + (6.25 * heightInInches) - (5 * Number(age) + 5)
+  : (10 * Number(weight)) + (6.25 * heightInInches) - (5 * Number(age) - 161) 
+
   const activityLevelIndex = ActivityLevel[activityLevel]
-  const caloriesToMaintainWeight = gender === 'male' ? commonCalories + 5 * activityLevelIndex : commonCalories - 161 * activityLevelIndex
+  const caloriesToMaintainWeight = Math.round(commonCalories * activityLevelIndex);
 
   if (goal === 'Loose Weight') {
-    const amountOfWeightToLoose = weight - targetWeight;
-    const durationInWeeks = durationInMonth * 4;
+    const amountOfWeightToLoose = Number(weight) - Number(targetWeight);
+    const durationInWeeks = Number(durationInMonth) * 4;
     const calorieNeed = caloriesToMaintainWeight - (amountOfWeightToLoose / durationInWeeks * 500)
     return Math.round(calorieNeed / 100) * 100;
   }
   else if (goal === 'Gain Weight') {
-    const amountOfWeightToGain = targetWeight - weight;
-    const durationInWeeks = durationInMonth * 4;
+    const amountOfWeightToGain = +targetWeight - +weight;
+    const durationInWeeks = +durationInMonth * 4;
     const calorieNeed = caloriesToMaintainWeight + (amountOfWeightToGain / durationInWeeks * 500)
     return Math.round(calorieNeed / 100) * 100;
   }
@@ -57,7 +61,7 @@ export const validFeetAndInches = (input: string) => {
 };
 
 
-export function delay(ms = 200) {
+export function delay(ms = 250) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -95,9 +99,7 @@ export function alternatePlanNumbers(inputNumber: number) {
 
 export function getPageSelectionOffset(state: State) {
   let offset = 0;
-  if (state.user && !state.user.activityLevel) offset = 1
-  if (state.user && state.user.activityLevel) offset = 2
-
+  if (state.user && state.user.subscriptionStatus) offset = 1
   return offset
 
 }

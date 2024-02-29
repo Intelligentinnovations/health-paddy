@@ -31,6 +31,7 @@ export class AppRepo {
     return await this.client.transaction().execute(async (trx) => {
       const {
         userId,
+        subscriptionPlanId,
         reference,
         transactionStatus,
         token,
@@ -81,6 +82,7 @@ export class AppRepo {
           status: "active",
           startDate: date,
           endDate,
+          subscriptionPlanId,
           updatedAt: date
         })
         .returning('id')
@@ -106,6 +108,20 @@ export class AppRepo {
       ])).orderBy('Subscription.createdAt desc')
       .innerJoin('Transaction', 'Transaction.id', 'Subscription.transactionId')
       .selectAll().innerJoin('Card', 'Card.id', 'Transaction.cardId').selectAll()
+      .executeTakeFirst()
+  }
+
+  async fetchUserLastExpiredSubscription(userId: string) {
+    return await this.client
+      .selectFrom('Subscription')
+      .select(['Subscription.status as subscriptionStatus'])
+      .where('Subscription.userId', '=', userId)
+      .where((eb) => eb.or([
+        eb('Subscription.status', '=', 'expired'),
+      ])).orderBy('Subscription.createdAt desc')
+      .innerJoin('SubscriptionPlan', 'SubscriptionPlan.id', 'Subscription.subscriptionPlanId').select(['planName'])
+      .innerJoin('Transaction', 'Transaction.id', 'Subscription.transactionId').selectAll()
+      .innerJoin('Card', 'Card.id', 'Transaction.cardId').selectAll()
       .executeTakeFirst()
   }
 
@@ -206,6 +222,27 @@ export class AppRepo {
   async fetchCurrentMealPlan(userId: string) {
     return this.client
       .selectFrom('UserMealPlan').selectAll().where('endDate', '>=', new Date()).where('userId', '=', userId).executeTakeFirst()
+  }
+
+  async fetchSubscriptionPlans() {
+    return this.client
+      .selectFrom('SubscriptionPlan').selectAll().where("isSpecialPlan", '=', false).execute()
+  }
+
+  async fetchSpecialSubscriptionPlan() {
+    return this.client
+      .selectFrom('SubscriptionPlan').selectAll().where("isSpecialPlan", '=', true).executeTakeFirst()
+  }
+
+  async fetchSubscriptionPlanById(planId: string) {
+    return this.client
+      .selectFrom('SubscriptionPlan').selectAll().where("id", '=', planId).executeTakeFirst()
+  }
+
+  async findUsersNotCreatedMealPlan() {
+    const currentDate = new Date();
+    const thirtyMinutesAgo = new Date(currentDate.getTime() - 30 * 60000);
+    return await this.client.selectFrom('User').selectAll().where('createdAt', '>=', thirtyMinutesAgo).where('isCreateMealPlanReminderSent', '=', false).execute();
   }
 
 }

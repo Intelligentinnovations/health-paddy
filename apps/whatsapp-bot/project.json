@@ -103,7 +103,8 @@
     "prisma-seed": {
       "executor": "@nx-tools/nx-prisma:seed",
       "options": {
-        "schema": "apps/whatsapp-bot/prisma/schema.prisma"
+        "schema": "apps/whatsapp-bot/prisma/schema.prisma",
+        "script": "apps/whatsapp-bot/src/seeder/seeders/seed.ts"
       }
     },
     "prisma-validate": {

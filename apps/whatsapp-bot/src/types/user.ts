@@ -20,7 +20,6 @@ export type IUser = {
     activityLevel: string | null;
     healthCondition: string | null;
     requiredCalorie: number | null;
-    hasUsedFreeTrial: boolean;
     createdAt: Date
     updatedAt: Date
 }

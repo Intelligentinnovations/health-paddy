@@ -1,9 +1,9 @@
-import { MESSAGE_MANAGER, Messaging } from '@backend-template/messaging';
+import { MESSAGE_MANAGER } from '@backend-template/messaging';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
-import { delay, sendWhatsAppText } from '../../helpers';
+import { sendWhatsAppText } from '../../helpers';
 import { State } from '../../types';
 import { EmailSchema } from '../../utils/schema';
 import { StringSchema } from '../../utils/schema/auth.schema';
@@ -15,7 +15,6 @@ export class SignupService {
   constructor(
     private repo: AppRepo,
     private helper: GenericService,
-    @Inject(MESSAGE_MANAGER) private messaging: Messaging,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
@@ -39,7 +38,7 @@ export class SignupService {
           phoneNumber,
           nextStage: 'signup/email',
           state,
-          data: { name: input }
+          data: { ...state.data, name: input }
         })
       }
       if (state.stage === 'signup/email') {
@@ -50,9 +49,6 @@ export class SignupService {
           return { status: 'success' }
         }
         const emailExist = await this.repo.findUserByEmail(input);
-        if (!emailExist) {
-          await this.repo.createUser({ email: input, phone: phoneNumber, name: state.data.name as string })
-        }
         if (emailExist) {
           const message = 'The email already exist, Please enter another email';
           await sendWhatsAppText({ message, phoneNumber })
@@ -60,13 +56,17 @@ export class SignupService {
             status: 'success',
           };
         }
-        await delay()
-        const user = await this.repo.findUserByPhoneNumber(phoneNumber);
-        return this.helper.handleNoState({
+        await this.repo.createUser({
+          email: input,
+          name: state.data.name,
+          phone: phoneNumber
+        })
+        return this.helper.sendTextAndSetCache({
+          message: 'May i know your age ?',
           phoneNumber,
-          profileName,
-          customHeader: `Hey! 🎉🎉 Thank you for signing up to Health Paddy!Get started on your wellness journey by creating your personalized meal plan and get a free day meal plan`,
-          state: {...state, user}
+          state,
+          nextStage: "create-meal-plan/age",
+          data: { ...state.data, email: input }
         })
       }
       return this.helper.handleNoState({

@@ -5,14 +5,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { DateTime } from 'luxon';
 
-import { SecretsService } from "../secrets/secrets.service";
+import { formatCurrency, sendWhatsAppText } from '../helpers';
+import { SecretsService } from '../secrets/secrets.service';
 import { PaymentService } from '../services/paystack';
-import { State } from '../types';
+import { State, SubscriptionPlan } from '../types';
 import { AppRepo } from './app.repo';
-import { SignupService } from './auth/signup'
+import { SignupService } from './auth/signup';
 import { GenericService } from './general';
 import { CreateMealPlanService, ViewRecipeService } from './meal-plan';
-import { SubscriptionService } from './subscription/subscription'
+import { SubscriptionService } from './subscription/subscription';
 
 @Injectable()
 export class AppService {
@@ -57,8 +58,8 @@ export class AppService {
             state = { ...initialState, user }
             await this.cacheManager.set(sender, state);
           }
-
-          if (!state || ['hey', 'hello', 'hi', 'good morning', 'good afternoon', 'good evening', 'hi health paddy', 'hello health paddy'].includes(msg_body.toLowerCase())) {
+          const greetings = ['hey', 'hello', 'hi', 'good morning', 'good afternoon', 'good evening', 'hi health paddy', 'hello health paddy']
+          if (!state || greetings.includes(msg_body.toLowerCase())) {
             return await this.generalResponse.handleNoState({
               phoneNumber: sender,
               profileName,
@@ -135,8 +136,8 @@ export class AppService {
     const verification = await this.paymentService.verifyPaystackTransaction(
       reference
     );
-    const { status, data } = verification;
 
+    const { status, data } = verification;
     const transactionExist = await this.repo.findTransactionByReference(
       reference
     );
@@ -147,7 +148,7 @@ export class AppService {
       authorization,
       customer: { email },
     } = data.data;
-    const { phoneNumber } = data.data.metadata.custom_fields[0];
+    const { phoneNumber, planPaidFor } = data.data.metadata.custom_fields[0] as { phoneNumber: string, planPaidFor: SubscriptionPlan };
 
     const {
       bin: first6Digits,
@@ -157,13 +158,13 @@ export class AppService {
     } = authorization;
 
     const amountInNaira = amountInKobo / 100;
-
     const today = DateTime.now();
+    const endDate = today.plus({ months: 1 }).toJSDate();
 
     if (status && transactionStatus === 'success') {
       const user = await this.repo.findUserByPhoneNumber(phoneNumber);
-      const endDate = today.plus({ day: this.secrets.get('FREE_PLAN_DAYS') }).toJSDate();
       await this.repo.createSubscription({
+        subscriptionPlanId: planPaidFor!.id as unknown as string,
         token,
         type: '',
         issuer,
@@ -178,11 +179,27 @@ export class AppService {
         amount: `${amountInNaira}`,
         reference,
       });
-      await this.generalResponse.handleNoState({
-        phoneNumber,
-        profileName: user!.name, customHeader: `Your card has been added 🎉, you can now access your free one-day meal Plan. Get ready to start your wellness journey!" 💪`,
-        state: { user, data: {}, stage: '' }
-      })
+      if (!planPaidFor.isSpecialPlan) {
+        const message = `Subscription alert\n
+Payment completed successfully 🙌, You can now enjoy all our services".\n
+Plan: ${planPaidFor.planName}
+Amount paid: ${formatCurrency(Number(amountInNaira))}
+Expires on: ${endDate.toDateString()}`
+        return sendWhatsAppText({ message, phoneNumber })
+      } else {
+        const message = 'Your payment has been received, Please fill the form below'
+        await this.generalResponse.sendCallToActionAndSetCache({
+          message,
+          phoneNumber,
+          state: { data: {}, stage: '', user: undefined },
+          nextStage: '',
+          data,
+          link: this.secrets.get('HEALTH_ISSUES_FORM_LINK'),
+          callToActionText: 'Fill Form'
+        })
+        return sendWhatsAppText({ message, phoneNumber })
+      }
     }
   }
+
 }

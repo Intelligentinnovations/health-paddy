@@ -94,7 +94,6 @@ export class ViewRecipeService {
         const closestCalorie = await this.helper.getClosestMealPlan(
           state!.user!.requiredCalorie as number
         );
-
         const recipe = await this.repo.getRecipe({
           calorie: closestCalorie!.calories,
           mealName: parsedMeal.trim(),

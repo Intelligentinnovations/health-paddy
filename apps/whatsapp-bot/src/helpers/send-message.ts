@@ -14,3 +14,25 @@ export const sendWhatsAppText = async ({ message, phoneNumber }: { message: stri
     },
   })
 }
+
+export const sendWhatsAppCTA = async ({ message, phoneNumber, link, callToActionText }: { message: string; phoneNumber: string; link: string, callToActionText: string }) => {
+  const url = `https://graph.facebook.com/v12.0/${PHONE_NUMBER_ID}/messages?access_token=${WHATSAPP_TOKEN}`;
+  axios.post(url, {
+    messaging_product: 'whatsapp',
+    to: phoneNumber,
+    type: "interactive",
+    interactive: {
+      type: "cta_url",
+      body: {
+        text: message
+      },
+      action: {
+        name: "cta_url",
+        parameters: {
+          display_text: callToActionText,
+          url: link
+        }
+      }
+    }
+  })
+}

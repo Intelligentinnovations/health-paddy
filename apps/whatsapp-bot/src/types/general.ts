@@ -1,4 +1,3 @@
-import { SubscriptionStatus } from "./database";
 import { IUser } from "./user";
 
 export interface State {
@@ -10,6 +9,7 @@ export interface State {
 
 export interface SubscriptionPayload {
     userId: string,
+    subscriptionPlanId: string,
     reference: string,
     token: string,
     email: string,
@@ -55,7 +55,6 @@ export const HealthGoal: { [key: string]: number } = {
 export interface GetCalorieGoalText {
     goal: string,
     requiredCalorie: number,
-    userName: string,
     durationInMonth: number,
     weightDifference: number
 }
