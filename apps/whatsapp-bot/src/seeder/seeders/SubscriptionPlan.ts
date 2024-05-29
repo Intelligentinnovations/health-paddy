@@ -3,7 +3,7 @@
 
 const subscriptionPlans = [
   {
-    planName: "Base Plan",
+    planName: "Basic Plan",
     amount: 3000,
     isSpecialPlan: false,
     hasCalorieCalculator: true,
@@ -22,7 +22,7 @@ const subscriptionPlans = [
     updatedAt: new Date()
   },
   {
-    planName: "Full Plan",
+    planName: "Premium Plan",
     amount: 9500,
     isSpecialPlan: false,
     hasCalorieCalculator: true,

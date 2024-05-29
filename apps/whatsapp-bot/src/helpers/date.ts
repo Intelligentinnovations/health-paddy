@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon';
 
 export const formatDate = (date: Date) => {
   const luxonDate = DateTime.fromJSDate(date);
@@ -6,9 +6,17 @@ export const formatDate = (date: Date) => {
 
 }
 
-export const getWeeksBetweenDates = ({ startDate, endDate }: { startDate: Date, endDate: Date }) => {
+export const getDiffBetweenDates = ({ startDate, endDate, timePeriod }: { startDate: Date, endDate: Date, timePeriod: 'years' |'weeks' }) => {
   const startDateTime = DateTime.fromJSDate(startDate);
-  const endDateTime = DateTime.fromJSDate(endDate);  
-  const diffInWeeks = endDateTime.diff(startDateTime, 'weeks').weeks;
-  return Math.round(diffInWeeks);
+  const endDateTime = DateTime.fromJSDate(endDate);
+  const diff = endDateTime.diff(startDateTime, timePeriod)[timePeriod]
+  return Math.round(diff);
 }
+
+export const parseDateOfBirth =  (dobString: string) => {
+  const dobDateTime = DateTime.fromFormat(dobString, 'dd/MM/yyyy');
+  if (!dobDateTime.isValid) {
+    return 'Invalid date format';
+  }
+  return dobDateTime.toFormat('dd/MM/yyyy')
+};

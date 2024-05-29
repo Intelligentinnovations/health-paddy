@@ -124,8 +124,9 @@ export type User = {
   id: Generated<string>;
   email: string;
   phone: string;
-  name: string;
-  age: number | null;
+  firstname: string;
+  lastname: string;
+  dateOfBirth: Timestamp | null;
   sex: string | null;
   height: string | null;
   weight: string | null;

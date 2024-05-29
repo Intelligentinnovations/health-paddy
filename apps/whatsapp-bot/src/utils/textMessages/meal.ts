@@ -12,7 +12,7 @@ export const extremeGainWeightText = `Trust me I get it, you want results really
 1) Increase Duration
 2) Reduce Target Weight`
 
-export const extremeWeightLossText = `Trust me I get it, you want to lose the weight as fast as possible. But it seems you are trying to lose more than 8kg per month, and that's highly unrealistic. you should either increase the duration or reduce your target weight\n
+export const extremeWeightLossText = `Trust me I get it, you want to lose weight as fast as possible. But it seems you are trying to lose more than 8kg per month, and that's highly unrealistic. you should either increase the duration or reduce your target weight\n
 1) Increase Duration
 2) Reduce Target Weight`
 
@@ -29,8 +29,7 @@ export const weightGainDurationText = `In how many months would you like to achi
 
 
 export const getCalorieGoalText = ({ goal, requiredCalorie, durationInMonth, weightDifference }: GetCalorieGoalText) => {
-  console.log(goal);
-  
+
   if (goal == 'Maintain Weight') return `Congratulations! We've successfully calculated your calorie target! To maintain your current weight, you will need to consume ${requiredCalorie} Cal per day 👌`
   if(goal == 'Loose Weight') return `Congratulations! We've successfully calculated your calorie target! To loose ${weightDifference}KG over the next ${durationInMonth} months, at your current level of activity and weight, you'll need to consume: ${requiredCalorie}cal per day`
   return `Congratulations! We've successfully calculated your calorie target! To gain ${weightDifference}KG over the next ${durationInMonth} months, at your current level of activity and weight, you'll need to consume: ${requiredCalorie}cal per day`

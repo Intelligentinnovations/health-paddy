@@ -148,7 +148,8 @@ export class AppService {
       authorization,
       customer: { email },
     } = data.data;
-    const { phoneNumber, planPaidFor } = data.data.metadata.custom_fields[0] as { phoneNumber: string, planPaidFor: SubscriptionPlan };
+    const { phoneNumber, planPaidFor } =
+      data.data.metadata.custom_fields[0] as { phoneNumber: string, planPaidFor: SubscriptionPlan };
 
     const {
       bin: first6Digits,

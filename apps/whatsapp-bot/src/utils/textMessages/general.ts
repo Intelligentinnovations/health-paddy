@@ -4,7 +4,7 @@ import { State, SubscriptionPlan } from '../../types';
 export const privacyMessage = (goal: string) => `Privacy Notice
 
 Fantastic! Here's what's going to happen next, we will:\n
-1. Help you calculate your daily calorie allowance for optimal ${goal}
+1. Help you calculate your daily calorie allowance for ${goal === 'Loose Weight' ? "optimal weight loss" : goal === 'Gain Weight' ? 'optimal weight gain' : 'maintain weight'}
 2. Create a Nigerian meal plan based on your calorie target.
 
 We may collect the following personal data:
@@ -26,7 +26,7 @@ Data Security
 We prioritize the security of your personal data. We implement measures to protect your data from unauthorized access, disclosure, alteration, and destruction.
 
 Consent
-By using our chat-bot, you consent to the collection and use of your personal data as described in this privacy notice.
+By using our service, you consent to the collection and use of your personal data as described in this privacy notice.
 
 1. Accept
 2. Reject`
@@ -49,7 +49,7 @@ ${5 - selectionOffset}. Manage Subscription ✉️`;
 
 
 export const getSubscriptionPlanMessage = (subscriptionPlans: SubscriptionPlan[]) => `*Subscription alert*\n
-Please select one of our subscription plan to create your meal plans, or simply click on this link below to learn more about all available plans.\n
+Please select one of our subscription plan to create your meal plans.\n
 ${subscriptionPlans.map((plan, index) => `${index + 1}. *${plan.planName} ${formatCurrency(Number(plan.amount))}/Month*
 - Calorie calculator ${plan.hasCalorieCalculator ? ' ✅' : '❌'}
 - Timetable/month ${plan.timetablePerMonth}

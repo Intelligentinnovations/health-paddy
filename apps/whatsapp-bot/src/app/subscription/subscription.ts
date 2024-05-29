@@ -145,7 +145,7 @@ of ${subscription.amount} per month.`;
           const subscription = await this.repo.fetchSubscription(user!.id);
 
           const message = `Subscription Status\n
-Dear ${user?.name}
+Dear ${user?.firstname}
 Here's a quick update on your subscription:\n
 Amount: ${formatCurrency(+subscription!.amount)}
 Status: ${capitalizeString(subscription!.subscriptionStatus)}
@@ -161,7 +161,7 @@ Best regards`;
           });
           return this.helper.handleNoState({
             phoneNumber,
-            profileName: user!.name,
+            profileName: user!.firstname,
             customHeader: `Hi, how else can I be of service to you?`,
             state
           })

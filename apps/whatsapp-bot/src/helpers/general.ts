@@ -1,4 +1,5 @@
 import { ActivityLevel, CalorieCalculator, State } from "../types";
+import { getDiffBetweenDates } from './date';
 
 export function formatCurrency(amount: number, currencyCode = 'NGN') {
   const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -17,11 +18,14 @@ function feetAndInchesToCm({ feet, inches }: { feet: number; inches: number }) {
 }
 
 
-export const calculateRequireCalorie = ({ age, weight, feet, inches, gender, activityLevel, goal, targetWeight, durationInMonth }: CalorieCalculator) => {
+export const calculateRequireCalorie = ({ dateOfBirth, weight, feet, inches, gender, activityLevel, goal, targetWeight, durationInMonth }: CalorieCalculator) => {
+  const age = getDiffBetweenDates({startDate: dateOfBirth, endDate: new Date(), timePeriod: 'years'})
+
+  console.log({age});
   const heightInInches = feetAndInchesToCm({ feet, inches });
-  const commonCalories = gender === 'male' 
+  const commonCalories = gender === 'male'
   ? (10 * Number(weight)) + (6.25 * heightInInches) - (5 * Number(age) + 5)
-  : (10 * Number(weight)) + (6.25 * heightInInches) - (5 * Number(age) - 161) 
+  : (10 * Number(weight)) + (6.25 * heightInInches) - (5 * Number(age) - 161)
 
   const activityLevelIndex = ActivityLevel[activityLevel]
   const caloriesToMaintainWeight = Math.round(commonCalories * activityLevelIndex);

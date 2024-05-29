@@ -10,25 +10,26 @@ datasource db {
 }
 
 model User {
-  id                 String              @id @default(dbgenerated("gen_random_uuid()"))
-  email              String              @unique
-  phone              String              @unique
-  name               String
-  age                Int?
-  sex                String?
-  height             String?
-  weight             Decimal?            @db.Decimal(9, 2)
-  subscriptionStatus SubscriptionStatus?
-  activityLevel      String?
-  healthCondition    String?
-  requiredCalorie    Float?
+  id                           String              @id @default(dbgenerated("gen_random_uuid()"))
+  email                        String              @unique
+  phone                        String              @unique
+  firstname                    String
+  lastname                     String
+  dateOfBirth                  DateTime?           @db.Date
+  sex                          String?
+  height                       String?
+  weight                       Decimal?            @db.Decimal(9, 2)
+  subscriptionStatus           SubscriptionStatus?
+  activityLevel                String?
+  healthCondition              String?
+  requiredCalorie              Float?
   isCreateMealPlanReminderSent Boolean             @default(false)
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  Subscription       Subscription[]
-  Card               Card[]
-  Transaction        Transaction[]
-  UserMealPlan       UserMealPlan[]
+  createdAt                    DateTime            @default(now())
+  updatedAt                    DateTime            @updatedAt
+  Subscription                 Subscription[]
+  Card                         Card[]
+  Transaction                  Transaction[]
+  UserMealPlan                 UserMealPlan[]
 }
 
 model Card {

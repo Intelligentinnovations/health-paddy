@@ -36,3 +36,16 @@ export const sendWhatsAppCTA = async ({ message, phoneNumber, link, callToAction
     }
   })
 }
+
+export const sendWhatsAppImageById = async ({ phoneNumber, imageObjectId }: { phoneNumber: string; imageObjectId: string }) => {
+  const url = `https://graph.facebook.com/v12.0/${PHONE_NUMBER_ID}/messages?access_token=${WHATSAPP_TOKEN}`;
+  axios.post(url, {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: phoneNumber,
+    type: "image",
+    image: {
+      id: imageObjectId
+    }
+  })
+}

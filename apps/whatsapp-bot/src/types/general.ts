@@ -34,7 +34,7 @@ export const ActivityLevel = {
 
 
 export interface CalorieCalculator {
-    age: number,
+    dateOfBirth: Date,
     weight: number
     gender: 'male' | 'female',
     activityLevel: 'sedentary' | 'mild' | 'moderate' | 'heavy' | 'extreme',

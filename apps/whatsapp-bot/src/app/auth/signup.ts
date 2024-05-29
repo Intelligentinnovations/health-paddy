@@ -31,14 +31,24 @@ export class SignupService {
     profileName: string;
   }) => {
     try {
-      if (state.stage === 'signup/name') {
+      if (state.stage === 'signup/firstname') {
         StringSchema.parse(input)
         return this.helper.sendTextAndSetCache({
-          message: `Great ${input}, Please tell me your email`,
+          message: `Great ${input}, Please enter your last name`,
+          phoneNumber,
+          nextStage: 'signup/lastname',
+          state,
+          data: { ...state.data, firstname: input }
+        })
+      }
+      if (state.stage === 'signup/lastname') {
+        StringSchema.parse(input)
+        return this.helper.sendTextAndSetCache({
+          message: `Great ${state.data.firstname} ${input}, Please tell me your email`,
           phoneNumber,
           nextStage: 'signup/email',
           state,
-          data: { ...state.data, name: input }
+          data: { ...state.data, lastname: input }
         })
       }
       if (state.stage === 'signup/email') {
@@ -58,11 +68,12 @@ export class SignupService {
         }
         await this.repo.createUser({
           email: input,
-          name: state.data.name,
+          firstname: state.data.firstname,
+          lastname: state.data.lastname,
           phone: phoneNumber
         })
         return this.helper.sendTextAndSetCache({
-          message: 'May i know your age ?',
+          message: 'May i know your date of birth? e.g ( 01/10/2000 )',
           phoneNumber,
           state,
           nextStage: "create-meal-plan/age",

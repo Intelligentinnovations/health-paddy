@@ -3,7 +3,8 @@ import { SubscriptionStatus } from "./database";
 export type UserPayload = {
     email: string;
     phone: string;
-    name: string;
+    firstname: string;
+    lastname: string;
 };
 
 
@@ -11,8 +12,9 @@ export type IUser = {
     id: string;
     email: string;
     phone: string;
-    name: string;
-    age: number | null;
+    firstname: string;
+    lastname: string;
+    dateOfBirth: Date | null;
     sex: string | null;
     height: string | null;
     weight: string | null;

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'kysely';
 
 import { DB, MealPlan, SubscriptionPayload, SubscriptionStatus, UserPayload } from '../types';
+import { getDiffBetweenDates } from '../helpers';
 
 @Injectable()
 export class AppRepo {

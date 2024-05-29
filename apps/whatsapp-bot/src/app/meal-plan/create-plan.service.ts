@@ -1,10 +1,18 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
+import { DateTime } from "luxon";
 
-import { calculateRequireCalorie, delay, formatCurrency, sendWhatsAppText, validFeetAndInches } from '../../helpers';
-import { SecretsService } from '../../secrets/secrets.service';
-import { PaymentService } from '../../services/paystack';
-import { HealthGoal, State } from '../../types';
+import {
+  calculateRequireCalorie,
+  delay,
+  formatCurrency,
+  parseDateOfBirth,
+  sendWhatsAppText,
+  validFeetAndInches
+} from "../../helpers";
+import { SecretsService } from "../../secrets/secrets.service";
+import { PaymentService } from "../../services/paystack";
+import { HealthGoal, State } from "../../types";
 import {
   extremeGainWeightText,
   extremeWeightLossText,
@@ -13,10 +21,10 @@ import {
   healthConditionText,
   weightGainDurationText,
   weightLossDurationText
-} from '../../utils/textMessages';
-import { AppRepo } from '../app.repo';
-import { GenericService } from '../general';
-import { ViewMealPlanService } from './view-plan';
+} from "../../utils/textMessages";
+import { AppRepo } from "../app.repo";
+import { GenericService } from "../general";
+import { ViewMealPlanService } from "./view-plan";
 
 @Injectable()
 export class CreateMealPlanService {
@@ -39,21 +47,21 @@ export class CreateMealPlanService {
     input: number | string;
   }) => {
     try {
-      const basePath = 'create-meal-plan';
+      const basePath = "create-meal-plan";
       const { stage } = state;
 
       if (stage === `${basePath}/age`) {
         const message = `Thanks! could you share your gender with me?\n
 1. Male
 2. Female`;
-        const parsedAge = Number(input);
-        if (Number.isNaN(parsedAge)) {
+        const parsedDateOfBirth = parseDateOfBirth(input as string);
+        if (parsedDateOfBirth === "Invalid date format") {
           await sendWhatsAppText({
-            message: `Please enter a valid age`,
+            message: "Please enter a valid date of birth in this format (dd/mm/yyyy)",
             phoneNumber,
           });
           return {
-            status: 'success',
+            status: "success",
           };
         }
         return this.helper.sendTextAndSetCache({
@@ -61,21 +69,21 @@ export class CreateMealPlanService {
           phoneNumber,
           nextStage: `${basePath}/gender`,
           state,
-          data: { ...state.data, age: input },
+          data: { ...state.data, dateOfBirth: parsedDateOfBirth },
         });
       }
       if (stage === `${basePath}/gender`) {
-        const gender = input == 1 ? 'male' : input == 2 ? 'female' : '';
+        const gender = input == 1 ? "male" : input == 2 ? "female" : "";
         if (!gender) {
           await sendWhatsAppText({
-            message: `Please choose between 1 and 2`,
+            message: "Please choose between 1 and 2",
             phoneNumber,
           });
           return {
-            status: 'success',
+            status: "success",
           };
         }
-        const message = `Perfect!, May I ask for your height in feet, for example, in the format "5f11" or 5'11?`;
+        const message = "Perfect!, May I ask for your height in feet, for example, in the format \"5f11\" or 5'11?";
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
@@ -88,14 +96,14 @@ export class CreateMealPlanService {
         const validatedFeetAndInches = validFeetAndInches(input as string);
         if (!validatedFeetAndInches) {
           await sendWhatsAppText({
-            message: `Please enter a valid height in feet, for example, in the format "5f11" or 5'11?`,
+            message: "Please enter a valid height in feet, for example, in the format \"5f11\" or 5'11?",
             phoneNumber,
           });
           return {
-            status: 'success',
+            status: "success",
           };
         }
-        const message = `Excellent! Would you be willing to tell me your weight in KG? (e.g 70)`;
+        const message = "Excellent! Would you be willing to tell me your weight in KG? (e.g 70)";
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
@@ -108,16 +116,16 @@ export class CreateMealPlanService {
         const parsedWeight = Number(input);
         if (isNaN(parsedWeight)) {
           await sendWhatsAppText({
-            message: `Please enter a valid weight in KG (e.g 70)`,
+            message: "Please enter a valid weight in KG (e.g 70)",
             phoneNumber,
           });
           return {
-            status: 'success',
+            status: "success",
           };
         }
         const selectedGoal = state.data.goal;
         if (selectedGoal) {
-          if (selectedGoal == 'Maintain Weight') {
+          if (selectedGoal == "Maintain Weight") {
             return this.helper.sendTextAndSetCache({
               message: getActivityLevelText(),
               phoneNumber,
@@ -126,15 +134,15 @@ export class CreateMealPlanService {
               data: { ...state.data, weight: input },
             });
           }
-          if (selectedGoal == 'Loose Weight' || selectedGoal == 'Gain Weight') {
-            const initialMessage = selectedGoal == 'Loose Weight'
-              ? `You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you `
-              : `Enjoy delicious and nourishing meals that promote muscle growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫`
+          if (selectedGoal == "Loose Weight" || selectedGoal == "Gain Weight") {
+            const initialMessage = selectedGoal == "Loose Weight"
+              ? "You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you "
+              : "Enjoy delicious and nourishing meals that promote muscle growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫"
             await sendWhatsAppText({
               message: initialMessage, phoneNumber
             })
             await delay()
-            const message = 'What is your target weight in KG? (e.g 50)';
+            const message = "What is your target weight in KG? (e.g 50)";
             return this.helper.sendTextAndSetCache({
               phoneNumber,
               message,
@@ -163,27 +171,27 @@ export class CreateMealPlanService {
       }
 
       if (stage === `${basePath}/goal`) {
-        if (input == HealthGoal['Maintain Weight']) {
+        if (input == HealthGoal["Maintain Weight"]) {
           return this.helper.sendTextAndSetCache({
             message: getActivityLevelText(),
             phoneNumber,
             state,
             nextStage: `${basePath}/activity-level`,
-            data: { ...state.data, goal: 'Maintain Weight' },
+            data: { ...state.data, goal: "Maintain Weight" },
           });
         }
         if (
-          input == HealthGoal['Loose Weight'] ||
-          input == HealthGoal['Gain Weight']
+          input == HealthGoal["Loose Weight"] ||
+          input == HealthGoal["Gain Weight"]
         ) {
-          const initialMessage = input == HealthGoal['Loose Weight']
-            ? `You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you `
-            : `Enjoy delicious and nourishing meals that promote muscle growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫`
+          const initialMessage = input == HealthGoal["Loose Weight"]
+            ? "You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you "
+            : "Enjoy delicious and nourishing meals that promote muscle growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫"
           await sendWhatsAppText({
             message: initialMessage, phoneNumber
           })
           await delay()
-          const message = 'What is your target weight in KG (e.g 50)';
+          const message = "What is your target weight in KG (e.g 50)";
           const goal = Object.keys(HealthGoal).find(
             (key) => HealthGoal[key] == input
           );
@@ -203,7 +211,7 @@ export class CreateMealPlanService {
           phoneNumber,
           nextStage: `${basePath}/goal`,
           state,
-          message: 'Please select your desired health goal',
+          message: "Please select your desired health goal",
           data: state.data,
         });
       }
@@ -212,19 +220,19 @@ export class CreateMealPlanService {
         const parseTargetWeight = Number(input);
         if (isNaN(parseTargetWeight)) {
           await sendWhatsAppText({
-            message: `Please enter a valid weight in KG (e.g 70)`,
+            message: "Please enter a valid weight in KG (e.g 70)",
             phoneNumber,
           });
           return {
-            status: 'success',
+            status: "success",
           };
         }
-        if (state.data.goal === 'Loose Weight') {
+        if (state.data.goal === "Loose Weight") {
           if (input >= state.data.weight) {
             return sendWhatsAppText({
               phoneNumber,
               message:
-                'Your target weight should be less than your current weight to lose weight',
+                "Your target weight should be less than your current weight to lose weight",
             });
           }
         } else {
@@ -232,14 +240,14 @@ export class CreateMealPlanService {
             return sendWhatsAppText({
               phoneNumber,
               message:
-                'Your target weight should be more than your current weight to gain weight',
+                "Your target weight should be more than your current weight to gain weight",
             });
           }
         }
 
         return this.helper.sendTextAndSetCache({
           phoneNumber,
-          message: state.data.goal === 'Gain Weight' ? weightGainDurationText : weightLossDurationText,
+          message: state.data.goal === "Gain Weight" ? weightGainDurationText : weightLossDurationText,
           nextStage: `${basePath}/goal-duration`,
           state,
           data: { ...state.data, targetWeight: Number(input) },
@@ -249,15 +257,15 @@ export class CreateMealPlanService {
         const parsedDuration = Number(input);
         if (isNaN(parsedDuration)) {
           await sendWhatsAppText({
-            message: `Please enter a valid duration in months`,
+            message: "Please enter a valid duration in months",
             phoneNumber,
           });
           return {
-            status: 'success',
+            status: "success",
           };
         }
         const { targetWeight, weight: currentWeight } = state.data;
-        if (state.data.goal == 'Loose Weight') {
+        if (state.data.goal == "Loose Weight") {
           const weightToLoose = currentWeight - targetWeight;
           const weightLossPerMonth = weightToLoose / Number(input);
           if (weightLossPerMonth > 8)
@@ -293,7 +301,7 @@ export class CreateMealPlanService {
         if (input == 1) {
           return this.helper.sendTextAndSetCache({
             phoneNumber,
-            message: `Please re - enter a duration in months (e.g 2)`,
+            message: "Please re - enter a duration in months (e.g 2)",
             nextStage: `${basePath}/goal-duration`,
             state,
             data: state.data
@@ -303,7 +311,7 @@ export class CreateMealPlanService {
         if (input == 2) {
           return this.helper.sendTextAndSetCache({
             phoneNumber,
-            message: `Please re - enter your target weight in KG (e.g 70)`,
+            message: "Please re - enter your target weight in KG (e.g 70)",
             nextStage: `${basePath}/target-weight`,
             state,
             data: state.data
@@ -314,23 +322,23 @@ export class CreateMealPlanService {
       if (stage === `${basePath}/activity-level`) {
         const activityLevel =
           input == 1
-            ? 'sedentary'
+            ? "sedentary"
             : input == 2
-              ? 'mild'
+              ? "mild"
               : input == 3
-                ? 'moderate'
+                ? "moderate"
                 : input == 4
-                  ? 'heavy'
+                  ? "heavy"
                   : input == 5
-                    ? 'extreme'
-                    : '';
+                    ? "extreme"
+                    : "";
         if (!activityLevel) {
           await sendWhatsAppText({
-            message: `Please select an activity level`,
+            message: "Please select an activity level",
             phoneNumber,
           });
           return {
-            status: 'success',
+            status: "success",
           };
         }
         return this.helper.sendTextAndSetCache({
@@ -344,20 +352,20 @@ export class CreateMealPlanService {
       if (stage === `${basePath}/health-condition`) {
         const healthCondition =
           input == 1
-            ? 'none'
+            ? "none"
             : input == 2
-              ? 'hypertension'
+              ? "hypertension"
               : input == 3
-                ? 'diabetes/pre-diabetes'
+                ? "diabetes/pre-diabetes"
                 : input == 4
-                  ? 'high cholesterol'
+                  ? "high cholesterol"
                   : input == 5
-                    ? 'polycystic Ovary Syndrome (PCOS)'
-                    : '';
-        if (healthCondition === 'none') {
+                    ? "polycystic Ovary Syndrome (PCOS)"
+                    : "";
+        if (healthCondition === "none") {
           const {
             data: {
-              age,
+              dateOfBirth,
               activityLevel,
               gender,
               height,
@@ -369,7 +377,7 @@ export class CreateMealPlanService {
           } = state;
           const value = validFeetAndInches(height);
           const requiredCalorie = calculateRequireCalorie({
-            age,
+            dateOfBirth: new Date(dateOfBirth),
             inches: value!.inches,
             feet: value!.feet,
             weight,
@@ -382,12 +390,12 @@ export class CreateMealPlanService {
           if (requiredCalorie < 1200) return this.helper.sendTextAndSetCache({
             message: `Your calorie requirement of ${requiredCalorie} is too low. The recommended minimum is 1200 cal per day to meet your body's nutritional needs`,
             phoneNumber,
-            nextStage: 'landing',
+            nextStage: "landing",
             state
           })
           await this.repo.updateUser({
             payload: {
-              age,
+              dateOfBirth,
               activityLevel,
               sex: gender,
               height,
@@ -406,7 +414,7 @@ export class CreateMealPlanService {
               weightDifference: Math.trunc(weightDifference)
             }),
             phoneNumber,
-            nextStage: '',
+            nextStage: "",
             state,
             data: { ...state.data, healthCondition },
           });
@@ -433,9 +441,9 @@ export class CreateMealPlanService {
             return this.helper.sendCallToActionAndSetCache({
               phoneNumber,
               message,
-              nextStage: 'landing',
+              nextStage: "landing",
               state,
-              callToActionText: 'Pay now',
+              callToActionText: "Pay now",
               link: data.data.authorization_url,
               data: { ...state.data, healthCondition },
             });
@@ -457,8 +465,8 @@ export class CreateMealPlanService {
         if (input == DECLINE) {
           return this.helper.handleNoState({
             phoneNumber,
-            profileName: state.user!.name,
-            customHeader: `Thank you for using Health Paddy, we look forward to helping you on your health journey soon, How else can i be of service ?`,
+            profileName: state.user!.firstname,
+            customHeader: "Thank you for using Health Paddy, we look forward to helping you on your health journey soon, How else can i be of service ?",
             state,
           });
         }

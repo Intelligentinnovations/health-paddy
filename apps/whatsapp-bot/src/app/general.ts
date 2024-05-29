@@ -8,10 +8,10 @@ import {
   alternatePlanNumbers,
   delay,
   formatCurrency,
-  generateMealHeading,
+  generateMealHeading, getDiffBetweenDates,
   getPageSelectionOffset,
-  getWeeksBetweenDates,
   sendWhatsAppCTA,
+  sendWhatsAppImageById,
   sendWhatsAppText
 } from '../helpers';
 import { SecretsService } from '../secrets/secrets.service';
@@ -53,8 +53,6 @@ export class GenericService {
       const selectionOffset = getPageSelectionOffset(state);
       const inputWithOffset = Number(input) + selectionOffset;
 
-      console.log({ inputWithOffset });
-
       switch (inputWithOffset) {
         case ROUTE.CREATE_MEAL_PLAN_OR_LOOSE_WEIGHT:
           if (state.user) {
@@ -73,13 +71,13 @@ export class GenericService {
                 })
               }
               await this.sendTextAndSetCache({
-                message: `Hi, ${state.user?.name} I'd love to chat with you and ask a few questions to help create your personalized meal plan. 😊`,
+                message: `Hi, ${state.user.firstname} I'd love to chat with you and ask a few questions to help create your personalized meal plan. 😊`,
                 phoneNumber,
                 nextStage: 'create-meal-plan/age',
                 state
               })
               await delay()
-              await sendWhatsAppText({ message: 'Please tell me your age', phoneNumber })
+              await sendWhatsAppText({ message: 'Please tell me your date of birth (e.g 01/11/2000)', phoneNumber })
               break;
             }
           } else {
@@ -153,7 +151,7 @@ export class GenericService {
           if (state.user) {
             if (state.user?.subscriptionStatus === 'active') {
               return this.sendTextAndSetCache({
-                message: `Manage your subscription\n 
+                message: `Manage your subscription\n
 1. View Subscription
 2. Cancel Subscription`,
                 phoneNumber,
@@ -212,7 +210,6 @@ export class GenericService {
         : `Hi ${profileName}! This is Health Paddy, your personal meal-planning assistant!\n\nWhat would you like us to help you achieve?`
       const heading = customHeader ? customHeader : message;
       const selectionOffset = getPageSelectionOffset(state);
-      console.log({ selectionOffset });
       await this.sendTextAndSetCache({
         message: getSelectionMessage({ heading, state, selectionOffset }),
         phoneNumber,
@@ -255,7 +252,7 @@ export class GenericService {
         const message = `Great! 🚀 Thanks for saying 'yes' to our privacy notice. Your data is in good hands! Please follow the prompt below to get signed up`;
         await sendWhatsAppText({ message, phoneNumber })
         await delay()
-        await this.sendTextAndSetCache({ message: 'What is your name?', phoneNumber, state, nextStage: 'signup/name', data: { ...state.data } });
+        await this.sendTextAndSetCache({ message: 'What is your firstname?', phoneNumber, state, nextStage: 'signup/firstname', data: { ...state.data } });
       } else {
         return this.handleNoState({
           phoneNumber,
@@ -285,12 +282,18 @@ export class GenericService {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const subscriptionMessage = getSubscriptionPlanMessage(subscriptionPlans)
-      return this.sendCallToActionAndSetCache({
+        await this.sendWhatsAppImageByIdAndSetCache({
+          phoneNumber,
+          imageObjectId: '2295755414113147',
+          state,
+          data: { subscriptionPlans, isFirstTimeSubscriber: true },
+          nextStage
+        })
+      await delay(500);
+      return this.sendTextAndSetCache({
         message: subscriptionMessage,
         phoneNumber,
         state,
-        link: 'https://google.com',
-        callToActionText: 'View Plans',
         data: { subscriptionPlans, isFirstTimeSubscriber: true },
         nextStage
       })
@@ -338,6 +341,7 @@ Your subscription has expired 😔. To continue using our service and access all
     }
   };
 
+
   sendCallToActionAndSetCache = async ({ message, phoneNumber, state, nextStage, data = {}, link, callToActionText = 'Subscribe' }
     : { message: string, phoneNumber: string, state: State, nextStage: string, data?: unknown; link: string, callToActionText?: string }) => {
     try {
@@ -351,10 +355,26 @@ Your subscription has expired 😔. To continue using our service and access all
     }
   };
 
+  sendWhatsAppImageByIdAndSetCache = async ({ phoneNumber, state, nextStage, data = {}, imageObjectId }
+    : { phoneNumber: string, state: State, nextStage: string, data?: unknown; imageObjectId: string }) => {
+    try {
+      await this.cacheManager.set(phoneNumber, { ...state, stage: nextStage, data });
+      console.log("sending message image");
+      await sendWhatsAppImageById({ phoneNumber, imageObjectId });
+      return {
+        status: 'success',
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   async getClosestMealPlan(userCalorie: number) {
-    const appWeek = getWeeksBetweenDates({
+    const appWeek = getDiffBetweenDates({
       startDate: new Date(this.secrets.get('WHATSAPP_BOT_START_DATE')),
-      endDate: new Date()
+      endDate: new Date(),
+      timePeriod: 'weeks'
     })
 
     const planNo = alternatePlanNumbers(appWeek)
@@ -425,7 +445,6 @@ Your subscription has expired 😔. To continue using our service and access all
       message += `*Dinner*: ${plan.dinner}\n\n`;
       message += `\nTotal Calories: ${plan.breakfastCalories + plan.snackCalories + plan.lunchCalories + plan.dinnerCalories}\n\n`;
       return message
-
     };
 
     const mealPlan = await this.getMealPlan(state)
@@ -435,8 +454,6 @@ Your subscription has expired 😔. To continue using our service and access all
     }
     await this.sendTextAndSetCache({ message: mealPlanSchedule, phoneNumber, nextStage: 'view-plan', state });
   }
-
-
 
   handleChangePlan({ phoneNumber, state, subscriptionPlans }: { phoneNumber: string; state: State, subscriptionPlans: SubscriptionPlan[] }) {
     return this.sendTextAndSetCache({
