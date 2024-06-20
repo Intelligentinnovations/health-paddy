@@ -12,13 +12,13 @@ export const SubscriptionStatus = {
 export type SubscriptionStatus =
   (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus];
 export const FoodCategory = {
-  starch: 'starch',
-  fruit: 'fruit',
-  vegetable: 'vegetable',
-  milk: 'milk',
-  protein: 'protein',
-  fat_and_oil: 'fat_and_oil',
-  snack: 'snack',
+  Starch: 'Starch',
+  Fruits: 'Fruits',
+  Protein: 'Protein',
+  Fat_and_Oil: 'Fat_and_Oil',
+  Snacks: 'Snacks',
+  Milk_and_Yoghurt: 'Milk_and_Yoghurt',
+  Drinks: 'Drinks',
 } as const;
 export type FoodCategory = (typeof FoodCategory)[keyof typeof FoodCategory];
 export type CalorieNeed = {
@@ -40,13 +40,27 @@ export type Card = {
   updatedAt: Timestamp;
   userId: string;
 };
-export type FoodItems = {
+export type FoodItem = {
   id: Generated<string>;
   name: string;
-  calorie: number;
-  portion: string;
   category: FoodCategory;
+  hasParts: Generated<boolean>;
+  hasCookingMethods: Generated<boolean>;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Timestamp;
+};
+export type FoodPortion = {
+  id: Generated<string>;
+  foodVariantId: string;
+  calorie: string;
+  size: string;
   description: string | null;
+  createdAt: Generated<Timestamp>;
+};
+export type FoodVariant = {
+  id: Generated<string>;
+  foodId: string;
+  name: string;
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
 };
@@ -97,14 +111,12 @@ export type SubscriptionPlan = {
   isSpecialPlan: Generated<boolean>;
   hasCalorieCalculator: boolean;
   timetablePerMonth: number;
-  hasSwapMealItem: boolean;
-  noOfRecipes: number;
+  noOfRecipes: string;
   mealPlanGuideLines: boolean;
   hasPreventHungerResources: boolean;
   hasMealPreppingResources: boolean;
   hasHandlingCheatMealResources: boolean;
   hasPostPurchaseSupport: boolean;
-  hasCommunity: boolean;
   hasQuickMealOptions: boolean;
   hasProgressReport: boolean;
   createdAt: Generated<Timestamp>;
@@ -134,6 +146,7 @@ export type User = {
   activityLevel: string | null;
   healthCondition: string | null;
   requiredCalorie: number | null;
+  hasUsedFreeMealPlan: Generated<boolean>;
   isCreateMealPlanReminderSent: Generated<boolean>;
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
@@ -148,7 +161,9 @@ export type UserMealPlan = {
 export type DB = {
   CalorieNeed: CalorieNeed;
   Card: Card;
-  FoodItems: FoodItems;
+  FoodItem: FoodItem;
+  FoodPortion: FoodPortion;
+  FoodVariant: FoodVariant;
   MealPlan: MealPlan;
   Recipe: Recipe;
   Snack: Snack;

@@ -1,21 +1,16 @@
-import { MESSAGE_MANAGER } from '@backend-template/messaging';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
-
-import { sendWhatsAppText } from '../../helpers';
-import { State } from '../../types';
-import { EmailSchema } from '../../utils/schema';
-import { StringSchema } from '../../utils/schema/auth.schema';
-import { AppRepo } from '../app.repo';
-import { GenericService } from '../general';
+import { Injectable } from "@nestjs/common";
+import { sendWhatsAppText } from "../../helpers";
+import { State } from "../../types";
+import { EmailSchema } from "../../utils/schema";
+import { StringSchema } from "../../utils/schema/auth.schema";
+import { AppRepo } from "../app.repo";
+import { GenericService } from "../general";
 
 @Injectable()
 export class SignupService {
   constructor(
     private repo: AppRepo,
     private helper: GenericService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
 
@@ -31,40 +26,37 @@ export class SignupService {
     profileName: string;
   }) => {
     try {
-      if (state.stage === 'signup/firstname') {
+      if (state.stage === "signup/firstname") {
         StringSchema.parse(input)
         return this.helper.sendTextAndSetCache({
           message: `Great ${input}, Please enter your last name`,
           phoneNumber,
-          nextStage: 'signup/lastname',
+          nextStage: "signup/lastname",
           state,
           data: { ...state.data, firstname: input }
         })
       }
-      if (state.stage === 'signup/lastname') {
+      if (state.stage === "signup/lastname") {
         StringSchema.parse(input)
         return this.helper.sendTextAndSetCache({
           message: `Great ${state.data.firstname} ${input}, Please tell me your email`,
           phoneNumber,
-          nextStage: 'signup/email',
+          nextStage: "signup/email",
           state,
           data: { ...state.data, lastname: input }
         })
       }
-      if (state.stage === 'signup/email') {
+      if (state.stage === "signup/email") {
         try {
           EmailSchema.parse({ email: input })
         } catch (error) {
-          await sendWhatsAppText({ message: `Please enter a valid email`, phoneNumber })
-          return { status: 'success' }
+          console.log({error})
+          return sendWhatsAppText({ message: "Please enter a valid email", phoneNumber })
         }
         const emailExist = await this.repo.findUserByEmail(input);
         if (emailExist) {
-          const message = 'The email already exist, Please enter another email';
-          await sendWhatsAppText({ message, phoneNumber })
-          return {
-            status: 'success',
-          };
+          const message = "The email already exist, Please enter another email";
+          return sendWhatsAppText({ message, phoneNumber })
         }
         await this.repo.createUser({
           email: input,
@@ -73,7 +65,7 @@ export class SignupService {
           phone: phoneNumber
         })
         return this.helper.sendTextAndSetCache({
-          message: 'May i know your date of birth? e.g ( 01/10/2000 )',
+          message: "May i know your date of birth? e.g ( 01/10/2000 )",
           phoneNumber,
           state,
           nextStage: "create-meal-plan/age",
@@ -83,7 +75,7 @@ export class SignupService {
       return this.helper.handleNoState({
         phoneNumber,
         profileName,
-        customHeader: 'Could not understand your request, lets start again',
+        customHeader: "Could not understand your request, lets start again",
         state
       });
     }

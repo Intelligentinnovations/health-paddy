@@ -1,4 +1,4 @@
-export { UserData, UserSchema } from './lib/schema/auth';
+export { UserData, UserSchema } from "./lib/schema/auth";
 export {
   FileManagerData,
   FileManagerSchema,
@@ -6,10 +6,9 @@ export {
   GenerateSignedUrlSchema,
   UploadFileData,
   UploadFileSchema,
-} from './lib/schema/filemanager';
-export * from './lib/types/database';
-export { MessageBody, ScheduleType } from './lib/types/event';
+} from "./lib/schema/filemanager";
+export * from "./lib/types/database";
+export { EventType,MessageBody, ScheduleType } from "./lib/types/event";
 export {
   NotificationData,
-  NotificationTemplateData,
-} from './lib/types/notification';
+  NotificationTemplateData} from "./lib/types/notification";

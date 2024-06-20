@@ -1,26 +1,30 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
-import { DateTime } from 'luxon';
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Inject, Injectable } from "@nestjs/common";
+import { Cache } from "cache-manager";
+import { DateTime } from "luxon";
 
 import {
   alternatePlanNumbers,
   delay,
   formatCurrency,
-  generateMealHeading, getDiffBetweenDates,
+  generateMealHeading,
+  getDiffBetweenDates,
   getPageSelectionOffset,
-  sendWhatsAppCTA,
   sendWhatsAppImageById,
   sendWhatsAppText
-} from '../helpers';
-import { SecretsService } from '../secrets/secrets.service';
-import { MealPlan, State, SubscriptionPlan } from '../types';
-import { getSelectionMessage, getSubscriptionPlanMessage, privacyMessage } from '../utils/textMessages';
-import { AppRepo } from './app.repo';
+} from "../helpers";
+import { SecretsService } from "../secrets/secrets.service";
+import {IUser, MealPlan, State, SubscriptionPlan} from "../types";
+import {
+  getSelectionMessage,
+  getSubscriptionPlanMessage,
+  privacyMessage
+} from "../utils/textMessages";
+import { AppRepo } from "./app.repo";
 
 
-DateTime.local().setLocale('en-NG');
+DateTime.local().setLocale("en-NG");
 
 @Injectable()
 export class GenericService {
@@ -43,59 +47,62 @@ export class GenericService {
   }) => {
     try {
       const ROUTE = {
-        CREATE_MEAL_PLAN_OR_LOOSE_WEIGHT: 1,
+        CREATE_MEAL_PLAN_OR_LOSE_WEIGHT: 1,
         VIEW_MEAL_PLAN_OR_MAINTAIN_WEIGHT: 2,
-        VIEW_RECIPE_OR_LOOSE_WEIGHT: 3,
-        CONTACT_SUPPORT: 4,
-        MANAGE_SUBSCRIPTION: 5
+        VIEW_RECIPE_OR_GAIN_WEIGHT: 3,
+        FOOD_BANK: 4,
+        CONTACT_SUPPORT: 5,
+        MANAGE_SUBSCRIPTION: 6,
+        SHARE_HEALTH_PADDY: 7
       }
 
       const selectionOffset = getPageSelectionOffset(state);
       const inputWithOffset = Number(input) + selectionOffset;
 
       switch (inputWithOffset) {
-        case ROUTE.CREATE_MEAL_PLAN_OR_LOOSE_WEIGHT:
+        case ROUTE.CREATE_MEAL_PLAN_OR_LOSE_WEIGHT:
           if (state.user) {
-            if (state.user?.subscriptionStatus === 'active') {
+            if (state.user?.subscriptionStatus === "active") {
               return this.sendTextAndSetCache({
-                message: 'You have already created a meal plan',
+                message: "You have already created a meal plan",
                 phoneNumber,
-                nextStage: 'landing',
+                nextStage: "landing",
                 state
               });
             } else {
-              if (state.user?.subscriptionStatus === 'expired') {
+              if (state.user?.subscriptionStatus === "expired") {
                 return this.handlePaymentNotification({
                   phoneNumber,
                   state
                 })
               }
+              const { nextStage: nestStageToResumeFrom, message} =  this.getRegistrationStage(state.user)  // determined dynamically
               await this.sendTextAndSetCache({
-                message: `Hi, ${state.user.firstname} I'd love to chat with you and ask a few questions to help create your personalized meal plan. 😊`,
+                message: `Hi, ${state.user.firstname} I'd love to chat with you and ask a few questions to help create your meal plan. 😊`,
                 phoneNumber,
-                nextStage: 'create-meal-plan/age',
+                nextStage: nestStageToResumeFrom,
                 state
               })
               await delay()
-              await sendWhatsAppText({ message: 'Please tell me your date of birth (e.g 01/11/2000)', phoneNumber })
+              await sendWhatsAppText({ message, phoneNumber })
               break;
             }
           } else {
-            return this.handlePrivacy({ phoneNumber, state, goal: 'Loose Weight' });
+            return this.handlePrivacy({ phoneNumber, state, goal: "Lose Weight" });
           }
 
         case ROUTE.VIEW_MEAL_PLAN_OR_MAINTAIN_WEIGHT:
           if (state.user) {
             if (!state.user?.activityLevel) {
               return this.sendTextAndSetCache({
-                message: 'Please create a meal plan to proceed',
+                message: "Please create a meal plan to proceed",
                 phoneNumber,
-                nextStage: 'landing',
+                nextStage: "landing",
                 state
               });
             }
 
-            if (state.user?.subscriptionStatus === 'expired' || !state.user?.subscriptionStatus) {
+            if (state.user?.subscriptionStatus === "expired" || !state.user?.subscriptionStatus) {
               return this.handlePaymentNotification({
                 phoneNumber,
                 state
@@ -103,38 +110,45 @@ export class GenericService {
             }
             return this.generateAndSendMealPlan({
               phoneNumber,
-              state
+              state,
             })
           } else {
-            return this.handlePrivacy({ phoneNumber, state, goal: 'Maintain Weight' });
+            return this.handlePrivacy({ phoneNumber, state, goal: "Maintain Weight" });
           }
-        case ROUTE.VIEW_RECIPE_OR_LOOSE_WEIGHT:
+        case ROUTE.VIEW_RECIPE_OR_GAIN_WEIGHT:
           if (state.user) {
             if (!state.user?.activityLevel) {
               return this.sendTextAndSetCache({
-                message: 'Please create a meal plan to proceed',
+                message: "Please create a meal plan to proceed",
                 phoneNumber,
-                nextStage: 'landing',
+                nextStage: "landing",
                 state
               });
             }
             return this.sendTextAndSetCache({
-              message: `Kindly choose a specific day to view the meal recipe! 🍽️✨ \n1. Monday\n2. Tuesday\n3. Wednesday\n4. Thursday\n5. Friday\n6. Saturday\n7. Sunday`,
+              message: "Kindly choose a specific day to view the meal recipe! 🍽️✨ \n\n1. Monday\n2. Tuesday\n3. Wednesday\n4. Thursday\n5. Friday\n6. Saturday\n7. Sunday",
               phoneNumber,
-              nextStage: 'view-recipe/day',
+              nextStage: "view-recipe/day",
               state
             })
           } else {
-            return this.handlePrivacy({ phoneNumber, state, goal: 'Gain Weight' });
+            return this.handlePrivacy({ phoneNumber, state, goal: "Gain Weight" });
           }
 
+        case ROUTE.FOOD_BANK:
+          return this.sendTextAndSetCache({
+            message: "Please enter a food name (e.g rice)",
+            phoneNumber,
+            state,
+            nextStage: "food-bank"
+          })
 
         case ROUTE.CONTACT_SUPPORT:
           if (state.user) {
             return this.sendTextAndSetCache({
-              message: `I apologize for any inconvenience you may have experienced. To log a complaint, please contact our support team at support@healthpaddy.com or call our helpline +xxxx . They will be able to assist you further and address your concerns.`,
+              message: `I apologize for any inconvenience you may have experienced. To log a complaint, please contact our support team at ${this.secrets.get("SUPPORT_EMAIL")} or call our helpline ${this.secrets.get("HELP_LINE")} . We will be able to assist you further and address your concerns.`,
               phoneNumber,
-              nextStage: 'landing',
+              nextStage: "landing",
               state
             })
 
@@ -142,27 +156,27 @@ export class GenericService {
             return this.handleNoState({
               phoneNumber,
               profileName,
-              customHeader: 'I could not understand your request, lets start again',
+              customHeader: "I could not understand your request, lets start again",
               state
             })
           }
 
         case ROUTE.MANAGE_SUBSCRIPTION:
           if (state.user) {
-            if (state.user?.subscriptionStatus === 'active') {
+            if (state.user?.subscriptionStatus === "active") {
               return this.sendTextAndSetCache({
                 message: `Manage your subscription\n
 1. View Subscription
 2. Cancel Subscription`,
                 phoneNumber,
                 state,
-                nextStage: 'subscription-management'
+                nextStage: "subscription-management"
               })
             }
             await this.handleNoState({
               phoneNumber,
               profileName,
-              customHeader: `😔😔 I'm sorry, but you don't currently have an active subscription. To enjoy all the benefits, please consider subscribing. How else can I be of service?`,
+              customHeader: "😔😔 I'm sorry, but you don't currently have an active subscription. To enjoy all the benefits, please consider subscribing. How else can I be of service?",
               state
             })
 
@@ -170,23 +184,22 @@ export class GenericService {
             return this.handleNoState({
               phoneNumber,
               profileName,
-              customHeader: 'I could not understand your request, lets start again',
+              customHeader: "I could not understand your request, lets start again",
               state
             })
           }
+          break
+        case ROUTE.SHARE_HEALTH_PADDY:
+          await sendWhatsAppText({ message: this.secrets.get("CHAT_LINK"), phoneNumber })
           break
         default:
           return this.handleNoState({
             phoneNumber,
             profileName,
-            customHeader: 'I could not understand your request, lets start again',
+            customHeader: "I could not understand your request, lets start again",
             state
           })
       }
-
-      return {
-        status: 'success',
-      };
     } catch (err) {
       console.log(err);
 
@@ -218,10 +231,13 @@ export class GenericService {
       })
       this.cacheManager.del(phoneNumber);
       return {
-        status: 'success',
+        success: true,
       };
     } catch (error) {
       console.log(error);
+      return {
+        success: false
+      }
     }
   };
 
@@ -231,7 +247,7 @@ export class GenericService {
       message,
       phoneNumber,
       state,
-      nextStage: 'privacy',
+      nextStage: "privacy",
       data: { goal }
     })
   };
@@ -248,21 +264,27 @@ export class GenericService {
     state: State
   }) => {
     try {
-      if (input === '1') {
-        const message = `Great! 🚀 Thanks for saying 'yes' to our privacy notice. Your data is in good hands! Please follow the prompt below to get signed up`;
+      if (input === "1") {
+        const message = "Great! 🚀 Thanks for saying 'yes' to our privacy notice. Your data is in good hands! Please follow the prompt below to get signed up";
         await sendWhatsAppText({ message, phoneNumber })
         await delay()
-        await this.sendTextAndSetCache({ message: 'What is your firstname?', phoneNumber, state, nextStage: 'signup/firstname', data: { ...state.data } });
+        await this.sendTextAndSetCache({
+          message: "What is your first name?",
+          phoneNumber,
+          state,
+          nextStage: "signup/firstname",
+          data: { ...state.data }
+        });
       } else {
         return this.handleNoState({
           phoneNumber,
           profileName,
-          customHeader: 'We respect your decision regarding our privacy policy. If you have any concerns or questions about specific aspects of the policy, please feel free to reach out to our support team',
+          customHeader: "We respect your decision regarding our privacy policy. If you have any concerns or questions about specific aspects of the policy, please feel free to reach out to our support team",
           state
         });
       }
       return {
-        status: 'success',
+        status: "success",
       };
     }
     catch (err) {
@@ -275,31 +297,31 @@ export class GenericService {
   }: {
     phoneNumber: string; state: State
   }) => {
-    const nextStage = 'subscription-acceptance';
-    const firstTimeSubscriber = state?.user?.subscriptionStatus === null;
-    const subscriptionPlans = await this.repo.fetchSubscriptionPlans();
-    if (firstTimeSubscriber) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const subscriptionMessage = getSubscriptionPlanMessage(subscriptionPlans)
+    try {
+      const nextStage = "subscription-acceptance";
+      const firstTimeSubscriber = state?.user?.subscriptionStatus === null;
+      const subscriptionPlans = await this.repo.fetchSubscriptionPlans();
+      if (firstTimeSubscriber) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const subscriptionMessage = getSubscriptionPlanMessage(subscriptionPlans)
         await this.sendWhatsAppImageByIdAndSetCache({
           phoneNumber,
-          imageObjectId: '2295755414113147',
+          imageObjectId: this.secrets.get("SUBSCRIPTION_IMAGE_ID"),
+          state,
+          nextStage
+        })
+        await delay();
+        return this.sendTextAndSetCache({
+          message: subscriptionMessage,
+          phoneNumber,
           state,
           data: { subscriptionPlans, isFirstTimeSubscriber: true },
           nextStage
         })
-      await delay(500);
-      return this.sendTextAndSetCache({
-        message: subscriptionMessage,
-        phoneNumber,
-        state,
-        data: { subscriptionPlans, isFirstTimeSubscriber: true },
-        nextStage
-      })
-    } else {
-      const lastSubscription = await this.repo.fetchUserLastExpiredSubscription(state.user!.id);
-      const message = `Subscription alert\n
+      } else {
+        const lastSubscription = await this.repo.fetchUserLastExpiredSubscription(state.user!.id);
+        const message = `Subscription alert\n
 Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.\n
 *Plan: ${lastSubscription!.planName}*
 *Amount Due: ${formatCurrency(Number(lastSubscription!.amount))}*\n
@@ -307,63 +329,76 @@ Your subscription has expired 😔. To continue using our service and access all
 2. Pay with new card
 3. Change plan
 4. Decline`
-      return this.sendTextAndSetCache({
-        message,
-        phoneNumber,
-        state,
-        data: {
-          isFirstTimeSubscriber: false,
-          subscriptionPlans,
-          subscription: subscriptionPlans.find((plan => plan.id === lastSubscription!.subscriptionPlanId))
-        },
-        nextStage
-      })
-    }
-  };
+        return this.sendTextAndSetCache({
+          message,
+          phoneNumber,
+          state,
+          data: {
+            isFirstTimeSubscriber: false,
+            subscriptionPlans,
+            subscription: subscriptionPlans.find(
+              (plan => plan.id === lastSubscription!.subscriptionPlanId))
+          },
+          nextStage
+        })
+      }
+    } catch (error) {
+      console.log({ error });
 
-  handleUnknownRequest = async ({ phoneNumber, message }: { phoneNumber: string; message: string }) => {
+    }
+  }
+
+  handleUnknownRequest = async ({ phoneNumber, message }
+    : { phoneNumber: string; message: string }) => {
     await sendWhatsAppText({ phoneNumber, message });
     return {
-      status: 'success',
+      status: "success",
     };
   };
 
-  sendTextAndSetCache = async ({ message, phoneNumber, state, nextStage, data = {} }
-    : { message: string, phoneNumber: string, state: State, nextStage: string, data?: unknown }) => {
+  sendTextAndSetCache = async ({
+    message,
+    phoneNumber,
+    state,
+    nextStage,
+    data = {}
+  }
+    : {
+      message: string,
+      phoneNumber: string,
+      state: State,
+      nextStage: string,
+      data?: unknown
+    }) => {
     try {
-      await this.cacheManager.set(phoneNumber, { ...state, stage: nextStage, data });
-      await sendWhatsAppText({ message, phoneNumber });
-      return {
-        status: 'success',
-      };
+      await this.cacheManager.set(phoneNumber, {
+        user: state.user,
+        stage: nextStage,
+        data
+      });
+      return sendWhatsAppText({ message, phoneNumber });
     } catch (error) {
       console.log(error);
     }
   };
 
-
-  sendCallToActionAndSetCache = async ({ message, phoneNumber, state, nextStage, data = {}, link, callToActionText = 'Subscribe' }
-    : { message: string, phoneNumber: string, state: State, nextStage: string, data?: unknown; link: string, callToActionText?: string }) => {
+  sendWhatsAppImageByIdAndSetCache = async ({
+    phoneNumber,
+    state,
+    nextStage,
+    data = {},
+    imageObjectId
+  }
+    : {
+      phoneNumber: string,
+      state: State,
+      nextStage: string,
+      data?: unknown;
+      imageObjectId: string
+    }) => {
     try {
       await this.cacheManager.set(phoneNumber, { ...state, stage: nextStage, data });
-      await sendWhatsAppCTA({ message, phoneNumber, link, callToActionText });
-      return {
-        status: 'success',
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  sendWhatsAppImageByIdAndSetCache = async ({ phoneNumber, state, nextStage, data = {}, imageObjectId }
-    : { phoneNumber: string, state: State, nextStage: string, data?: unknown; imageObjectId: string }) => {
-    try {
-      await this.cacheManager.set(phoneNumber, { ...state, stage: nextStage, data });
-      console.log("sending message image");
-      await sendWhatsAppImageById({ phoneNumber, imageObjectId });
-      return {
-        status: 'success',
-      };
+      return sendWhatsAppImageById({ phoneNumber, imageObjectId });
     } catch (error) {
       console.log(error);
     }
@@ -372,9 +407,9 @@ Your subscription has expired 😔. To continue using our service and access all
 
   async getClosestMealPlan(userCalorie: number) {
     const appWeek = getDiffBetweenDates({
-      startDate: new Date(this.secrets.get('WHATSAPP_BOT_START_DATE')),
+      startDate: new Date(this.secrets.get("WHATSAPP_BOT_START_DATE")),
       endDate: new Date(),
-      timePeriod: 'weeks'
+      timePeriod: "weeks"
     })
 
     const planNo = alternatePlanNumbers(appWeek)
@@ -392,7 +427,8 @@ Your subscription has expired 😔. To continue using our service and access all
     return closestMealPlan
   }
 
-  async getMealPlan(state: State) {
+  async getMealPlan({state, numberOfMealPlans }: {state: State; numberOfMealPlans: number}) {
+    try {
     const cacheKey = `${state!.user!.phone}-meal-plan`;
     const mealPlan = await this.cacheManager.get<MealPlan[]>(cacheKey);
     if (mealPlan) {
@@ -403,29 +439,37 @@ Your subscription has expired 😔. To continue using our service and access all
     if (currentMealPlan) {
       fetchedMealPlan = JSON.parse(currentMealPlan.plan)
     } else {
-      const closestCalorie = await this.getClosestMealPlan(state!.user!.requiredCalorie!);
+      const user= await  this.repo.findUserByEmail(state.user!.email as string)
+      const closestCalorie = await this.getClosestMealPlan(user!.requiredCalorie as number);
       const subscription = await this.repo.fetchSubscription(state!.user!.id as unknown as string);
-      const subscriptionEndDate = DateTime.fromISO(subscription!.endDate!.toISOString().split('T')[0]!);
-      const currentDate = DateTime.fromISO(new Date().toISOString().split('T')[0]!);
+      let numberOfMealPlanToFetch = numberOfMealPlans;
 
-      const remainingSubscriptionsDays = subscriptionEndDate.diff(currentDate, 'days').toObject().days
-      const numberOfMealPlanToFetch = remainingSubscriptionsDays! > 8 ? 8 : remainingSubscriptionsDays;
+      if(state.user?.subscriptionStatus === "active") {
+        const subscriptionEndDate = DateTime.fromISO(subscription!.endDate!.toISOString().split("T")[0]!);
+        const currentDate = DateTime.fromISO(new Date().toISOString().split("T")[0]!);
+        const remainingSubscriptionsDays = subscriptionEndDate.diff(currentDate, "days").toObject().days as number
+        numberOfMealPlanToFetch = remainingSubscriptionsDays! > numberOfMealPlans ? numberOfMealPlans : remainingSubscriptionsDays;
+      }
       fetchedMealPlan = (
         await this.repo.fetchMealPlanByCalorieNeedId({
           calorieNeedId: closestCalorie!.id,
           limit: numberOfMealPlanToFetch!,
         })
       ).rows;
-      const today = new Date();
-      await this.repo.saveUserMealPlan({
+      const today = DateTime.now();
+     await this.repo.saveUserMealPlan({
         userId: state.user!.id,
         plan: JSON.stringify(fetchedMealPlan),
-        startDate: today,
-        endDate: today
+        startDate: today.toJSDate(),
+        endDate: today.plus({ days: numberOfMealPlanToFetch }).toJSDate()
       })
       await this.cacheManager.set(cacheKey, fetchedMealPlan);
     }
     return fetchedMealPlan
+    }
+    catch (error) {
+      console.log(error)
+    }
   }
 
 
@@ -436,6 +480,7 @@ Your subscription has expired 😔. To continue using our service and access all
     state: State;
     phoneNumber: string;
   }) {
+    try {
     const formatMessage = (plan: MealPlan & { snack?: string }) => {
       const heading = generateMealHeading(plan.day)
       let message = `*${heading}*\n\n`;
@@ -443,19 +488,39 @@ Your subscription has expired 😔. To continue using our service and access all
       message += `*Snack*: ${plan.snack}\n\n`;
       message += `*Lunch*: ${plan.lunch}\n\n`;
       message += `*Dinner*: ${plan.dinner}\n\n`;
-      message += `\nTotal Calories: ${plan.breakfastCalories + plan.snackCalories + plan.lunchCalories + plan.dinnerCalories}\n\n`;
+      message += `Total Calories: ${plan.breakfastCalories + plan.snackCalories + plan.lunchCalories + plan.dinnerCalories}\n\n`;
       return message
     };
 
-    const mealPlan = await this.getMealPlan(state)
-    let mealPlanSchedule = '';
-    for (const plan of mealPlan) {
+    const numberOfMealPlans = state!.user!.hasUsedFreeMealPlan ? 7 : 1;
+    const mealPlan = await this.getMealPlan({state, numberOfMealPlans})
+    let mealPlanSchedule = "";
+    for (const plan of mealPlan!) {
       mealPlanSchedule += formatMessage(plan);
     }
-    await this.sendTextAndSetCache({ message: mealPlanSchedule, phoneNumber, nextStage: 'view-plan', state });
+    if(!state.user?.hasUsedFreeMealPlan) {
+    await this.repo.updateUser({
+      payload: {
+        hasUsedFreeMealPlan: true
+      },
+      userId: state.user?.id as string
+    })
+    }
+    await this.sendTextAndSetCache({
+      message: mealPlanSchedule,
+      phoneNumber,
+      nextStage: "view-plan",
+      state
+    });
+
+    }
+    catch (error) {
+      console.log(error)
+    }
   }
 
-  handleChangePlan({ phoneNumber, state, subscriptionPlans }: { phoneNumber: string; state: State, subscriptionPlans: SubscriptionPlan[] }) {
+  async handleChangePlan({ phoneNumber, state, subscriptionPlans }: { phoneNumber: string; state: State, subscriptionPlans: SubscriptionPlan[] }) {
+    try {
     return this.sendTextAndSetCache({
       message: getSubscriptionPlanMessage(subscriptionPlans),
       phoneNumber,
@@ -463,6 +528,42 @@ Your subscription has expired 😔. To continue using our service and access all
       data: { subscriptionPlans, isFirstTimeSubscriber: false },
       nextStage: "subscription-change-expired-plan"
     })
+
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
+  getRegistrationStage (user: IUser) {
+    const basePath = "create-meal-plan"
+    const {dateOfBirth, sex, height, weight} = user;
+    if (!dateOfBirth) return {
+      message: "May i know your date of birth? e.g ( 01/10/2000 )",
+      nextStage: `${basePath}/age`,
+    }
+    if (!sex) return  {
+      message: `Thanks! could you share your gender with me?\n
+1. Male
+2. Female`,
+      nextStage: `${basePath}/gender`,
+    }
+    if (!height) return  {
+      message: `Perfect!, May I ask for your height in feet, for example, in the format \"5f11\" or 5'11?`,
+      nextStage: `${basePath}/height`,
+    }
+    if (!weight) return  {
+      message: `"Excellent! Would you be willing to tell me your weight in KG? (e.g 70)`,
+      nextStage: `${basePath}/weight`,
+    }
+    return  {
+      message: `What health goal do you want to achieve ?\n
+1. Maintain Weight
+2. Lose Weight
+3. Gain Weight`,
+      nextStage: `${basePath}/goal`,
+    }
+
   }
 
 }

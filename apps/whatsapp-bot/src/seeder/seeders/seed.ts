@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { Kysely, PostgresDialect } = require('kysely');
-const { Pool } = require('pg');
-const fs = require('fs');
-const path = require('path');
+const { Kysely, PostgresDialect } = require("kysely");
+const { Pool } = require("pg");
+const fs = require("fs");
+const path = require("path");
 
 
 async function executeAllSeedFiles(db: any): Promise<void> {
@@ -10,7 +10,7 @@ async function executeAllSeedFiles(db: any): Promise<void> {
   const files = fs.readdirSync(folderPath);
 
   for await (const file of files) {
-    if (file !== 'seed.ts') {
+    if (file !== "seed.ts") {
       const filePath = path.join(folderPath, file);
       try {
         const module = require(filePath);
@@ -26,11 +26,11 @@ try {
 
   const dialect = new PostgresDialect({
     pool: new Pool({
-      database: 'health_paddy',
+      database: "health_paddy",
       port: 5432,
-      password: 'postgres',
-      host: 'localhost',
-      user: 'postgres'
+      password: "postgres",
+      host: "localhost",
+      user: "postgres"
     })
   })
 

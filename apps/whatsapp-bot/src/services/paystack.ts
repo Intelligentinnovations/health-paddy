@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import axios from 'axios';
-import { randomUUID } from 'crypto';
+import { Injectable } from "@nestjs/common";
+import axios from "axios";
+import { randomUUID } from "crypto";
 
-import { SecretsService } from '../secrets/secrets.service';
+import { SecretsService } from "../secrets/secrets.service";
 
 @Injectable()
 export class PaymentService {
@@ -11,10 +11,10 @@ export class PaymentService {
   ) { }
 
   private readonly instance = axios.create({
-    baseURL: 'https://api.paystack.co/transaction/',
+    baseURL: "https://api.paystack.co/transaction/",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.secretsService.get('PAYSTACK_SECRET_KEY')}`,
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.secretsService.get("PAYSTACK_SECRET_KEY")}`,
     },
   });
 
@@ -22,14 +22,14 @@ export class PaymentService {
     email,
     amountInNaira,
     metaData,
-    callbackUrl = this.secretsService.get('PAYSTACK_WEBHOOK'),
+    callbackUrl = this.secretsService.get("PAYSTACK_WEBHOOK"),
   }: {
     email: string;
     amountInNaira: number;
     metaData: object;
     callbackUrl?: string;
   }) {
-    const url = 'initialize';
+    const url = "initialize";
     return this.instance.post(url, {
       reference: randomUUID(),
       email,
@@ -51,7 +51,7 @@ export class PaymentService {
   }
 
   async chargePaystackCard({ amount, cardEmail, authorizationCode }: { amount: number; cardEmail: string; authorizationCode: string }) {
-    const url = 'charge_authorization';
+    const url = "charge_authorization";
     return this.instance.post(url, {
       amount: amount * 100,
       email: cardEmail,

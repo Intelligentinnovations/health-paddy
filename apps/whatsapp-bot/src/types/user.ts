@@ -22,6 +22,8 @@ export type IUser = {
     activityLevel: string | null;
     healthCondition: string | null;
     requiredCalorie: number | null;
+    hasUsedFreeMealPlan: boolean;
     createdAt: Date
     updatedAt: Date
 }
+

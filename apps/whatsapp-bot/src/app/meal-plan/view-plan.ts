@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {MESSAGE_MANAGER, Messaging} from '@backend-template/messaging';
-import {CACHE_MANAGER} from '@nestjs/cache-manager';
-import {Inject, Injectable} from '@nestjs/common';
-import {Cache} from 'cache-manager';
+import { Injectable} from "@nestjs/common";
 
-import {State} from '../../types';
-import {GenericService} from '../general';
+import {delay} from "../../helpers";
+import {SecretsService} from "../../secrets/secrets.service";
+import {State} from "../../types";
+import {getSubscriptionPlanMessage} from "../../utils/textMessages";
+import {AppRepo} from "../app.repo";
+import {GenericService} from "../general";
 
 
 @Injectable()
 export class ViewMealPlanService {
   constructor(
     private helper: GenericService,
-    @Inject(MESSAGE_MANAGER) private messaging: Messaging,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    private secrets: SecretsService,
+    private repo: AppRepo,
   ) { }
 
   handleViewMealPlan = async ({
@@ -23,14 +24,46 @@ export class ViewMealPlanService {
     phoneNumber: string;
     state: State
   }) => {
-    try {      
-      if (state.user?.subscriptionStatus === 'expired' || state.user?.subscriptionStatus === null) {        
+    const {user} = state
+    try {
+      if(user?.hasUsedFreeMealPlan){
+        if (user?.subscriptionStatus === "expired" || user?.subscriptionStatus === null) {
         return this.helper.handlePaymentNotification({
           phoneNumber,
           state
         })
+        }
       }
-      return this.helper.generateAndSendMealPlan({ state, phoneNumber })
+      else {
+        await this.helper.sendTextAndSetCache({
+          message: "Awesome choice! We hope you are as excited as we are to create your plan! Just as a teaser, here is what your Nigerian-based meal plan could look like",
+          phoneNumber,
+          state,
+          nextStage: ""
+        })
+        await delay()
+      await this.helper.generateAndSendMealPlan({state, phoneNumber})
+        const nextStage = "subscription-acceptance";
+        await delay()
+        await this.helper.sendWhatsAppImageByIdAndSetCache({
+          phoneNumber,
+          imageObjectId: this.secrets.get("SUBSCRIPTION_IMAGE_ID"),
+          state,
+          nextStage
+        })
+        await delay()
+        const subscriptionPlans = await this.repo.fetchSubscriptionPlans();
+        // @ts-ignore
+        const subscriptionMessage = getSubscriptionPlanMessage(subscriptionPlans, "To get access to the full meal plan for 30 days")
+        return this.helper.sendTextAndSetCache({
+          message: subscriptionMessage,
+          phoneNumber,
+          state,
+          nextStage,
+          data: { subscriptionPlans, isFirstTimeSubscriber: true },
+        })
+
+      }
     } catch (err) {
       console.log(err);
 

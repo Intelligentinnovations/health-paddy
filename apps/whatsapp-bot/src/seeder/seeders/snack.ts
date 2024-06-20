@@ -6,13 +6,13 @@ async function seedSnacks(db: any) {
   try {
     await db.transaction().execute(async (trx: any) => {
       await trx
-        .insertInto('Snack')
+        .insertInto("Snack")
         .values(snacks)
         .execute();
     })
 
   } catch (error) {
-    console.log(error, 'Could not seed data');
+    console.log(error, "Could not seed data");
 
   }
 }

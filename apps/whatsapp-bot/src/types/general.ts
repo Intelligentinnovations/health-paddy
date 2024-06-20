@@ -36,8 +36,8 @@ export const ActivityLevel = {
 export interface CalorieCalculator {
     dateOfBirth: Date,
     weight: number
-    gender: 'male' | 'female',
-    activityLevel: 'sedentary' | 'mild' | 'moderate' | 'heavy' | 'extreme',
+    gender: "male" | "female",
+    activityLevel: "sedentary" | "mild" | "moderate" | "heavy" | "extreme",
     feet: number,
     inches: number,
     goal: string,
@@ -46,9 +46,9 @@ export interface CalorieCalculator {
 }
 
 export const HealthGoal: { [key: string]: number } = {
-    'Maintain Weight': 1,
-    'Loose Weight': 2,
-    'Gain Weight': 3
+    "Maintain Weight": 1,
+    "Lose Weight": 2,
+    "Gain Weight": 3
 }
 
 

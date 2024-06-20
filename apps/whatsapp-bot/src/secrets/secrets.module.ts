@@ -1,8 +1,8 @@
-import { loadSecrets } from '@backend-template/secrets';
-import { Global, Module } from '@nestjs/common';
+import { loadSecrets } from "@backend-template/secrets";
+import { Global, Module } from "@nestjs/common";
 
-import { schema } from './secrets.schema';
-import { SecretsService } from './secrets.service';
+import { schema } from "./secrets.schema";
+import { SecretsService } from "./secrets.service";
 
 @Global()
 @Module({

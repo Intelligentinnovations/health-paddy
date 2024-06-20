@@ -7,8 +7,9 @@ export const formatDate = (date: Date) => {
 }
 
 export const getDiffBetweenDates = ({ startDate, endDate, timePeriod }: { startDate: Date, endDate: Date, timePeriod: 'years' |'weeks' }) => {
-  const startDateTime = DateTime.fromJSDate(startDate);
+  const startDateTime = DateTime.fromJSDate(new Date(startDate));
   const endDateTime = DateTime.fromJSDate(endDate);
+  console.log({startDateTime, endDateTime})
   const diff = endDateTime.diff(startDateTime, timePeriod)[timePeriod]
   return Math.round(diff);
 }
@@ -18,5 +19,5 @@ export const parseDateOfBirth =  (dobString: string) => {
   if (!dobDateTime.isValid) {
     return 'Invalid date format';
   }
-  return dobDateTime.toFormat('dd/MM/yyyy')
+  return dobDateTime.toFormat('yyyy/MM/dd')
 };

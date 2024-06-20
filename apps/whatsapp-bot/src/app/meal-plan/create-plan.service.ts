@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from "@nestjs/common";
-import { DateTime } from "luxon";
 
 import {
+  calculateBMI,
   calculateRequireCalorie,
   delay,
   formatCurrency,
@@ -12,7 +12,7 @@ import {
 } from "../../helpers";
 import { SecretsService } from "../../secrets/secrets.service";
 import { PaymentService } from "../../services/paystack";
-import { HealthGoal, State } from "../../types";
+import {HealthGoal, IUser, State, SubscriptionPlan} from "../../types";
 import {
   extremeGainWeightText,
   extremeWeightLossText,
@@ -26,6 +26,7 @@ import { AppRepo } from "../app.repo";
 import { GenericService } from "../general";
 import { ViewMealPlanService } from "./view-plan";
 
+
 @Injectable()
 export class CreateMealPlanService {
   constructor(
@@ -33,7 +34,7 @@ export class CreateMealPlanService {
     private helper: GenericService,
     private viewMealPlan: ViewMealPlanService,
     private paymentService: PaymentService,
-    private secrets: SecretsService,
+    private secrets: SecretsService
   ) {
   }
 
@@ -55,15 +56,14 @@ export class CreateMealPlanService {
 1. Male
 2. Female`;
         const parsedDateOfBirth = parseDateOfBirth(input as string);
+        console.log({parsedDateOfBirth})
         if (parsedDateOfBirth === "Invalid date format") {
-          await sendWhatsAppText({
+          return sendWhatsAppText({
             message: "Please enter a valid date of birth in this format (dd/mm/yyyy)",
             phoneNumber,
           });
-          return {
-            status: "success",
-          };
         }
+        await this.repo.updateUser({payload: {dateOfBirth: parsedDateOfBirth}, userId: state.user?.id as string})
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
@@ -74,16 +74,13 @@ export class CreateMealPlanService {
       }
       if (stage === `${basePath}/gender`) {
         const gender = input == 1 ? "male" : input == 2 ? "female" : "";
-        if (!gender) {
-          await sendWhatsAppText({
+        if (!gender) return  sendWhatsAppText({
             message: "Please choose between 1 and 2",
             phoneNumber,
           });
-          return {
-            status: "success",
-          };
-        }
+
         const message = "Perfect!, May I ask for your height in feet, for example, in the format \"5f11\" or 5'11?";
+        await this.repo.updateUser({payload: { sex: gender }, userId: state.user?.id as string})
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
@@ -94,15 +91,11 @@ export class CreateMealPlanService {
       }
       if (stage === `${basePath}/height`) {
         const validatedFeetAndInches = validFeetAndInches(input as string);
-        if (!validatedFeetAndInches) {
-          await sendWhatsAppText({
+        if (!validatedFeetAndInches) return  sendWhatsAppText({
             message: "Please enter a valid height in feet, for example, in the format \"5f11\" or 5'11?",
             phoneNumber,
           });
-          return {
-            status: "success",
-          };
-        }
+        await this.repo.updateUser({payload: {height: input}, userId: state.user?.id as string})
         const message = "Excellent! Would you be willing to tell me your weight in KG? (e.g 70)";
         return this.helper.sendTextAndSetCache({
           message,
@@ -114,16 +107,13 @@ export class CreateMealPlanService {
       }
       if (stage === `${basePath}/weight`) {
         const parsedWeight = Number(input);
-        if (isNaN(parsedWeight)) {
-          await sendWhatsAppText({
+        if (isNaN(parsedWeight))  return sendWhatsAppText({
             message: "Please enter a valid weight in KG (e.g 70)",
             phoneNumber,
           });
-          return {
-            status: "success",
-          };
-        }
+
         const selectedGoal = state.data.goal;
+        await this.repo.updateUser({payload: {weight: parsedWeight }, userId: state.user?.id as string})
         if (selectedGoal) {
           if (selectedGoal == "Maintain Weight") {
             return this.helper.sendTextAndSetCache({
@@ -131,11 +121,11 @@ export class CreateMealPlanService {
               phoneNumber,
               state,
               nextStage: `${basePath}/activity-level`,
-              data: { ...state.data, weight: input },
+              data: { ...state.data, weight: parsedWeight },
             });
           }
-          if (selectedGoal == "Loose Weight" || selectedGoal == "Gain Weight") {
-            const initialMessage = selectedGoal == "Loose Weight"
+          if (selectedGoal == "Lose Weight" || selectedGoal == "Gain Weight") {
+            const initialMessage = selectedGoal == "Lose Weight"
               ? "You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you "
               : "Enjoy delicious and nourishing meals that promote muscle growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫"
             await sendWhatsAppText({
@@ -150,7 +140,7 @@ export class CreateMealPlanService {
               state,
               data: {
                 ...state.data,
-                weight: input
+                weight: parsedWeight
               },
             });
           }
@@ -158,14 +148,14 @@ export class CreateMealPlanService {
         else {
           const message = `What health goal do you want to achieve ?\n
 1. Maintain Weight
-2. Loose Weight
+2. Lose Weight
 3. Gain Weight`;
           return this.helper.sendTextAndSetCache({
             message,
             phoneNumber,
             nextStage: `${basePath}/goal`,
             state,
-            data: { ...state.data, weight: input },
+            data: { ...state.data, weight: parsedWeight },
           });
         }
       }
@@ -181,10 +171,10 @@ export class CreateMealPlanService {
           });
         }
         if (
-          input == HealthGoal["Loose Weight"] ||
+          input == HealthGoal["Lose Weight"] ||
           input == HealthGoal["Gain Weight"]
         ) {
-          const initialMessage = input == HealthGoal["Loose Weight"]
+          const initialMessage = input == HealthGoal["Lose Weight"]
             ? "You've made an empowering choice by selecting the Lose Weight option! 🌱🔥 Our meal plans are here to support you on your weight loss journey, guiding you towards a healthier, more vibrant you "
             : "Enjoy delicious and nourishing meals that promote muscle growth and help you gain healthy weight. Together, we'll lay a solid foundation for your progress!💫"
           await sendWhatsAppText({
@@ -211,7 +201,7 @@ export class CreateMealPlanService {
           phoneNumber,
           nextStage: `${basePath}/goal`,
           state,
-          message: "Please select your desired health goal",
+          message: "Please select between 1 to 3",
           data: state.data,
         });
       }
@@ -227,7 +217,7 @@ export class CreateMealPlanService {
             status: "success",
           };
         }
-        if (state.data.goal === "Loose Weight") {
+        if (state.data.goal === "Lose Weight") {
           if (input >= state.data.weight) {
             return sendWhatsAppText({
               phoneNumber,
@@ -265,9 +255,9 @@ export class CreateMealPlanService {
           };
         }
         const { targetWeight, weight: currentWeight } = state.data;
-        if (state.data.goal == "Loose Weight") {
-          const weightToLoose = currentWeight - targetWeight;
-          const weightLossPerMonth = weightToLoose / Number(input);
+        if (state.data.goal == "Lose Weight") {
+          const weightToLose = currentWeight - targetWeight;
+          const weightLossPerMonth = weightToLose / Number(input);
           if (weightLossPerMonth > 8)
             return this.helper.sendTextAndSetCache({
               phoneNumber,
@@ -361,116 +351,172 @@ export class CreateMealPlanService {
                   ? "high cholesterol"
                   : input == 5
                     ? "polycystic Ovary Syndrome (PCOS)"
-                    : "";
-        if (healthCondition === "none") {
-          const {
-            data: {
-              dateOfBirth,
-              activityLevel,
-              gender,
-              height,
-              weight,
-              goal,
-              targetWeight,
-              durationInMonth,
-            },
-          } = state;
-          const value = validFeetAndInches(height);
-          const requiredCalorie = calculateRequireCalorie({
-            dateOfBirth: new Date(dateOfBirth),
-            inches: value!.inches,
-            feet: value!.feet,
-            weight,
-            gender,
+                    : input == 6
+                      ? "pregnant" :
+                      input == 7
+                        ? "breastfeeding"
+                        : "";
+
+        const {
+          data: {
+            dateOfBirth,
             activityLevel,
+            gender,
+            height,
+            weight,
             goal,
             targetWeight,
             durationInMonth,
-          });
-          if (requiredCalorie < 1200) return this.helper.sendTextAndSetCache({
-            message: `Your calorie requirement of ${requiredCalorie} is too low. The recommended minimum is 1200 cal per day to meet your body's nutritional needs`,
-            phoneNumber,
-            nextStage: "landing",
-            state
-          })
-          await this.repo.updateUser({
-            payload: {
-              dateOfBirth,
-              activityLevel,
-              sex: gender,
-              height,
-              weight,
-              healthCondition,
-              requiredCalorie,
-            },
-            userId: state.user!.id,
-          });
-          const weightDifference = Math.abs(weight - targetWeight);
+          },
+        } = state;
+        const {
+          dateOfBirth: savedDateOfBirth,
+          weight: savedWeight,
+          height: savedHeight,
+          sex: savedGender
+        } = state.user as IUser
+
+        const value = validFeetAndInches(height || savedHeight);
+        console.log({value, savedDateOfBirth})
+        const requiredCalorie = calculateRequireCalorie({
+          dateOfBirth: dateOfBirth || savedDateOfBirth,
+          inches:  value?.inches as number,
+          feet: value?.feet as number,
+          weight: weight || savedWeight,
+          gender: gender || savedGender,
+          activityLevel,
+          goal,
+          targetWeight,
+          durationInMonth,
+        });
+
+        const updatedUser = await this.repo.updateUser({
+          payload: {
+            dateOfBirth,
+            activityLevel,
+            sex: gender,
+            height,
+            weight,
+            healthCondition,
+            requiredCalorie,
+          },
+          userId: state.user!.id,
+        });
+
+        if (healthCondition === "none") {
+          const parsedWeight = weight ? weight : Number(savedWeight)
+          const weightDifference = Math.abs(parsedWeight - targetWeight);
+          const {
+            bmi,
+            description: bmiDescription
+          } = calculateBMI({ weightInKg: parsedWeight , feet: value!.feet, inches: value!.inches })
+
           await this.helper.sendTextAndSetCache({
-            message: getCalorieGoalText({
+            message: `${getCalorieGoalText({
               goal,
               requiredCalorie,
               durationInMonth,
               weightDifference: Math.trunc(weightDifference)
-            }),
+            })}. \nYour current BMI is ${bmi} (${bmiDescription})`,
             phoneNumber,
             nextStage: "",
-            state,
+            state: { ...state, user: updatedUser },
             data: { ...state.data, healthCondition },
           });
+          await delay()
           await this.helper.sendTextAndSetCache({
             message: `Would you like us to create a Nigerian meal plan that will provide you ${requiredCalorie} cal per day towards achieving your goal?\n
 1. Absolutely
 2. No, thank you, I'm good`,
             phoneNumber,
-            state,
+            state: { ...state, user: updatedUser },
             nextStage: `${basePath}/should-generate-meal-plan`,
           })
         } else {
           const specialHealthPlan = await this.repo.fetchSpecialSubscriptionPlan();
-          const paymentLink = await this.paymentService.initializePaystackPayment({
-            email: state!.user!.email,
-            amountInNaira: Number(specialHealthPlan!.amount),
-            metaData: { phoneNumber, planPaidFor: specialHealthPlan },
-          })
+          const data = { ...state.data, healthCondition, specialHealthPlan }
+          const message = `Considering your (${healthCondition}), your plan must be fully customized to you! To help us do that we'll like to collect some additional information.\n\nPlease note that our customized meal plans are ${formatCurrency(+specialHealthPlan!.amount)} only.\n\nAfter payment, we'll send you a link to a form. You'll be filling in your health data and food likes, so we can tailor your plan to you `;
+          await this.helper.sendTextAndSetCache({
+            phoneNumber,
+            message,
+            nextStage: `${basePath}/health-condition/help`,
+            state,
+            data,
+          });
 
-          const { data, status } = paymentLink;
-          if (status) {
-            const message = `We are here to support you on your health journey ensuring you stay and keep you healthy, We understand that some of our clients face health challenges, and we want to accommodate their needs.
-            A form will be sent to you to collect more specific information Click on the pay now button below to pay ${formatCurrency(+specialHealthPlan!.amount)}.`;
-            return this.helper.sendCallToActionAndSetCache({
-              phoneNumber,
-              message,
-              nextStage: "landing",
-              state,
-              callToActionText: "Pay now",
-              link: data.data.authorization_url,
-              data: { ...state.data, healthCondition },
-            });
-          }
+          await this.helper.sendWhatsAppImageByIdAndSetCache({
+            phoneNumber,
+            state,
+            nextStage: `${basePath}/health-condition/help`,
+            data,
+            imageObjectId: this.secrets.get("CUSTOMIZED_MEAL_PLAN_IMAGE_ID")
+          })
+          await delay()
+          return sendWhatsAppText({
+            message: `Do you have any questions?
+1. Yes
+2. No`,
+            phoneNumber
+          })
         }
       }
-
       const ACCEPT = 1;
       const DECLINE = 2;
 
+
+      if (stage == `${basePath}/health-condition/help`) {
+        if (input == ACCEPT) {
+          return sendWhatsAppText({
+            message: `We are happy to provide you with the support you need to make a decision. Please click on the link ${this.secrets.get("CUSTOMER_REP_CHAT_LINK")} to speak with one of our sales representatives.`,
+            phoneNumber
+          })
+
+        }
+        else {
+          const { healthCondition, specialHealthPlan } = state.data as { specialHealthPlan: SubscriptionPlan, healthCondition: string }
+          const paymentLink = await this.paymentService.initializePaystackPayment({
+            email: state!.user!.email,
+            amountInNaira: Number(specialHealthPlan!.amount),
+            metaData: { phoneNumber, planPaidFor: specialHealthPlan, state },
+            callbackUrl: this.secrets.get("PAYSTACK_WEBHOOK"),
+          })
+
+          const { data, status } = paymentLink;
+          return this.helper.sendTextAndSetCache({
+            phoneNumber,
+            message: `Please click on the link ${data.data.authorization_url} to make payment`,
+            nextStage: "landing",
+            state,
+            data: { ...state.data, healthCondition },
+          });
+        }
+      }
+
       if (stage == `${basePath}/should-generate-meal-plan`) {
         if (input == ACCEPT) {
-          await this.viewMealPlan.handleViewMealPlan({
+          const { requiredCalorie } = state.user as IUser
+
+          if (requiredCalorie as number > 2300 || requiredCalorie! < 1200) return this.helper.sendTextAndSetCache({
+            message: `Sorry we do not have any meal plans at the moment to meet your daily calorie needs.
+              However you can speak to one of our representatives to create a custom meal plan by clicking on this link https://wa.link/0ubqh3`,
+            phoneNumber,
+            nextStage: "landing",
+            state
+          })
+
+          return this.viewMealPlan.handleViewMealPlan({
             phoneNumber,
             state,
           });
         }
-
         if (input == DECLINE) {
           return this.helper.handleNoState({
             phoneNumber,
             profileName: state.user!.firstname,
-            customHeader: "Thank you for using Health Paddy, we look forward to helping you on your health journey soon, How else can i be of service ?",
+            customHeader: "Thank you for using Health Paddy, we look forward to helping you on your health journey soon. However, feel free to explore our calorie bank to check how many calories are in different Nigerian meals",
             state,
           });
         }
-
       }
     } catch (err) {
       console.log(err);

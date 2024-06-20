@@ -16,6 +16,12 @@ export const schema = {
   FREE_PLAN_DAYS: z.coerce.number(),
   WHATSAPP_BOT_START_DATE: z.string(),
   HEALTH_SUBSCRIPTION_AMOUNT: z.coerce.number(),
-  HEALTH_ISSUES_FORM_LINK: z.string()
+  HEALTH_ISSUES_FORM_LINK: z.string(),
+  CHAT_LINK: z.string(),
+  HELP_LINE: z.string(),
+  SUBSCRIPTION_IMAGE_ID: z.string(),
+  CUSTOMER_REP_CHAT_LINK: z.string(),
+  SUPPORT_EMAIL: z.string(),
+  CUSTOMIZED_MEAL_PLAN_IMAGE_ID: z.string()
 } as const;
 export const objectSchema = z.object(schema);

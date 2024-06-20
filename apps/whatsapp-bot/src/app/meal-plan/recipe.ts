@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Inject, Injectable } from "@nestjs/common";
+import { Cache } from "cache-manager";
 
-import { MealPlan, State } from '../../types';
-import { AppRepo } from '../app.repo';
-import { GenericService } from '../general';
+import { MealPlan, State } from "../../types";
+import { AppRepo } from "../app.repo";
+import { GenericService } from "../general";
 
 @Injectable()
 export class ViewRecipeService {
@@ -26,31 +26,31 @@ export class ViewRecipeService {
   }) => {
 
     try {
-      const baseUrl = `view-recipe`;
+      const baseUrl = "view-recipe";
       if (state.stage === `${baseUrl}/day`) {
         const days = [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-          'Sunday',
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
         ];
         const selectedDay = days[Number(input) - 1];
-        const userMealPlan = await this.helper.getMealPlan(state)
+        const userMealPlan = await this.helper.getMealPlan({state, numberOfMealPlans: 8})
+
         if (userMealPlan && userMealPlan.length) {
           const selectedMealDay = userMealPlan.find(
             (meal) => meal.day === selectedDay
           ) as MealPlan;
+          
           const foodWithRecipes: string[] = [];
           for (const key in selectedMealDay) {
             const value = selectedMealDay[key as keyof MealPlan]! as string;
+            
 
-            if (
-              typeof value === 'string' &&
-              value.toLowerCase().includes('recipe')
-            ) {
+            if (value.toString().toLowerCase().includes("recipe")) {
               foodWithRecipes.push(
                 selectedMealDay[key as keyof MealPlan] as string
               );
@@ -60,7 +60,7 @@ export class ViewRecipeService {
           const regex = /^(.+?)\s*\(see recipe\)/i;
 
           for (const foodString of foodWithRecipes) {
-            const parts = foodString.split('+').map((part) => part.trim());
+            const parts = foodString.split("+").map((part) => part.trim());
             const match = parts.find((part) => regex.test(part));
             if (match) {
               const regexResult = match.match(regex);
@@ -70,16 +70,16 @@ export class ViewRecipeService {
           }
           if (!extractedPortions.length) {
             return this.helper.sendTextAndSetCache({
-              message: 'You have no meal with recipe for this day',
+              message: "You have no meal with recipe for this day",
               phoneNumber,
-              nextStage: '',
+              nextStage: "",
               state
             })
           }
           return this.helper.sendTextAndSetCache({
-            message: `Please select a meal\n${extractedPortions
+            message: `Please select a meal\n\n${extractedPortions
               .map((portion, index) => `${index + 1}. ${portion}`)
-              .join('\n')}`,
+              .join("\n")}`,
             phoneNumber,
             state,
             nextStage: `${baseUrl}/day/meal`,
@@ -90,7 +90,7 @@ export class ViewRecipeService {
       if (state.stage === `${baseUrl}/day/meal`) {
         const { mealsWithRecipe } = state.data;
         const selectedMeal = mealsWithRecipe[Number(input) - 1];
-        const parsedMeal = selectedMeal.split(' of ')[1].trim();
+        const parsedMeal = selectedMeal.split(" of ")[1].trim();
         const closestCalorie = await this.helper.getClosestMealPlan(
           state!.user!.requiredCalorie as number
         );
@@ -101,13 +101,13 @@ export class ViewRecipeService {
 
         if (recipe) {
           const message = `*${recipe?.name} (${recipe?.servings} Servings)*\n
-*Instructions*:${recipe?.instructions.map(instruction => `\n\n* ${instruction}`).join('')}\n
-*Ingredients*:${recipe?.ingredients.map(ingredient => `\n\n* ${ingredient}`).join('')}`;
+*Instructions*:${recipe?.instructions.map(instruction => `\n\n* ${instruction}`).join("")}\n
+*Ingredients*:${recipe?.ingredients.map(ingredient => `\n\n* ${ingredient}`).join("")}`;
           return this.helper.sendTextAndSetCache({
             message,
             phoneNumber,
             state,
-            nextStage: 'landing',
+            nextStage: "landing",
           });
         }
       }

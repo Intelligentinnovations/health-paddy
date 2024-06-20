@@ -2,11 +2,11 @@ import {
   SendMessageBatchCommand,
   SendMessageCommand,
   SQSClient,
-} from '@aws-sdk/client-sqs';
-import { MessageBody } from '@backend-template/types';
-import { v4 } from 'uuid';
+} from "@aws-sdk/client-sqs";
+import { MessageBody } from "@backend-template/types";
+import { v4 } from "uuid";
 
-import { Messaging } from '../messaging';
+import { Messaging } from "../messaging";
 
 export class Sqs implements Messaging {
   private readonly sqsClient: SQSClient;
@@ -17,7 +17,7 @@ export class Sqs implements Messaging {
 
   async send(
     data: Array<MessageBody> | MessageBody,
-    queueUrl = process.env.QUEUE_URL
+    queueUrl = process.env.QUEUE_URL,
   ): Promise<void> {
     if (Array.isArray(data)) {
       await this.sqsClient.send(

@@ -12,7 +12,7 @@ export const snacks = [
     updatedAt: today
   },
   {
-    snack: "½ cup of Greek yoghurt + 3 pieces of Jacob’s crackers",
+    snack: "½ cup of Greek yoghurt + 3 pieces of Jacob's crackers",
     calories: calorieCount200,
     updatedAt: today
   },
@@ -87,7 +87,7 @@ export const snacks = [
     updatedAt: today
   },
   {
-    snack: "⅔ cup of Greek yoghurt + 3 pieces of Jacob’s crackers",
+    snack: "⅔ cup of Greek yoghurt + 3 pieces of Jacob's crackers",
     calories: calorieCount250,
     updatedAt: today
   },

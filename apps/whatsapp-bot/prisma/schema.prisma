@@ -23,6 +23,7 @@ model User {
   activityLevel                String?
   healthCondition              String?
   requiredCalorie              Float?
+  hasUsedFreeMealPlan          Boolean             @default(false)
   isCreateMealPlanReminderSent Boolean             @default(false)
   createdAt                    DateTime            @default(now())
   updatedAt                    DateTime            @updatedAt
@@ -69,14 +70,12 @@ model SubscriptionPlan {
   isSpecialPlan                 Boolean        @default(false)
   hasCalorieCalculator          Boolean
   timetablePerMonth             Int
-  hasSwapMealItem               Boolean
-  noOfRecipes                   Int
+  noOfRecipes                   String
   mealPlanGuideLines            Boolean
   hasPreventHungerResources     Boolean
   hasMealPreppingResources      Boolean
   hasHandlingCheatMealResources Boolean
   hasPostPurchaseSupport        Boolean
-  hasCommunity                  Boolean
   hasQuickMealOptions           Boolean
   hasProgressReport             Boolean
   createdAt                     DateTime       @default(now())
@@ -98,15 +97,35 @@ model Subscription {
   updatedAt          DateTime           @updatedAt
 }
 
-model FoodItems {
-  id          String       @id @default(dbgenerated("gen_random_uuid()"))
+model FoodItem {
+  id                String        @id @default(dbgenerated("gen_random_uuid()"))
+  name              String
+  category          FoodCategory
+  hasParts          Boolean       @default(false)
+  hasCookingMethods Boolean       @default(false)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  FoodVariant       FoodVariant[]
+}
+
+model FoodVariant {
+  id          String        @id @default(dbgenerated("gen_random_uuid()"))
+  foodId      String
+  food        FoodItem      @relation(fields: [foodId], references: [id])
   name        String
-  calorie     Int
-  portion     String
-  category    FoodCategory
-  description String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  FoodPortion FoodPortion[]
+}
+
+model FoodPortion {
+  id            String      @id @default(dbgenerated("gen_random_uuid()"))
+  foodVariantId String
+  foodVariant   FoodVariant @relation(fields: [foodVariantId], references: [id])
+  calorie       String
+  size          String
+  description   String?
+  createdAt     DateTime    @default(now())
 }
 
 model CalorieNeed {
@@ -165,11 +184,11 @@ enum SubscriptionStatus {
 }
 
 enum FoodCategory {
-  starch
-  fruit
-  vegetable
-  milk
-  protein
-  fat_and_oil
-  snack
+  Starch
+  Fruits
+  Protein
+  Fat_and_Oil
+  Snacks
+  Milk_and_Yoghurt
+  Drinks
 }

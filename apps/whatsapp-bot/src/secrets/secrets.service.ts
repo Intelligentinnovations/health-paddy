@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { z } from 'zod';
+import { Injectable } from "@nestjs/common";
+import { z } from "zod";
 
-import { objectSchema } from './secrets.schema';
+import { objectSchema } from "./secrets.schema";
 
 @Injectable()
 export class SecretsService {

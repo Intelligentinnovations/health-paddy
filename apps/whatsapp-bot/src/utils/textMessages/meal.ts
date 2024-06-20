@@ -22,16 +22,20 @@ export const healthConditionText = `Finally, are you managing any of these healt
 3. Diabetes/Pre-diabetes
 4. High Cholesterol
 5. Polycystic Ovary Syndrome (PCOS)
-`
+6. I am pregnant
+7. I am breastfeeding`
 
 export const weightLossDurationText = `In how many months would you like to achieve this goal? (Please be realistic here. Extreme weight loss is rarely ever sustainable, we recommend a target of 5kg or less per month)`
 export const weightGainDurationText = `In how many months would you like to achieve this goal? (Please be realistic here. Extreme weight gain is unhealthy, we recommend a target of 1 - 2kg per month)`
 
 
 export const getCalorieGoalText = ({ goal, requiredCalorie, durationInMonth, weightDifference }: GetCalorieGoalText) => {
+  console.log({weightDifference})
 
   if (goal == 'Maintain Weight') return `Congratulations! We've successfully calculated your calorie target! To maintain your current weight, you will need to consume ${requiredCalorie} Cal per day 👌`
-  if(goal == 'Loose Weight') return `Congratulations! We've successfully calculated your calorie target! To loose ${weightDifference}KG over the next ${durationInMonth} months, at your current level of activity and weight, you'll need to consume: ${requiredCalorie}cal per day`
+  if(goal == 'Lose Weight') return `Congratulations! We've successfully calculated your calorie target! To lose ${weightDifference}KG over the next ${durationInMonth} months, at your current level of activity and weight, you'll need to consume: ${requiredCalorie}cal per day`
   return `Congratulations! We've successfully calculated your calorie target! To gain ${weightDifference}KG over the next ${durationInMonth} months, at your current level of activity and weight, you'll need to consume: ${requiredCalorie}cal per day`
 
 }
+
+
