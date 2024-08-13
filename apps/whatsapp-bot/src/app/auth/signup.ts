@@ -1,15 +1,16 @@
 import { Injectable } from "@nestjs/common";
+
 import { sendWhatsAppText } from "../../helpers";
+import {UserRepo} from "../../repo";
 import { State } from "../../types";
 import { EmailSchema } from "../../utils/schema";
 import { StringSchema } from "../../utils/schema/auth.schema";
-import { AppRepo } from "../app.repo";
 import { GenericService } from "../general";
 
 @Injectable()
 export class SignupService {
   constructor(
-    private repo: AppRepo,
+    private userRepo: UserRepo,
     private helper: GenericService,
   ) { }
 
@@ -53,12 +54,12 @@ export class SignupService {
           console.log({error})
           return sendWhatsAppText({ message: "Please enter a valid email", phoneNumber })
         }
-        const emailExist = await this.repo.findUserByEmail(input);
+        const emailExist = await this.userRepo.findUserByEmail(input);
         if (emailExist) {
           const message = "The email already exist, Please enter another email";
           return sendWhatsAppText({ message, phoneNumber })
         }
-        await this.repo.createUser({
+        await this.userRepo.createUser({
           email: input,
           firstname: state.data.firstname,
           lastname: state.data.lastname,

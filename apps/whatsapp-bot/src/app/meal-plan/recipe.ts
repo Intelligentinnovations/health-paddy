@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CACHE_MANAGER } from "@nestjs/cache-manager";
-import { Inject, Injectable } from "@nestjs/common";
-import { Cache } from "cache-manager";
+import { Injectable } from "@nestjs/common";
 
+import {MealPlanRepo} from "../../repo";
 import { MealPlan, State } from "../../types";
-import { AppRepo } from "../app.repo";
 import { GenericService } from "../general";
 
 @Injectable()
 export class ViewRecipeService {
   constructor(
-    private repo: AppRepo,
+    private mealPlanRepo: MealPlanRepo,
     private helper: GenericService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) { }
 
   handleViewRecipe = async ({
@@ -44,11 +41,11 @@ export class ViewRecipeService {
           const selectedMealDay = userMealPlan.find(
             (meal) => meal.day === selectedDay
           ) as MealPlan;
-          
+
           const foodWithRecipes: string[] = [];
           for (const key in selectedMealDay) {
             const value = selectedMealDay[key as keyof MealPlan]! as string;
-            
+
 
             if (value.toString().toLowerCase().includes("recipe")) {
               foodWithRecipes.push(
@@ -94,7 +91,7 @@ export class ViewRecipeService {
         const closestCalorie = await this.helper.getClosestMealPlan(
           state!.user!.requiredCalorie as number
         );
-        const recipe = await this.repo.getRecipe({
+        const recipe = await this.mealPlanRepo.getRecipe({
           calorie: closestCalorie!.calories,
           mealName: parsedMeal.trim(),
         });

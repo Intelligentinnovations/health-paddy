@@ -4,10 +4,10 @@ import { Cache } from "cache-manager";
 import { DateTime } from "luxon";
 
 import { formatCurrency } from "../../helpers";
+import {MealPlanRepo, SubscriptionRepo, TransactionRepo, UserRepo} from "../../repo";
 import { SecretsService } from "../../secrets/secrets.service";
 import { PaymentService } from "../../services/paystack";
 import { State, SubscriptionPlan } from "../../types";
-import { AppRepo } from "../app.repo";
 import { GenericService } from "../general";
 
 
@@ -15,7 +15,10 @@ import { GenericService } from "../general";
 export class HandlePayment {
   constructor(
     private paymentService: PaymentService,
-    private repo: AppRepo,
+    private subscriptionRepo: SubscriptionRepo,
+    private userRepo: UserRepo,
+    private mealPlanRepo: MealPlanRepo,
+    private transactionRepo: TransactionRepo,
     private generalResponse: GenericService,
     private secrets: SecretsService,
 
@@ -28,7 +31,7 @@ export class HandlePayment {
     try {
       const verification = await this.paymentService.verifyPaystackTransaction(reference);
       const {status, data} = verification;
-      const transactionExist = await this.repo.findTransactionByReference(
+      const transactionExist = await this.transactionRepo.findTransactionByReference(
         reference
       );
       if (transactionExist) return;
@@ -61,7 +64,7 @@ export class HandlePayment {
       if (status && transactionStatus === "success") {
         const userId = state.user?.id as string
 
-        await this.repo.createSubscription({
+        await this.subscriptionRepo.createSubscription({
           subscriptionPlanId: planPaidFor?.id as unknown as string,
           token,
           type: "",
@@ -95,10 +98,10 @@ ${isNotSpecialPlan ? "PS. A downloadable PDF version of the plan has been sent t
             nextStage: ""
           })
         if (isNotSpecialPlan) {
-          await this.repo.deleteCurrentMealPlan(state.user?.id as string) // delete previous meal plan from db
+          await this.mealPlanRepo.deleteCurrentMealPlan(state.user?.id as string) // delete previous meal plan from db
           const cacheKey = `${state?.user?.phone}-meal-plan`;
           await this.cacheManager.del(cacheKey) // remove previous meal plan from memory
-          const user = await this.repo.findUserByPhoneNumber(phoneNumber);
+          const user = await this.userRepo.findUserByPhoneNumber(phoneNumber);
           return this.generalResponse.generateAndSendMealPlan({
             phoneNumber,
             state: {data: {}, stage: "", user},

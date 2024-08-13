@@ -3,16 +3,17 @@ import { Injectable } from "@nestjs/common";
 import { DateTime } from "luxon";
 
 import { capitalizeString, formatCurrency, formatDate } from "../../helpers";
+import {CardRepo, SubscriptionRepo} from "../../repo";
 import { SecretsService } from "../../secrets/secrets.service";
 import { PaymentService } from "../../services/paystack";
 import {State, SubscriptionPlan} from "../../types";
-import { AppRepo } from "../app.repo";
 import { GenericService } from "../general";
 
 @Injectable()
 export class SubscriptionService {
   constructor(
-    private repo: AppRepo,
+    private subscriptionRepo: SubscriptionRepo,
+    private cardRepo: CardRepo,
     private helper: GenericService,
     private secrets: SecretsService,
     private payment: PaymentService,
@@ -70,7 +71,7 @@ ${selectedPlan.planName} for ${formatCurrency(Number(selectedPlan.amount))} per 
             if (user?.subscriptionStatus === "expired") {
               const { subscriptionPlans, subscription } = data as {subscriptionPlans: SubscriptionPlan[], subscription: SubscriptionPlan};
               if(parsedInput == RENEW) {
-                const card = await this.repo.fetchUserDefaultCard(user!.id);
+                const card = await this.cardRepo.fetchUserDefaultCard(user!.id);
                 const { email: cardEmail, token: authorizationCode } = card;
                 const amount = Number(subscription.amount);
                 const chargeAttempt = await this.payment.chargePaystackCard({
@@ -88,7 +89,7 @@ ${selectedPlan.planName} for ${formatCurrency(Number(selectedPlan.amount))} per 
                   })
                 }
                 const today = DateTime.now();
-                await this.repo.createSubscription({
+                await this.subscriptionRepo.createSubscription({
                   userId: user!.id,
                   subscriptionPlanId: subscription.id as unknown as string,
                   amount: amount.toString(),
@@ -146,7 +147,7 @@ of ${subscription.amount} per month.`;
 
       if (stage === "subscription-management") {
         if (parsedInput == ACCEPT) {
-          const subscription = await this.repo.fetchSubscription(user!.id);
+          const subscription = await this.subscriptionRepo.fetchSubscription(user!.id);
 
           const message = `Subscription Status\n
 Dear ${user?.firstname}
@@ -190,10 +191,10 @@ Best regards`;
       }
 
       if (stage === "subscription-cancel") {
-        const subscriptionStatus = await this.repo.fetchSubscription((user!.id))
+        const subscriptionStatus = await this.subscriptionRepo.fetchSubscription((user!.id))
         const message = subscriptionStatus?.status !== "active" ? "Your subscription has either expired or canceled " : "We respect your decision to unsubscribe. 😢 Thank you for being a part of our community. If you ever decide to return, we'll be here. 🙌"
         if (parsedInput == ACCEPT) {
-          subscriptionStatus?.status === "active" ?? await this.repo.unSubscribe(user!.id);
+          if(subscriptionStatus?.status === "active") await this.subscriptionRepo.unSubscribe(user!.id);
           return this.helper.handleNoState({
             phoneNumber,
             profileName,
@@ -215,7 +216,7 @@ Best regards`;
       if (stage === "subscription-change-expired-plan") {
         const { subscriptionPlans, isFirstTimeSubscriber } = state.data
         const selectedPlan = subscriptionPlans[parsedInput - 1] as SubscriptionPlan;
-        const defaultCard = await this.repo.fetchUserDefaultCard(state.user!.id);
+        const defaultCard = await this.cardRepo.fetchUserDefaultCard(state.user!.id);
         const message = `Subscription alert\n
 Your subscription has expired 😔. To continue using our service and access all its benefits, please consider renewing your subscription.\n
 *Plan: ${selectedPlan!.planName}*

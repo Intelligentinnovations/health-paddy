@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Sqs } from "@backend-template/messaging";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Inject, Injectable } from "@nestjs/common";
 import { Cache } from "cache-manager";
 import { EventType } from "libs/types/src/lib/types/event";
+
+import {UserRepo} from "../repo";
 import { State} from "../types";
-import { AppRepo } from "./app.repo";
 
 
 
@@ -14,7 +14,7 @@ export class AppService {
   private readonly sqs: Sqs;
 
   constructor(
-    private repo: AppRepo,
+    private userRepo: UserRepo,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {
     this.sqs = new Sqs()
@@ -43,7 +43,7 @@ export class AppService {
               user: undefined,
               data: state?.data
             };
-            const user = await this.repo.findUserByPhoneNumber(sender);
+            const user = await this.userRepo.findUserByPhoneNumber(sender);
             state = { ...initialState, user }
             await this.cacheManager.set(sender, state);
           }

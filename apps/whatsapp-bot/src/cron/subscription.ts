@@ -2,24 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
 
 // import * as cron from 'node-cron';
-import { AppRepo } from '../app/app.repo';
+import { SubscriptionRepo, CardRepo } from '../repo';
 import { PaymentService } from '../services/paystack';
 
 @Injectable()
 export class CronService {
-  constructor(private repo: AppRepo, private payment: PaymentService) {
+  constructor(
+    private subscriptionRepo: SubscriptionRepo,
+    private cardRepo: CardRepo,
+    private payment: PaymentService
+  ) {
     this.scheduleCronJob();
   }
 
   public async scheduleCronJob() {
     // cron.schedule('0 10 * * *', async () => {
     try {
-      const dueSubscriptions = await this.repo.fetchDueSubscription();
+      const dueSubscriptions = await this.subscriptionRepo.fetchDueSubscription();
 
       if (dueSubscriptions.length) {
         for await (const dueSubscription of dueSubscriptions) {
           const { userId, status: subscriptionStatus, subscriptionPlanId } = dueSubscription;
-          const cards = await this.repo.fetchUserCards(userId);
+          const cards = await this.cardRepo.fetchUserCards(userId);
           if (cards.length) {
             for await (const card of cards) {
               if (subscriptionStatus === 'active') {
@@ -33,7 +37,7 @@ export class CronService {
                   charge?.data?.data?.status === 'success'
                 ) {
                   const today = DateTime.now();
-                  await this.repo.createSubscription({
+                  await this.subscriptionRepo.createSubscription({
                     userId,
                     subscriptionPlanId,
                     reference: charge.data.data.reference,
@@ -46,23 +50,23 @@ export class CronService {
                     processor: 'paystack',
                     date: today.toJSDate(),
                     endDate: today.plus({ month: 1 }).toJSDate(),
-                    amount: '10000', // this should be plan driven
+                    amount: '10000', // this should be plan-driven
                     transactionStatus: 'success',
                   });
                   break;
                 } else {
                   // send message of expired subscription because we could not charge card
-                  await this.repo.updateSubscriptionStatus({
+                  await this.subscriptionRepo.updateSubscriptionStatus({
                     userId,
                     status: 'expired',
                   });
-                  await this.repo.updateUserSubscriptionStatus({
+                  await this.subscriptionRepo.updateUserSubscriptionStatus({
                     userId,
                     status: 'expired',
                   });
                 }
               } else if (subscriptionStatus === 'canceled') {
-                await this.repo.updateUserSubscriptionStatus({
+                await this.subscriptionRepo.updateUserSubscriptionStatus({
                   userId,
                   status: 'expired',
                 });

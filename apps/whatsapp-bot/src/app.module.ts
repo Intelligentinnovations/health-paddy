@@ -3,21 +3,21 @@ import { Module } from "@nestjs/common";
 import { redisStore } from "cache-manager-redis-yet";
 
 import { AppController } from "./app/app.controller";
-import { AppRepo } from "./app/app.repo";
 import { AppService } from "./app/app.service";
 import { SignupService } from "./app/auth/signup"
-import { ConsumerService } from "./app/consumers/consumerService"
-import { ChatMessageHandler } from "./app/consumers/chatMessageHandler";
 import {FoodBankService} from "./app/food-bank/foodBank"
 // import { CronService } from './cron/subscription';
 import { GenericService, } from "./app/general";
 import { CreateMealPlanService, ViewMealPlanService, ViewRecipeService } from "./app/meal-plan";
+import {HandlePayment} from "./app/payment/payment.service";
 import { SubscriptionService } from "./app/subscription/subscription"
+import { ChatMessageHandler } from "./consumers/chatMessageHandler";
+import { ConsumerService } from "./consumers/consumerService"
 import { LibrariesModule } from "./libraries/libraries.module";
+import { CardRepo,MealPlanRepo, SubscriptionRepo, TransactionRepo, UserRepo } from "./repo";
 import { SecretsModule } from "./secrets/secrets.module";
 import { SecretsService } from "./secrets/secrets.service";
 import { PaymentService } from "./services/paystack";
-import {HandlePayment} from "./app/payment/payment.service";
 
 
 @Module({
@@ -38,7 +38,11 @@ import {HandlePayment} from "./app/payment/payment.service";
   controllers: [AppController],
   providers: [
     AppService,
-    AppRepo,
+    UserRepo,
+    CardRepo,
+    MealPlanRepo,
+    TransactionRepo,
+    SubscriptionRepo,
     GenericService,
     SignupService,
     SubscriptionService,

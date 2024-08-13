@@ -58,7 +58,7 @@ export const getSubscriptionPlanMessage = (subscriptionPlans: SubscriptionPlan[]
   return `*Subscription alert*\n
 ${header}
 ${subscriptionPlans.map((plan, index) => `${index + 1}. *${plan.planName} ${formatCurrency(Number(plan.amount))}/Month*
-- Calorie calculator ${plan.hasCalorieCalculator ? " ✅" : "❌"}
+- Calorie calculator ${plan.hasCalorieCalculator ? "✅" : "❌"}
 - Timetable/month ${plan.timetablePerMonth}
 - No of recipes ${plan.noOfRecipes}
 - Meal plan Guidelines ${plan.mealPlanGuideLines ? "✅" : "❌"}

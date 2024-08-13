@@ -3,19 +3,7 @@ const currentDate = new Date;
 export const foodList = [
   {
     id: "f9a8d4ee-1b8f-4b39-93e1-c01d401dc2ff",
-    name: "White rice",
-    updatedAt: currentDate,
-    category: "Starch"
-  },
-  {
-    id: "8a95a489-9ba6-468b-93c0-199b82ec54a1",
-    name: "Brown rice",
-    updatedAt: currentDate,
-    category: "Starch"
-  },
-  {
-    id: "df431a11-0893-4f67-b58c-7316d1f87f0c",
-    name: "Basmati rice",
+    name: "Rice",
     updatedAt: currentDate,
     category: "Starch"
   },
@@ -844,10 +832,31 @@ export const foodList = [
     "name": "Amstel Malta",
     updatedAt: currentDate,
     "category": "Drinks"
+  },
+  {
+    "id": "b7c8d9e0-f1a2-3b4c-5d6e-7890fgh1ij2k",
+    "name": "Maltina",
+    updatedAt: currentDate,
+    "category": "Drinks"
+  },
+  {
+    "id": "c8d9e0f1-a2b3-4c5d-6e7f-8901gh2ij3kl",
+    "name": "Schweppes Bitter Lemon",
+    updatedAt: currentDate,
+    "category": "Drinks"
+  },
+  {
+    "id": "d9e0f1a2-b3c4-5d6e-7f8g-9012hi3jk4lm",
+    "name": "Chivita Ice Tea",
+    updatedAt: currentDate,
+    "category": "Drinks"
+  },
+  {
+    "id": "e0f1a2b3-c4d5-6e7f-8g9h-0123ij4kl5mn",
+    "name": "Lipton Ice Tea",
+    updatedAt: currentDate,
+    "category": "Drinks"
   }
-
-
-
 
 
 
@@ -855,6 +864,9 @@ export const foodList = [
   // { name: "Schweppes bitter lemon", portion: "33cL can", calorie: "86cal",updatedAt: currentDate,al", category: "Drinks" },
   // { name: "Chivita ice tea", portion: "1L pack", calorie: "320cal", updatedAt: currentDate,al", category: "Drinks" },
   // { name: "Lipton Ice Tea", portion: "1 bottle", calorie: "95cal",updatedAt: currentDate,al", category: "Drinks" },
+
+
+  // still have addded the remaining
 
   // { name: "Wilson's lemonade", portion: "1 small bottle, 300mls", calorie: "143cal",updatedAt: currentDate,al", category: "Drinks" },
   // { name: "Wilson's lemonade", portion: "Big bottle, 500mls", calorie: "238cal",updatedAt: currentDate,al", category: "Drinks" },
@@ -874,19 +886,19 @@ export const foodVariant = [
     id: "c8194dce-ba31-4238-9235-5c93d00664d6",
     foodId: "f9a8d4ee-1b8f-4b39-93e1-c01d401dc2ff",
     updatedAt: currentDate,
-    name: "cooked"
+    name: "white (cooked)"
   },
   {
     id: "006b8c39-3a05-404e-9a1f-9d2ed6371da3",
-    foodId: "8a95a489-9ba6-468b-93c0-199b82ec54a1",
+    foodId: "f9a8d4ee-1b8f-4b39-93e1-c01d401dc2ff",
     updatedAt: currentDate,
-    name: "cooked"
+    name: "Brown (cooked)"
   },
   {
     id: "ac5eab1a-09d3-4a83-ab58-1183e6a425fd",
-    foodId: "df431a11-0893-4f67-b58c-7316d1f87f0c",
+    foodId: "f9a8d4ee-1b8f-4b39-93e1-c01d401dc2ff",
     updatedAt: currentDate,
-    name: "cooked"
+    name: "Basmati (cooked)"
   },
   {
     id: "0dca7b52-338e-41d1-869e-3474827754e0",
@@ -947,6 +959,12 @@ export const foodVariant = [
     "foodId": "g1d1e87c-72a7-4187-8076-22756a0de8d4",
     updatedAt: currentDate,
     "name": "raw"
+  },
+  {
+    "id": "g1d1e87c-72a7-4187-8076-22756a0de8d4-2",
+    "foodId": "g1d1e87c-72a7-4187-8076-22756a0de8d4",
+    updatedAt: currentDate,
+    "name": "cooked, plain"
   },
   {
     "id": "h1d1e87c-72a7-4187-8076-22756a0de8d5-1",
@@ -1067,13 +1085,13 @@ export const foodVariant = [
     "id": "h1d1e87c-72a7-4187-8076-22756a0de8e9-1",
     "foodId": "h1d1e87c-72a7-4187-8076-22756a0de8e9",
     updatedAt: currentDate,
-    "name": "(cooked)"
+    "name": "cooked"
   },
   {
     "id": "h1d1e87c-72a7-4187-8076-22756a0de8e9-2",
     "foodId": "h1d1e87c-72a7-4187-8076-22756a0de8e9",
     updatedAt: currentDate,
-    "name": "(raw)"
+    "name": "raw"
   },
   {
     "id": "i1d1e87c-72a7-4187-8076-22756a0de8f0-1",
@@ -2261,6 +2279,12 @@ export const foodPortion = [
   {
     "foodVariantId": "g1d1e87c-72a7-4187-8076-22756a0de8d4-1",
     "calorie": "311cal",
+    "size": "1 cup",
+    "description": ""
+  },
+  {
+    "foodVariantId": "g1d1e87c-72a7-4187-8076-22756a0de8d4-2",
+    "calorie": "150cal",
     "size": "1 cup",
     "description": ""
   },

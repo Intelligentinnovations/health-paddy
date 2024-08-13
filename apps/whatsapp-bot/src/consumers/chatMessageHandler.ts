@@ -1,11 +1,11 @@
 import { MessageBody } from "@backend-template/types";
 import { Injectable } from "@nestjs/common";
 
-import { SignupService } from "../auth/signup";
-import { FoodBankService } from "../food-bank/foodBank";
-import { GenericService } from "../general";
-import { CreateMealPlanService, ViewRecipeService } from "../meal-plan";
-import { SubscriptionService } from "../subscription/subscription";
+import { SignupService } from "../app/auth/signup";
+import { FoodBankService } from "../app/food-bank/foodBank";
+import { GenericService } from "../app/general";
+import { CreateMealPlanService, ViewRecipeService } from "../app/meal-plan";
+import { SubscriptionService } from "../app/subscription/subscription";
 
 @Injectable()
 export class ChatMessageHandler {

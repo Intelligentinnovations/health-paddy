@@ -24,7 +24,7 @@ const subscriptionPlans = [
     amount: 9500,
     isSpecialPlan: false,
     hasCalorieCalculator: true,
-    timetablePerMonth: 1,
+    timetablePerMonth: 2,
     noOfRecipes: "All Recipes",
     mealPlanGuideLines: true,
     hasPreventHungerResources: true,

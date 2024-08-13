@@ -947,7 +947,6 @@ export const mealPlanData = {
       dinnerCalories: 650,
       calorieNeedId: calorieNeed2300ForPlan2,
     },
-
     {
       day: "Monday",
       breakfast: "2 slices of white or wheat bread + fried eggs (2 eggs + 1 teaspoon of oil + 1 cup of mixed veggies)",
@@ -958,7 +957,6 @@ export const mealPlanData = {
       dinner: "Pepper soup + 1 cup of diced sweet potatoes + 1 piece of chicken thigh with skin + 1 piece of chicken drumstick with skin (see recipe)",
       dinnerCalories: 400,
       calorieNeedId: calorieNeed1400ForPlan1,
-
     },
     {
       day: "Tuesday",

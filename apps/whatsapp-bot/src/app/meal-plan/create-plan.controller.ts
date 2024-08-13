@@ -10,6 +10,7 @@ import {
   sendWhatsAppText,
   validFeetAndInches
 } from "../../helpers";
+import {SubscriptionRepo, UserRepo} from "../../repo";
 import { SecretsService } from "../../secrets/secrets.service";
 import { PaymentService } from "../../services/paystack";
 import {HealthGoal, IUser, State, SubscriptionPlan} from "../../types";
@@ -22,7 +23,6 @@ import {
   weightGainDurationText,
   weightLossDurationText
 } from "../../utils/textMessages";
-import { AppRepo } from "../app.repo";
 import { GenericService } from "../general";
 import { ViewMealPlanService } from "./view-plan";
 
@@ -30,7 +30,8 @@ import { ViewMealPlanService } from "./view-plan";
 @Injectable()
 export class CreateMealPlanService {
   constructor(
-    private repo: AppRepo,
+    private userRepo: UserRepo,
+    private subscriptionRepo: SubscriptionRepo,
     private helper: GenericService,
     private viewMealPlan: ViewMealPlanService,
     private paymentService: PaymentService,
@@ -56,14 +57,13 @@ export class CreateMealPlanService {
 1. Male
 2. Female`;
         const parsedDateOfBirth = parseDateOfBirth(input as string);
-        console.log({parsedDateOfBirth})
         if (parsedDateOfBirth === "Invalid date format") {
           return sendWhatsAppText({
             message: "Please enter a valid date of birth in this format (dd/mm/yyyy)",
             phoneNumber,
           });
         }
-        await this.repo.updateUser({payload: {dateOfBirth: parsedDateOfBirth}, userId: state.user?.id as string})
+        await this.userRepo.updateUser({payload: {dateOfBirth: parsedDateOfBirth}, userId: state.user?.id as string})
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
@@ -80,7 +80,7 @@ export class CreateMealPlanService {
           });
 
         const message = "Perfect!, May I ask for your height in feet, for example, in the format \"5f11\" or 5'11?";
-        await this.repo.updateUser({payload: { sex: gender }, userId: state.user?.id as string})
+        await this.userRepo.updateUser({payload: { sex: gender }, userId: state.user?.id as string})
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
@@ -95,7 +95,7 @@ export class CreateMealPlanService {
             message: "Please enter a valid height in feet, for example, in the format \"5f11\" or 5'11?",
             phoneNumber,
           });
-        await this.repo.updateUser({payload: {height: input}, userId: state.user?.id as string})
+        await this.userRepo.updateUser({payload: {height: input}, userId: state.user?.id as string})
         const message = "Excellent! Would you be willing to tell me your weight in KG? (e.g 70)";
         return this.helper.sendTextAndSetCache({
           message,
@@ -113,7 +113,7 @@ export class CreateMealPlanService {
           });
 
         const selectedGoal = state.data.goal;
-        await this.repo.updateUser({payload: {weight: parsedWeight }, userId: state.user?.id as string})
+        await this.userRepo.updateUser({payload: {weight: parsedWeight }, userId: state.user?.id as string})
         if (selectedGoal) {
           if (selectedGoal == "Maintain Weight") {
             return this.helper.sendTextAndSetCache({
@@ -377,7 +377,6 @@ export class CreateMealPlanService {
         } = state.user as IUser
 
         const value = validFeetAndInches(height || savedHeight);
-        console.log({value, savedDateOfBirth})
         const requiredCalorie = calculateRequireCalorie({
           dateOfBirth: dateOfBirth || savedDateOfBirth,
           inches:  value?.inches as number,
@@ -390,7 +389,7 @@ export class CreateMealPlanService {
           durationInMonth,
         });
 
-        const updatedUser = await this.repo.updateUser({
+        const updatedUser = await this.userRepo.updateUser({
           payload: {
             dateOfBirth,
             activityLevel,
@@ -423,6 +422,15 @@ export class CreateMealPlanService {
             state: { ...state, user: updatedUser },
             data: { ...state.data, healthCondition },
           });
+
+          if (requiredCalorie as number > 2300 || requiredCalorie! < 1200) return this.helper.sendTextAndSetCache({
+            message: `Sorry we do not have any meal plans at the moment to meet your daily calorie needs.
+However, you can speak to one of our representatives to create a custom meal plan by clicking on this link https://wa.link/0ubqh3`,
+            phoneNumber,
+            nextStage: "landing",
+            state
+          })
+
           await delay()
           await this.helper.sendTextAndSetCache({
             message: `Would you like us to create a Nigerian meal plan that will provide you ${requiredCalorie} cal per day towards achieving your goal?\n
@@ -433,7 +441,7 @@ export class CreateMealPlanService {
             nextStage: `${basePath}/should-generate-meal-plan`,
           })
         } else {
-          const specialHealthPlan = await this.repo.fetchSpecialSubscriptionPlan();
+          const specialHealthPlan = await this.subscriptionRepo.fetchSpecialSubscriptionPlan();
           const data = { ...state.data, healthCondition, specialHealthPlan }
           const message = `Considering your (${healthCondition}), your plan must be fully customized to you! To help us do that we'll like to collect some additional information.\n\nPlease note that our customized meal plans are ${formatCurrency(+specialHealthPlan!.amount)} only.\n\nAfter payment, we'll send you a link to a form. You'll be filling in your health data and food likes, so we can tailor your plan to you `;
           await this.helper.sendTextAndSetCache({
@@ -481,7 +489,7 @@ export class CreateMealPlanService {
             callbackUrl: this.secrets.get("PAYSTACK_WEBHOOK"),
           })
 
-          const { data, status } = paymentLink;
+          const { data } = paymentLink;
           return this.helper.sendTextAndSetCache({
             phoneNumber,
             message: `Please click on the link ${data.data.authorization_url} to make payment`,
@@ -494,16 +502,6 @@ export class CreateMealPlanService {
 
       if (stage == `${basePath}/should-generate-meal-plan`) {
         if (input == ACCEPT) {
-          const { requiredCalorie } = state.user as IUser
-
-          if (requiredCalorie as number > 2300 || requiredCalorie! < 1200) return this.helper.sendTextAndSetCache({
-            message: `Sorry we do not have any meal plans at the moment to meet your daily calorie needs.
-              However you can speak to one of our representatives to create a custom meal plan by clicking on this link https://wa.link/0ubqh3`,
-            phoneNumber,
-            nextStage: "landing",
-            state
-          })
-
           return this.viewMealPlan.handleViewMealPlan({
             phoneNumber,
             state,

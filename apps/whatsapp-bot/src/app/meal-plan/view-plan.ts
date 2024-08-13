@@ -2,10 +2,10 @@
 import { Injectable} from "@nestjs/common";
 
 import {delay} from "../../helpers";
+import {SubscriptionRepo} from "../../repo";
 import {SecretsService} from "../../secrets/secrets.service";
 import {State} from "../../types";
 import {getSubscriptionPlanMessage} from "../../utils/textMessages";
-import {AppRepo} from "../app.repo";
 import {GenericService} from "../general";
 
 
@@ -14,7 +14,7 @@ export class ViewMealPlanService {
   constructor(
     private helper: GenericService,
     private secrets: SecretsService,
-    private repo: AppRepo,
+    private subscriptionRepo: SubscriptionRepo,
   ) { }
 
   handleViewMealPlan = async ({
@@ -52,7 +52,7 @@ export class ViewMealPlanService {
           nextStage
         })
         await delay()
-        const subscriptionPlans = await this.repo.fetchSubscriptionPlans();
+        const subscriptionPlans = await this.subscriptionRepo.fetchSubscriptionPlans();
         // @ts-ignore
         const subscriptionMessage = getSubscriptionPlanMessage(subscriptionPlans, "To get access to the full meal plan for 30 days")
         return this.helper.sendTextAndSetCache({

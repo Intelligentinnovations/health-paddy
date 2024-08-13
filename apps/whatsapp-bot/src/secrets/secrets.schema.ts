@@ -15,7 +15,6 @@ export const schema = {
   THIRTY_MINUTES_IN_SECONDS: z.coerce.number().optional(),
   FREE_PLAN_DAYS: z.coerce.number(),
   WHATSAPP_BOT_START_DATE: z.string(),
-  HEALTH_SUBSCRIPTION_AMOUNT: z.coerce.number(),
   HEALTH_ISSUES_FORM_LINK: z.string(),
   CHAT_LINK: z.string(),
   HELP_LINE: z.string(),

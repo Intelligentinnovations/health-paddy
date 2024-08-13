@@ -2,7 +2,7 @@ import { DeleteMessageCommand, ReceiveMessageCommand, SQSClient } from "@aws-sdk
 import { EventType,MessageBody } from "@backend-template/types";
 import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
 
-import {HandlePayment} from "../payment/payment.service";
+import {HandlePayment} from "../app/payment/payment.service";
 import { ChatMessageHandler } from "./chatMessageHandler";
 
 
