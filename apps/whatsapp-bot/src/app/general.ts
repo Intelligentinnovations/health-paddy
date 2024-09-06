@@ -452,6 +452,9 @@ Your subscription has expired 😔. To continue using our service and access all
           const remainingSubscriptionsDays = subscriptionEndDate.diff(currentDate, "days").toObject().days as number
           numberOfMealPlanToFetch = remainingSubscriptionsDays! > numberOfMealPlans ? numberOfMealPlans : remainingSubscriptionsDays;
         }
+
+        console.log({numberOfMealPlans}, "eventual")
+
         fetchedMealPlan = (
           await this.mealPlanRepo.fetchMealPlanByCalorieNeedId({
             calorieNeedId: closestCalorie!.id,
@@ -488,18 +491,20 @@ Your subscription has expired 😔. To continue using our service and access all
         let message = "";
         for (const meal of plan) {
           const heading = generateMealHeading(meal.day)
-          message = `*${heading}*\n\n`;
+          message += `*${heading}*\n\n`;
           message += `*Breakfast*: ${meal.breakfast}\n\n`;
           message += `*Snack*: ${meal.snack}\n\n`;
           message += `*Lunch*: ${meal.lunch}\n\n`;
           message += `*Dinner*: ${meal.dinner}\n\n`;
           message += `Total Calories: ${meal.breakfastCalories + meal.snackCalories + meal.lunchCalories + meal.dinnerCalories}\n\n`;
+          message += "\n";
         }
-        return message
+        return message.trim();
       };
 
       const numberOfMealPlans = state!.user!.hasUsedFreeMealPlan ? 7 : 1;
-      const mealPlan = await this.getMealPlan({ state, numberOfMealPlans })
+      const mealPlan = await this.getMealPlan({ state, numberOfMealPlans });
+
       const splitMealPlan = this.splitArray(mealPlan!)
       for (const mealPlan of splitMealPlan!) {
         const mealPlanSchedule = formatMessage(mealPlan);
@@ -522,7 +527,7 @@ Your subscription has expired 😔. To continue using our service and access all
 
     }
     catch (error) {
-      console.log(error)
+      console.log(error, "show error")
     }
   }
 

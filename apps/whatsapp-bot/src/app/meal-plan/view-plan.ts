@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Injectable} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
-import {delay} from "../../helpers";
-import {SubscriptionRepo} from "../../repo";
-import {SecretsService} from "../../secrets/secrets.service";
-import {State} from "../../types";
-import {getSubscriptionPlanMessage} from "../../utils/textMessages";
-import {GenericService} from "../general";
+import { delay } from "../../helpers";
+import { SubscriptionRepo } from "../../repo";
+import { SecretsService } from "../../secrets/secrets.service";
+import { State } from "../../types";
+import { getSubscriptionPlanMessage } from "../../utils/textMessages";
+import { GenericService } from "../general";
 
 
 @Injectable()
@@ -24,14 +24,14 @@ export class ViewMealPlanService {
     phoneNumber: string;
     state: State
   }) => {
-    const {user} = state
+    const { user } = state
     try {
-      if(user?.hasUsedFreeMealPlan){
+      if (user?.hasUsedFreeMealPlan) {
         if (user?.subscriptionStatus === "expired" || user?.subscriptionStatus === null) {
-        return this.helper.handlePaymentNotification({
-          phoneNumber,
-          state
-        })
+          return this.helper.handlePaymentNotification({
+            phoneNumber,
+            state
+          })
         }
       }
       else {
@@ -42,7 +42,7 @@ export class ViewMealPlanService {
           nextStage: ""
         })
         await delay()
-      await this.helper.generateAndSendMealPlan({state, phoneNumber})
+        await this.helper.generateAndSendMealPlan({ state, phoneNumber })
         const nextStage = "subscription-acceptance";
         await delay()
         await this.helper.sendWhatsAppImageByIdAndSetCache({

@@ -5,6 +5,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import {GlobalExceptionFilter} from "./exceptionFilter";
 
 export async function httpBootstrap(module: unknown, globalPrefix: string) {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,8 +14,8 @@ export async function httpBootstrap(module: unknown, globalPrefix: string) {
   );
 
   app.setGlobalPrefix(globalPrefix);
-  
-  app.useGlobalFilters(new CustomResFilter());
+
+  app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalInterceptors(new DefaultInterceptor());
 
   await app.init();

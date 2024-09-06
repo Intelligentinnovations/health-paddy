@@ -19,6 +19,7 @@ export class MealPlanRepo {
   }
 
   async fetchMealPlanByCalorieNeedId({ calorieNeedId, limit }: { calorieNeedId: string, limit: number }) {
+    console.log({limit})
     return await sql<MealPlan>`WITH CurrentDay AS (
       SELECT
         CURRENT_DATE AS today,

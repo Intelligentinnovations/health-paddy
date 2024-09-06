@@ -51,6 +51,7 @@ export class ConsumerService implements OnModuleInit {
       if (data.Messages) {
         for (const message of data.Messages) {
           const event = JSON.parse(message.Body as string) as MessageBody
+          console.log(event.data?.state)
           this.logger.log(`Received message: ${event.eventType}`);
           await this.processMessage(event);
           await this.deleteMessage(message.ReceiptHandle as string);
