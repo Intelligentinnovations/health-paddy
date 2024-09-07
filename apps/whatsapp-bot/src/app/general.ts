@@ -14,7 +14,7 @@ import {
   sendWhatsAppImageById,
   sendWhatsAppText
 } from "../helpers";
-import {MealPlanRepo, SubscriptionRepo, UserRepo} from "../repo";
+import { MealPlanRepo, SubscriptionRepo, UserRepo } from "../repo";
 import { SecretsService } from "../secrets/secrets.service";
 import { IUser, MealPlan, State, SubscriptionPlan } from "../types";
 import {
@@ -78,7 +78,7 @@ export class GenericService {
                   state
                 })
               }
-              const { nextStage: nestStageToResumeFrom, message } = this.getRegistrationStage(state.user)  // determined dynamically
+              const { nextStage: nestStageToResumeFrom, message } = this.getRegistrationStage(state.user) // determined dynamically
               await this.sendTextAndSetCache({
                 message: `Hi, ${state.user.firstname} I'd love to chat with you and ask a few questions to help create your meal plan. 😊`,
                 phoneNumber,
@@ -86,8 +86,7 @@ export class GenericService {
                 state
               })
               await delay()
-              await sendWhatsAppText({ message, phoneNumber })
-              break;
+              return sendWhatsAppText({ message, phoneNumber })
             }
           } else {
             return this.handlePrivacy({ phoneNumber, state, goal: "Lose Weight" });
@@ -233,12 +232,15 @@ export class GenericService {
       })
       this.cacheManager.del(phoneNumber);
       return {
-        success: true,
+        status: true,
+        message: "success"
       };
     } catch (error) {
       console.log(error);
+
       return {
-        success: false
+        status: false,
+        message: "error in handling no state"
       }
     }
   };
@@ -270,7 +272,7 @@ export class GenericService {
         const message = "Great! 🚀 Thanks for saying 'yes' to our privacy notice. Your data is in good hands! Please follow the prompt below to get signed up";
         await sendWhatsAppText({ message, phoneNumber })
         await delay()
-        await this.sendTextAndSetCache({
+        return this.sendTextAndSetCache({
           message: "What is your first name?",
           phoneNumber,
           state,
@@ -285,12 +287,11 @@ export class GenericService {
           state
         });
       }
-      return {
-        status: "success",
-      };
     }
     catch (err) {
-      console.log(err);
+      return {
+        status: false,
+      };
 
     }
   }
@@ -346,19 +347,21 @@ Your subscription has expired 😔. To continue using our service and access all
       }
     } catch (error) {
       console.log({ error });
+      return {
+        status: false,
+        message: "error handling payment"
+      }
 
     }
   }
 
   handleUnknownRequest = async ({ phoneNumber, message }
     : { phoneNumber: string; message: string }) => {
-    await sendWhatsAppText({ phoneNumber, message });
-    return {
-      status: "success",
-    };
+    return sendWhatsAppText({ phoneNumber, message });
+
   };
 
-  sendTextAndSetCache = async ({
+  sendTextAndSetCache = ({
     message,
     phoneNumber,
     state,
@@ -373,14 +376,18 @@ Your subscription has expired 😔. To continue using our service and access all
       data?: unknown
     }) => {
     try {
-      await this.cacheManager.set(phoneNumber, {
+      this.cacheManager.set(phoneNumber, {
         user: state.user,
         stage: nextStage,
         data
       });
       return sendWhatsAppText({ message, phoneNumber });
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      console.error("Error sending message:", error);
+      return {
+        status: false,
+        message: "Message not sent"
+      };
     }
   };
 
@@ -401,8 +408,11 @@ Your subscription has expired 😔. To continue using our service and access all
     try {
       await this.cacheManager.set(phoneNumber, { ...state, stage: nextStage, data });
       return sendWhatsAppImageById({ phoneNumber, imageObjectId });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      return {
+        status: false,
+        message: error.message
+      }
     }
   };
 
@@ -452,8 +462,6 @@ Your subscription has expired 😔. To continue using our service and access all
           const remainingSubscriptionsDays = subscriptionEndDate.diff(currentDate, "days").toObject().days as number
           numberOfMealPlanToFetch = remainingSubscriptionsDays! > numberOfMealPlans ? numberOfMealPlans : remainingSubscriptionsDays;
         }
-
-        console.log({numberOfMealPlans}, "eventual")
 
         fetchedMealPlan = (
           await this.mealPlanRepo.fetchMealPlanByCalorieNeedId({
@@ -545,6 +553,10 @@ Your subscription has expired 😔. To continue using our service and access all
     }
     catch (error) {
       console.log(error)
+      return {
+        status: false,
+        message: "error handling change of plan"
+      };
     }
   }
 

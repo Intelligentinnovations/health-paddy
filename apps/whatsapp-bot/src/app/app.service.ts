@@ -4,9 +4,29 @@ import { Inject, Injectable } from "@nestjs/common";
 import { Cache } from "cache-manager";
 import { EventType } from "libs/types/src/lib/types/event";
 
-import {UserRepo} from "../repo";
-import { State} from "../types";
+import { UserRepo } from "../repo";
+import { State } from "../types";
 
+interface IncomingMessageBody {
+  object: unknown;
+  entry?: Array<{
+    changes?: Array<{
+      value: {
+        messages?: Array<{
+          from: string;
+          text: {
+            body: string;
+          };
+        }>;
+        contacts?: Array<{
+          profile: {
+            name: string;
+          };
+        }>;
+      };
+    }>;
+  }>;
+}
 
 
 @Injectable()
@@ -21,21 +41,24 @@ export class AppService {
   }
 
 
-  async handleIncomingMessage(body: any) {
+  async handleIncomingMessage(body: IncomingMessageBody) {
     try {
       if (body.object) {
         if (
-          body.entry &&
-          body.entry[0].changes &&
-          body.entry[0].changes[0] &&
-          body.entry[0].changes[0].value.messages &&
-          body.entry[0].changes[0].value.messages[0]
+          body.entry?.[0]?.changes?.[0]?.value.messages?.[0] &&
+          body.entry[0].changes[0].value.contacts?.[0]
         ) {
           const sender = body.entry[0].changes[0].value.messages[0].from;
           const messageBody = body.entry[0].changes[0].value.messages[0].text.body;
           const profileName =
             body.entry[0].changes[0].value.contacts[0].profile.name;
 
+          const isProcessingCacheKey = `${sender}-is-processing`
+          const isProcessing = await this.cacheManager.get(isProcessingCacheKey)
+
+          if (isProcessing) return {
+            status: "success"
+          }
           let state = await this.cacheManager.get<State>(sender);
           if (!state?.user?.id) {
             const initialState: State = {

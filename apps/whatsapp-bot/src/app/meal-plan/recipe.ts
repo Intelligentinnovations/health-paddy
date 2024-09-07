@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from "@nestjs/common";
 
-import {MealPlanRepo} from "../../repo";
+import { MealPlanRepo } from "../../repo";
 import { MealPlan, State } from "../../types";
 import { GenericService } from "../general";
 
@@ -21,7 +21,6 @@ export class ViewRecipeService {
     state: State;
     input: string;
   }) => {
-
     try {
       const baseUrl = "view-recipe";
       if (state.stage === `${baseUrl}/day`) {
@@ -35,7 +34,7 @@ export class ViewRecipeService {
           "Sunday",
         ];
         const selectedDay = days[Number(input) - 1];
-        const userMealPlan = await this.helper.getMealPlan({state, numberOfMealPlans: 8})
+        const userMealPlan = await this.helper.getMealPlan({ state, numberOfMealPlans: 8 })
 
         if (userMealPlan && userMealPlan.length) {
           const selectedMealDay = userMealPlan.find(
@@ -108,8 +107,14 @@ export class ViewRecipeService {
           });
         }
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: unknown) {
+      console.error("Error in handleViewRecipe:", err);
+      return {
+        status: false,
+        message: "An error occurred while processing your request. Please try again later."
+      };
     }
+
+    return { status: false }
   };
 }

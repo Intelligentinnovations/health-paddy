@@ -3,10 +3,10 @@ import { Injectable } from "@nestjs/common";
 import { DateTime } from "luxon";
 
 import { capitalizeString, formatCurrency, formatDate } from "../../helpers";
-import {CardRepo, SubscriptionRepo} from "../../repo";
+import { CardRepo, SubscriptionRepo } from "../../repo";
 import { SecretsService } from "../../secrets/secrets.service";
 import { PaymentService } from "../../services/paystack";
-import {State, SubscriptionPlan} from "../../types";
+import { State, SubscriptionPlan } from "../../types";
 import { GenericService } from "../general";
 
 @Injectable()
@@ -34,7 +34,7 @@ export class SubscriptionService {
     try {
       const { stage, user, data } = state;
       const parsedInput = Number(input)
-      if(isNaN(parsedInput)) return this.helper.handleNoState({
+      if (isNaN(parsedInput)) return this.helper.handleNoState({
         phoneNumber,
         profileName,
         state,
@@ -43,8 +43,8 @@ export class SubscriptionService {
 
       if (stage === "subscription-acceptance") {
         const { isFirstTimeSubscriber, subscriptionPlans } = data;
-        if(isFirstTimeSubscriber){
-          const selectedPlan = subscriptionPlans[Number(input) -1] as SubscriptionPlan;
+        if (isFirstTimeSubscriber) {
+          const selectedPlan = subscriptionPlans[Number(input) - 1] as SubscriptionPlan;
           const paymentLink = await this.payment.initializePaystackPayment({
             email: user!.email,
             amountInNaira: Number(selectedPlan.amount),
@@ -68,78 +68,78 @@ ${selectedPlan.planName} for ${formatCurrency(Number(selectedPlan.amount))} per 
           const CHARGE_NEW_CARD = 2
           const CHANGE_PLAN = 3
 
-            if (user?.subscriptionStatus === "expired") {
-              const { subscriptionPlans, subscription } = data as {subscriptionPlans: SubscriptionPlan[], subscription: SubscriptionPlan};
-              if(parsedInput == RENEW) {
-                const card = await this.cardRepo.fetchUserDefaultCard(user!.id);
-                const { email: cardEmail, token: authorizationCode } = card;
-                const amount = Number(subscription.amount);
-                const chargeAttempt = await this.payment.chargePaystackCard({
-                  amount,
-                  cardEmail,
-                  authorizationCode
-                });
-                const { data } = chargeAttempt;
-                if (chargeAttempt.status !== 200 || data?.data.status !== "success") {
-                  return this.helper.handleNoState({
-                    customHeader: "Could not complete payment, please try again with another card",
-                    phoneNumber,
-                    profileName,
-                    state
-                  })
-                }
-                const today = DateTime.now();
-                await this.subscriptionRepo.createSubscription({
-                  userId: user!.id,
-                  subscriptionPlanId: subscription.id as unknown as string,
-                  amount: amount.toString(),
-                  date: new Date(),
-                  email: user!.email,
-                  endDate: today.plus({ month: 1 }).toJSDate(),
-                  first6Digits: card.first6Digits,
-                  issuer: card.issuer,
-                  last4Digits: card.last4Digits,
-                  processor: card.processor,
-                  reference: data.reference,
-                  token: card.token,
-                  transactionStatus: "success",
-                  type: card.type
-                })
+          if (user?.subscriptionStatus === "expired") {
+            const { subscriptionPlans, subscription } = data as { subscriptionPlans: SubscriptionPlan[], subscription: SubscriptionPlan };
+            if (parsedInput == RENEW) {
+              const card = await this.cardRepo.fetchUserDefaultCard(user!.id);
+              const { email: cardEmail, token: authorizationCode } = card;
+              const amount = Number(subscription.amount);
+              const chargeAttempt = await this.payment.chargePaystackCard({
+                amount,
+                cardEmail,
+                authorizationCode
+              });
+              const { data } = chargeAttempt;
+              if (chargeAttempt.status !== 200 || data?.data.status !== "success") {
                 return this.helper.handleNoState({
+                  customHeader: "Could not complete payment, please try again with another card",
                   phoneNumber,
                   profileName,
-                  customHeader: "Payment completed successfully 🙌, You can now continue to enjoy our service",
+                  state
+                })
+              }
+              const today = DateTime.now();
+              await this.subscriptionRepo.createSubscription({
+                userId: user!.id,
+                subscriptionPlanId: subscription.id as unknown as string,
+                amount: amount.toString(),
+                date: new Date(),
+                email: user!.email,
+                endDate: today.plus({ month: 1 }).toJSDate(),
+                first6Digits: card.first6Digits,
+                issuer: card.issuer,
+                last4Digits: card.last4Digits,
+                processor: card.processor,
+                reference: data.reference,
+                token: card.token,
+                transactionStatus: "success",
+                type: card.type
+              })
+              return this.helper.handleNoState({
+                phoneNumber,
+                profileName,
+                customHeader: "Payment completed successfully 🙌, You can now continue to enjoy our service",
+                state
+              });
+            }
+            else if (parsedInput == CHARGE_NEW_CARD) {
+              const paymentLink = await this.payment.initializePaystackPayment({
+                email: user!.email,
+                amountInNaira: Number(subscription.amount),
+                metaData: { phoneNumber, planPaidFor: subscription, state },
+                callbackUrl: this.secrets.get("PAYSTACK_WEBHOOK"),
+              });
+              const { data, status } = paymentLink;
+              if (status) {
+                const message = `Click on the link ${data.data.authorization_url} to complete your subscription for the ${subscription.planName}
+of ${subscription.amount} per month.`;
+                return this.helper.sendTextAndSetCache({
+                  phoneNumber,
+                  message,
+                  nextStage: "subscription-payment-option",
                   state
                 });
               }
-              else if(parsedInput == CHARGE_NEW_CARD) {
-                const paymentLink = await this.payment.initializePaystackPayment({
-                  email: user!.email,
-                  amountInNaira: Number(subscription.amount),
-                  metaData: { phoneNumber, planPaidFor: subscription, state },
-                  callbackUrl: this.secrets.get("PAYSTACK_WEBHOOK"),
-                });
-                const { data, status } = paymentLink;
-                if (status) {
-                  const message = `Click on the link ${data.data.authorization_url} to complete your subscription for the ${subscription.planName}
-of ${subscription.amount} per month.`;
-                  return this.helper.sendTextAndSetCache({
-                    phoneNumber,
-                    message,
-                    nextStage: "subscription-payment-option",
-                    state
-                  });
-                }
-              }
-              else if(parsedInput == CHANGE_PLAN) {
-                return this.helper.handleChangePlan({subscriptionPlans, phoneNumber, state})
-              }
-              else {
-                return this.helper.handleNoState({phoneNumber, profileName, state})
-              }
             }
-              const message = "I am not sure of your request";
-              return this.helper.handleUnknownRequest({ phoneNumber, message });
+            else if (parsedInput == CHANGE_PLAN) {
+              return this.helper.handleChangePlan({ subscriptionPlans, phoneNumber, state })
+            }
+            else {
+              return this.helper.handleNoState({ phoneNumber, profileName, state })
+            }
+          }
+          const message = "I am not sure of your request";
+          return this.helper.handleUnknownRequest({ phoneNumber, message });
         }
       }
       const ACCEPT = 1;
@@ -194,7 +194,7 @@ Best regards`;
         const subscriptionStatus = await this.subscriptionRepo.fetchSubscription((user!.id))
         const message = subscriptionStatus?.status !== "active" ? "Your subscription has either expired or canceled " : "We respect your decision to unsubscribe. 😢 Thank you for being a part of our community. If you ever decide to return, we'll be here. 🙌"
         if (parsedInput == ACCEPT) {
-          if(subscriptionStatus?.status === "active") await this.subscriptionRepo.unSubscribe(user!.id);
+          if (subscriptionStatus?.status === "active") await this.subscriptionRepo.unSubscribe(user!.id);
           return this.helper.handleNoState({
             phoneNumber,
             profileName,
@@ -235,9 +235,12 @@ Your subscription has expired 😔. To continue using our service and access all
       }
     } catch (error) {
       console.log({ error });
+      return {
+        status: false,
+      };
     }
     return {
-      status: "success",
+      status: false,
     };
   };
 }

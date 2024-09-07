@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
 import { sendWhatsAppText } from "../../helpers";
-import {UserRepo} from "../../repo";
+import { UserRepo } from "../../repo";
 import { State } from "../../types";
 import { EmailSchema } from "../../utils/schema";
 import { StringSchema } from "../../utils/schema/auth.schema";
@@ -51,7 +51,7 @@ export class SignupService {
         try {
           EmailSchema.parse({ email: input })
         } catch (error) {
-          console.log({error})
+          console.log({ error })
           return sendWhatsAppText({ message: "Please enter a valid email", phoneNumber })
         }
         const emailExist = await this.userRepo.findUserByEmail(input);
@@ -81,8 +81,12 @@ export class SignupService {
       });
     }
     catch (e) {
+
       console.log(e);
 
+      return {
+        status: false
+      }
     }
 
   }

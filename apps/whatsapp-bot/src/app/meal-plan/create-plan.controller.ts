@@ -10,10 +10,10 @@ import {
   sendWhatsAppText,
   validFeetAndInches
 } from "../../helpers";
-import {SubscriptionRepo, UserRepo} from "../../repo";
+import { SubscriptionRepo, UserRepo } from "../../repo";
 import { SecretsService } from "../../secrets/secrets.service";
 import { PaymentService } from "../../services/paystack";
-import {HealthGoal, IUser, State, SubscriptionPlan} from "../../types";
+import { HealthGoal, IUser, State, SubscriptionPlan } from "../../types";
 import {
   extremeGainWeightText,
   extremeWeightLossText,
@@ -47,7 +47,7 @@ export class CreateMealPlanService {
     phoneNumber: string;
     state: State;
     input: number | string;
-  }) => {
+  }): Promise<{status: boolean; message: string}> => {
     try {
       const basePath = "create-meal-plan";
       const { stage } = state;
@@ -63,7 +63,7 @@ export class CreateMealPlanService {
             phoneNumber,
           });
         }
-        await this.userRepo.updateUser({payload: {dateOfBirth: parsedDateOfBirth}, userId: state.user?.id as string})
+        await this.userRepo.updateUser({ payload: { dateOfBirth: parsedDateOfBirth }, userId: state.user?.id as string })
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
@@ -74,13 +74,13 @@ export class CreateMealPlanService {
       }
       if (stage === `${basePath}/gender`) {
         const gender = input == 1 ? "male" : input == 2 ? "female" : "";
-        if (!gender) return  sendWhatsAppText({
-            message: "Please choose between 1 and 2",
-            phoneNumber,
-          });
+        if (!gender) return sendWhatsAppText({
+          message: "Please choose between 1 and 2",
+          phoneNumber,
+        });
 
         const message = "Perfect!, May I ask for your height in feet, for example, in the format \"5f11\" or 5'11?";
-        await this.userRepo.updateUser({payload: { sex: gender }, userId: state.user?.id as string})
+        await this.userRepo.updateUser({ payload: { sex: gender }, userId: state.user?.id as string })
         return this.helper.sendTextAndSetCache({
           message,
           phoneNumber,
@@ -91,11 +91,11 @@ export class CreateMealPlanService {
       }
       if (stage === `${basePath}/height`) {
         const validatedFeetAndInches = validFeetAndInches(input as string);
-        if (!validatedFeetAndInches) return  sendWhatsAppText({
-            message: "Please enter a valid height in feet, for example, in the format \"5f11\" or 5'11?",
-            phoneNumber,
-          });
-        await this.userRepo.updateUser({payload: {height: input}, userId: state.user?.id as string})
+        if (!validatedFeetAndInches) return sendWhatsAppText({
+          message: "Please enter a valid height in feet, for example, in the format \"5f11\" or 5'11?",
+          phoneNumber,
+        });
+        await this.userRepo.updateUser({ payload: { height: input }, userId: state.user?.id as string })
         const message = "Excellent! Would you be willing to tell me your weight in KG? (e.g 70)";
         return this.helper.sendTextAndSetCache({
           message,
@@ -107,13 +107,13 @@ export class CreateMealPlanService {
       }
       if (stage === `${basePath}/weight`) {
         const parsedWeight = Number(input);
-        if (isNaN(parsedWeight))  return sendWhatsAppText({
-            message: "Please enter a valid weight in KG (e.g 70)",
-            phoneNumber,
-          });
+        if (isNaN(parsedWeight)) return sendWhatsAppText({
+          message: "Please enter a valid weight in KG (e.g 70)",
+          phoneNumber,
+        });
 
         const selectedGoal = state.data.goal;
-        await this.userRepo.updateUser({payload: {weight: parsedWeight }, userId: state.user?.id as string})
+        await this.userRepo.updateUser({ payload: { weight: parsedWeight }, userId: state.user?.id as string })
         if (selectedGoal) {
           if (selectedGoal == "Maintain Weight") {
             return this.helper.sendTextAndSetCache({
@@ -209,13 +209,10 @@ export class CreateMealPlanService {
       if (stage === `${basePath}/target-weight`) {
         const parseTargetWeight = Number(input);
         if (isNaN(parseTargetWeight)) {
-          await sendWhatsAppText({
+          return sendWhatsAppText({
             message: "Please enter a valid weight in KG (e.g 70)",
             phoneNumber,
           });
-          return {
-            status: "success",
-          };
         }
         if (state.data.goal === "Lose Weight") {
           if (input >= state.data.weight) {
@@ -246,13 +243,10 @@ export class CreateMealPlanService {
       if (stage === `${basePath}/goal-duration`) {
         const parsedDuration = Number(input);
         if (isNaN(parsedDuration)) {
-          await sendWhatsAppText({
+          return sendWhatsAppText({
             message: "Please enter a valid duration in months",
             phoneNumber,
           });
-          return {
-            status: "success",
-          };
         }
         const { targetWeight, weight: currentWeight } = state.data;
         if (state.data.goal == "Lose Weight") {
@@ -323,13 +317,10 @@ export class CreateMealPlanService {
                     ? "extreme"
                     : "";
         if (!activityLevel) {
-          await sendWhatsAppText({
+          return sendWhatsAppText({
             message: "Please select an activity level",
             phoneNumber,
           });
-          return {
-            status: "success",
-          };
         }
         return this.helper.sendTextAndSetCache({
           message: healthConditionText,
@@ -379,7 +370,7 @@ export class CreateMealPlanService {
         const value = validFeetAndInches(height || savedHeight);
         const requiredCalorie = calculateRequireCalorie({
           dateOfBirth: dateOfBirth || savedDateOfBirth,
-          inches:  value?.inches as number,
+          inches: value?.inches as number,
           feet: value?.feet as number,
           weight: weight || savedWeight,
           gender: gender || savedGender,
@@ -408,7 +399,7 @@ export class CreateMealPlanService {
           const {
             bmi,
             description: bmiDescription
-          } = calculateBMI({ weightInKg: parsedWeight , feet: value!.feet, inches: value!.inches })
+          } = calculateBMI({ weightInKg: parsedWeight, feet: value!.feet, inches: value!.inches })
 
           await this.helper.sendTextAndSetCache({
             message: `${getCalorieGoalText({
@@ -432,7 +423,7 @@ However, you can speak to one of our representatives to create a custom meal pla
           })
 
           await delay()
-          await this.helper.sendTextAndSetCache({
+          return this.helper.sendTextAndSetCache({
             message: `Would you like us to create a Nigerian meal plan that will provide you ${requiredCalorie} cal per day towards achieving your goal?\n
 1. Absolutely
 2. No, thank you, I'm good`,
@@ -518,6 +509,14 @@ However, you can speak to one of our representatives to create a custom meal pla
       }
     } catch (err) {
       console.log(err);
+      return {
+        status: false,
+        message: "Error in meal generation"
+      }
+    }
+    return {
+      status: false,
+      message: "Error in meal generation"
     }
   };
 }

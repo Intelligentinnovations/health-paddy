@@ -23,9 +23,9 @@ export class ViewMealPlanService {
   }: {
     phoneNumber: string;
     state: State
-  }) => {
-    const { user } = state
+  }): Promise<{status: boolean; message: string}> => {
     try {
+    const { user } = state
       if (user?.hasUsedFreeMealPlan) {
         if (user?.subscriptionStatus === "expired" || user?.subscriptionStatus === null) {
           return this.helper.handlePaymentNotification({
@@ -62,11 +62,17 @@ export class ViewMealPlanService {
           nextStage,
           data: { subscriptionPlans, isFirstTimeSubscriber: true },
         })
-
       }
     } catch (err) {
       console.log(err);
-
+      return {
+        status: false,
+        message: "error in view meal plan"
+      }
+    }
+    return {
+      status: false,
+      message: "error in view meal plan"
     }
   }
 }

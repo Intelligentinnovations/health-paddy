@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
 import { sendWhatsAppText } from "../../helpers";
-import {MealPlanRepo} from "../../repo";
+import { MealPlanRepo } from "../../repo";
 import { FoodData, State } from "../../types";
 import { GenericService } from "../general";
 
@@ -50,9 +50,9 @@ updating our database with your suggestions, and we look forward to including yo
             })
           }
           const variants = [
-            ... new Set(searchResult.map((variant) => `${variant.foodItemName} ${variant.foodVariantName ? "-": ""}${variant.foodVariantName}`))
+            ... new Set(searchResult.map((variant) => `${variant.foodItemName} ${variant.foodVariantName ? "-" : ""}${variant.foodVariantName}`))
           ]
-          if(searchResult[0]?.hasParts) {
+          if (searchResult[0]?.hasParts) {
             const cleanedVariantNames = [...new Set(searchResult.map(item => {
               let name = item.foodVariantName;
               if (!name) return
@@ -67,7 +67,7 @@ ${cleanedVariantNames.map((method, index) => `${index + 1}. ${method}\n`).join("
               phoneNumber,
               nextStage: "food-bank/parts",
               state,
-              data: {...state.data, foodVariant: searchResult, foodParts: cleanedVariantNames},
+              data: { ...state.data, foodVariant: searchResult, foodParts: cleanedVariantNames },
             });
           }
 
@@ -77,7 +77,7 @@ ${variants.map((v, index) => `${index + 1}. ${v}\n`).join("")}`,
             phoneNumber,
             nextStage: "food-bank/variant",
             state,
-            data: { ...state.data, foodVariant: variants, searchResult  },
+            data: { ...state.data, foodVariant: variants, searchResult },
           });
         } else {
           const result = searchResult[0];
@@ -100,14 +100,14 @@ ${variants.map((v, index) => `${index + 1}. ${v}\n`).join("")}`,
         }
 
         const { searchResult, foodVariant } = state.data;
-        const selectedVariant = foodVariant[Number(input) -1];
+        const selectedVariant = foodVariant[Number(input) - 1];
         const [foodItem, variantName] = selectedVariant.split("-")
 
-          const  foodList= searchResult.filter((item: { foodItemName: string | any[]; foodVariantName: string | any[]; }) => {
-            const matchesFoodItem = foodItem ? item.foodItemName.includes(foodItem.trim()) : true;
-            const matchesVariantName = variantName ? item.foodVariantName && item.foodVariantName.includes(variantName) : true;
-            return matchesFoodItem && matchesVariantName;
-          });
+        const foodList = searchResult.filter((item: { foodItemName: string | any[]; foodVariantName: string | any[]; }) => {
+          const matchesFoodItem = foodItem ? item.foodItemName.includes(foodItem.trim()) : true;
+          const matchesVariantName = variantName ? item.foodVariantName && item.foodVariantName.includes(variantName) : true;
+          return matchesFoodItem && matchesVariantName;
+        });
 
         return this.helper.sendTextAndSetCache({
           message: `${foodList.map((item: { foodItemName: string; foodVariantName: string; size: string; calorie: string; }) => `The amount of calorie in ${item.foodItemName} ${item.foodVariantName} per ${item.size} is ${item.calorie}\n`).join("")}`,
@@ -121,14 +121,14 @@ ${variants.map((v, index) => `${index + 1}. ${v}\n`).join("")}`,
         await this.parseInput(input, phoneNumber);
         const foodVariant = state.data.foodVariant
         const selectedFoodPart = state.data.foodParts[Number(input) - 1];
-        const filteredFood = foodVariant.filter((food: { foodVariantName: string | any[]; }) => food.foodVariantName.includes(selectedFoodPart) )
+        const filteredFood = foodVariant.filter((food: { foodVariantName: string | any[]; }) => food.foodVariantName.includes(selectedFoodPart))
 
         const cookingMethods = [... new Set(filteredFood.map((item: { foodVariantName: string; }) => {
           const match = item.foodVariantName.match(/\((.*?)\)/);
           return match ? match[1] : null;
         }).filter(Boolean))]; // Filter out null values
 
-        if(filteredFood.length > 1)  return this.helper.sendTextAndSetCache({
+        if (filteredFood.length > 1) return this.helper.sendTextAndSetCache({
           message: `Please specify your preferred cooking method\n
 ${cookingMethods.map((method: any, index: number) => `${index + 1}. ${method}\n`).join("")}`,
           phoneNumber,
@@ -156,10 +156,12 @@ ${cookingMethods.map((method: any, index: number) => `${index + 1}. ${method}\n`
       }
 
     } catch (error) {
-      console.log({ error });
+      return {
+        status: false,
+      };
     }
     return {
-      status: "success",
+      status: true,
     };
   };
 

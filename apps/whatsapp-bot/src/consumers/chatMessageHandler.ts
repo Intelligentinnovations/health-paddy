@@ -1,11 +1,16 @@
 import { MessageBody } from "@backend-template/types";
-import { Injectable } from "@nestjs/common";
+import {Inject, Injectable} from "@nestjs/common";
 
 import { SignupService } from "../app/auth/signup";
 import { FoodBankService } from "../app/food-bank/foodBank";
 import { GenericService } from "../app/general";
 import { CreateMealPlanService, ViewRecipeService } from "../app/meal-plan";
 import { SubscriptionService } from "../app/subscription/subscription";
+import { State } from "../types";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
+
+
 
 @Injectable()
 export class ChatMessageHandler {
@@ -26,80 +31,58 @@ export class ChatMessageHandler {
     private signup: SignupService,
     private createMealPlan: CreateMealPlanService,
     private recipe: ViewRecipeService,
-    private foodBank: FoodBankService
-  ) {
+    private foodBank: FoodBankService,
+  @Inject(CACHE_MANAGER) private cacheManager: Cache
+
+) {
 
   }
 
-  public async handleMessages(data: MessageBody) {
-    const { input, state, phoneNumber: sender, profileName  } = data.data!;
-    if (!state || this.greetings.includes(input.toLowerCase())) {
+  public async handleMessages(data: MessageBody): Promise<{ status: boolean; message?: string }> {
+    const { data: messageData } = data;
+    const { input, state, phoneNumber: sender, profileName } = messageData ?? {};
+    const defaultParams = {
+      input: input ?? "",
+      phoneNumber: sender ?? "",
+      profileName: profileName ?? "",
+      state,
+    };
+    if (!state || (input && this.greetings.includes(input.toLowerCase()))) {
       return this.generalResponse.handleNoState({
-        phoneNumber: sender,
-        profileName,
-        state
+        ...defaultParams,
+        state: state as State
       });
     }
 
-    if (state.stage === "landing") {
-      return this.generalResponse.handleLandingPageSelection({
-        input,
-        phoneNumber: sender,
-        profileName,
-        state,
-      });
+    const stageHandlers = {
+      landing: () => this.generalResponse.handleLandingPageSelection({...defaultParams, state: defaultParams.state as State}),
+      privacy: () => this.generalResponse.handlePrivacyResponse({...defaultParams, state: defaultParams.state as State}),
+      signup: () => this.signup.handleSignup({...defaultParams, state: defaultParams.state as State}),
+      subscription: () => this.subscriptionService.handleSubscription({...defaultParams, state: defaultParams.state as State}),
+      "create-meal-plan": () => this.createMealPlan.handleCreateMealPlan({...defaultParams, state: defaultParams.state as State}),
+      "view-recipe": () => this.recipe.handleViewRecipe({...defaultParams, state: defaultParams.state as State}),
+      "food-bank": () => this.foodBank.handleFoodBank({...defaultParams, state: defaultParams.state as State}),
+    };
+
+    for (const [prefix, handler] of Object.entries(stageHandlers)) {
+      if (state.stage.startsWith(prefix)) {
+        console.log("processing message.....")
+        const isProcessingCacheKey = `${sender}-is-processing`
+        await this.cacheManager.set(isProcessingCacheKey, true);
+        const result = await handler();
+        if (result) {
+          return {
+            status: result.status,
+            ...(("message" in result) && { message: result.message })
+          };
+        }
+      }
     }
 
-    if (state.stage === "privacy") {
-      return this.generalResponse.handlePrivacyResponse({
-        input,
-        phoneNumber: sender,
-        profileName,
-        state
-      });
-    }
-    if (state.stage.startsWith("signup")) {
-      return this.signup.handleSignup({
-        input,
-        phoneNumber: sender,
-        state,
-        profileName,
-      });
-    }
-    if (state.stage.startsWith("subscription")) {
-      return this.subscriptionService.handleSubscription({
-        input,
-        phoneNumber: sender,
-        state,
-        profileName,
-      });
-    }
-    if (state.stage.startsWith("create-meal-plan")) {
-      return this.createMealPlan.handleCreateMealPlan({
-        input,
-        phoneNumber: sender,
-        state,
-      });
-    }
-    if (state.stage.startsWith("view-recipe")) {
-      return this.recipe.handleViewRecipe({
-        input,
-        phoneNumber: sender,
-        state,
-      });
-    }
-    if (state.stage.startsWith("food-bank")) {
-      return this.foodBank.handleFoodBank({
-        input,
-        phoneNumber: sender,
-        state,
-      });
-    }
     return this.generalResponse.handleNoState({
-      phoneNumber: sender,
-      profileName,
-      customHeader: "I could not understand your request, lets start afresh",
-      state
+      ...defaultParams,
+      customHeader: "I could not understand your request, let's start afresh",
+      state: state as State
     });
   }
 }

@@ -1,8 +1,10 @@
 import { DeleteMessageCommand, ReceiveMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
-import { EventType,MessageBody } from "@backend-template/types";
-import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { EventType, MessageBody } from "@backend-template/types";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Inject, Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { Cache } from "cache-manager";
 
-import {HandlePayment} from "../app/payment/payment.service";
+import { HandlePayment } from "../app/payment/payment.service";
 import { ChatMessageHandler } from "./chatMessageHandler";
 
 
@@ -17,7 +19,9 @@ export class ConsumerService implements OnModuleInit {
 
   constructor(
     private handleIncomingChat: ChatMessageHandler,
-    private handlePayments: HandlePayment
+    private handlePayments: HandlePayment,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+
   ) {
     this.queueUrl = process.env.QUEUE_URL || "";
     this.sqsClient = new SQSClient({ region: "us-east-1" });
@@ -26,7 +30,7 @@ export class ConsumerService implements OnModuleInit {
 
 
   onModuleInit() {
-     this.startPolling();
+    this.startPolling();
   }
 
   private async startPolling() {
@@ -51,14 +55,13 @@ export class ConsumerService implements OnModuleInit {
       if (data.Messages) {
         for (const message of data.Messages) {
           const event = JSON.parse(message.Body as string) as MessageBody
-          console.log(event.data?.state)
           this.logger.log(`Received message: ${event.eventType}`);
           await this.processMessage(event);
           await this.deleteMessage(message.ReceiptHandle as string);
         }
       }
     } catch (error) {
-      console.log({error})
+      console.log({ error })
       this.logger.error("Error receiving messages", error);
     }
   }
@@ -68,10 +71,16 @@ export class ConsumerService implements OnModuleInit {
     this.logger.log(`Processing message: ${event.data}`);
     const { eventType } = event;
     switch (eventType) {
-      case EventType.MESSAGE:
-        return this.handleIncomingChat.handleMessages(event);
+      case EventType.MESSAGE: {
+        const { status, message } = await this.handleIncomingChat.handleMessages(event);
+        if (status || message == "Message not sent after 3 attempts") {
+          const isProcessingCacheKey = `${event.data?.phoneNumber}-is-processing`
+          await this.cacheManager.del(isProcessingCacheKey)
+        }
+        return;
+      }
       case EventType.PAYMENT:
-         return this.handlePayments.handlePaystackTransaction(event.reference as string)
+        return this.handlePayments.handlePaystackTransaction(event.reference as string)
       default:
         break;
     }
