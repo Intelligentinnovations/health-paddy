@@ -66,7 +66,6 @@ export class ChatMessageHandler {
 
     for (const [prefix, handler] of Object.entries(stageHandlers)) {
       if (state.stage.startsWith(prefix)) {
-        console.log("processing message.....")
         const isProcessingCacheKey = `${sender}-is-processing`
         await this.cacheManager.set(isProcessingCacheKey, true);
         const result = await handler();

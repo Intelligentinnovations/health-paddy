@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CustomRes } from "@backend-template/helpers";
+import {CustomRes} from "@backend-template/helpers";
 import { Body, Controller, Get, Post, Query, Request, Response } from "@nestjs/common";
 import { FastifyReply } from "fastify";
 
