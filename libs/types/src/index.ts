@@ -12,4 +12,4 @@ export { EventType,MessageBody, ScheduleType } from "./lib/types/event";
 export {
   NotificationData,
   NotificationTemplateData} from "./lib/types/notification";
-export {CalculateCalorieSchema} from './lib/schema/calculateCalorieCount'
+export * from './lib/schema/calculateCalorieCount'

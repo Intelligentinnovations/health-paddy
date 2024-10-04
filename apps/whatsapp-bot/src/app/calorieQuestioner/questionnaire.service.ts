@@ -1,13 +1,14 @@
 import {Inject, Injectable} from "@nestjs/common";
-import {CalculateCalorieSchema} from "@backend-template/types";
+import {BioDataPayload, HealthGoalPayload, TargetWeightPayload} from "@backend-template/types";
 import {UserRepo} from "../../repo";
 import {State, UserPayload} from "../../types";
 import {CACHE_MANAGER} from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
+import {sendWhatsAppText} from "../../helpers";
 
 
 @Injectable()
-export class QuestionerService {
+export class QuestionnaireService {
   constructor(
     private userRepo: UserRepo,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
@@ -30,18 +31,52 @@ export class QuestionerService {
       }
     }
 
-  async processResponse(payload: any) {
-    const phone = payload?.phoneNumber as string;
-    const state = await this.cacheManager.get<State>(phone);
+  async submitGoal(payload: HealthGoalPayload) {
+    const state = await this.cacheManager.get<State>(payload.phone);
     if(!state?.user?.id) return "Please start with your bio data"
-    const goals = ['lose weight', 'maintain-weight', 'gain-weight']
-
     if(state.stage === 'goal'){
-      const selectedGoal = goals.find(i => i === payload.goal.toLowerCase())
-      if(!selectedGoal) return "please select a goal between lose weight', 'maintain-weight' and 'gain-weight"
-
-      // if(payload?.goal && )
+      const selectedGoal = payload.goal.toLowerCase()
+      this.cacheManager.set(payload.phone, {
+        user: state.user,
+        stage: 'bio-data',
+        data: {...state.data, goal: selectedGoal}
+      });
     }
+    return "Goal submitted successfully"
+  }
 
+  async submitBioData(payload: BioDataPayload) {
+    const state = await this.cacheManager.get<State>(payload.phone);
+    if(!state?.user?.id) return
+    if(state.stage !== 'goal') return "Please start with your bio data"
+    const nextStage = state.data.goal === 'maintain-weight' ? 'activity-level': 'target-weight'
+    this.cacheManager.set(payload.phone, {
+      user: state.user,
+      stage: nextStage,
+      data: {...state.data, payload}
+    });
+    return "Bio-data submitted successfully"
+}
+
+  async submitTargetWeight(payload: TargetWeightPayload) {
+    const targetWeight = payload.weight;
+    const state = await this.cacheManager.get<State>(payload.phone);
+    if(!state?.user?.id) return "Please start from the beginning"
+    if(state.stage !== 'target-weight') return "Please start over"
+    const selectedGoal = state.data.goal
+    if(selectedGoal === 'lose-weight'){
+      if (targetWeight >= state.data.weight) {
+        return "Your target weight should be less than your current weight to lose weight";
+      }
+      else if (targetWeight <= state.data.weight) {
+        return "Your target weight should be more than your current weight to gain weight";
+      }
+    }
+    this.cacheManager.set(payload.phone, {
+      user: state.user,
+      stage: 'activity-level',
+      data: {...state.data, payload}
+    });
+    return "Target weight submitted successfully"
   }
 }
