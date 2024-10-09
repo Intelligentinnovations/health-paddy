@@ -1,4 +1,5 @@
 export { UserData, UserSchema } from "./lib/schema/auth";
+export * from "./lib/schema/calculateCalorieCount"
 export {
   FileManagerData,
   FileManagerSchema,
@@ -12,4 +13,4 @@ export { EventType,MessageBody, ScheduleType } from "./lib/types/event";
 export {
   NotificationData,
   NotificationTemplateData} from "./lib/types/notification";
-export * from './lib/schema/calculateCalorieCount'
+export * from "./lib/types/response"

@@ -21,33 +21,37 @@ function feetAndInchesToMeters({ feet, inches }: { feet: number; inches: number 
 }
 
 
+export const calculateRequireCalorie = ({
+  dateOfBirth,
+  weight,
+  feet,
+  inches,
+  gender,
+  activityLevel,
+  goal,
+  targetWeight,
+  durationInMonth
+}: CalorieCalculator) => {
 
-
-export const calculateRequireCalorie = ({ dateOfBirth, weight, feet, inches, gender, activityLevel, goal, targetWeight, durationInMonth }: CalorieCalculator) => {
-  console.log({
-    dateOfBirth, weight, feet, inches, gender, activityLevel, goal, targetWeight, durationInMonth
-  })
-  const age = getDiffBetweenDates({startDate: dateOfBirth, endDate: new Date(), timePeriod: "years"})
-  console.log({age, dateOfBirth})
+  const age = getDiffBetweenDates({ startDate: dateOfBirth, endDate: new Date(), timePeriod: "years" })
+  console.log({ age, dateOfBirth })
   const heightInInches = feetAndInchesToCm({ feet, inches });
   const commonCalories = gender === "male"
-  ? (10 * Number(weight)) + (6.25 * heightInInches) - (5 * Number(age) + 5)
-  : (10 * Number(weight)) + (6.25 * heightInInches) - (5 * Number(age) - 161)
-
-  console.log({commonCalories})
+    ? (10 * Number(weight)) + (6.25 * heightInInches) - (5 * Number(age) + 5)
+    : (10 * Number(weight)) + (6.25 * heightInInches) - (5 * Number(age) - 161)
 
   const activityLevelIndex = ActivityLevel[activityLevel]
   const caloriesToMaintainWeight = Math.round(commonCalories * activityLevelIndex);
 
-  console.log({activityLevelIndex, caloriesToMaintainWeight})
+  console.log({ activityLevelIndex, caloriesToMaintainWeight })
 
-  if (goal === "Lose Weight") {
+  if (goal === "Lose Weight" || goal === "lose-weight") {
     const amountOfWeightToLoose = Number(weight) - Number(targetWeight);
     const durationInWeeks = Number(durationInMonth) * 4;
     const calorieNeed = caloriesToMaintainWeight - (amountOfWeightToLoose / durationInWeeks * 500)
     return Math.round(calorieNeed / 100) * 100;
   }
-  else if (goal === "Gain Weight") {
+  else if (goal === "Gain Weight" || goal === "gain-weight") {
     const amountOfWeightToGain = +targetWeight - +weight;
     const durationInWeeks = +durationInMonth * 4;
     const calorieNeed = caloriesToMaintainWeight + (amountOfWeightToGain / durationInWeeks * 500)
@@ -65,7 +69,6 @@ export const capitalizeString = (text: string) => {
 }
 
 export const validFeetAndInches = (input: string) => {
-  console.log({input}, "height")
   const regex = /^(\d+)[f']([0-9]|1[0-1])$/;
   const match = input?.match(regex);
   if (!match) {
@@ -123,10 +126,10 @@ export function getPageSelectionOffset(state: State) {
 
 
 export function calculateBMI({
-                               weightInKg, feet, inches}:
-                               {weightInKg: number, feet: number; inches: number}) {
-  const heightInMeters = feetAndInchesToMeters({feet, inches})
-  const BMI =  Number(weightInKg) / (heightInMeters * heightInMeters);
+  weightInKg, feet, inches }:
+  { weightInKg: number, feet: number; inches: number }) {
+  const heightInMeters = feetAndInchesToMeters({ feet, inches })
+  const BMI = Number(weightInKg) / (heightInMeters * heightInMeters);
   let description;
   if (BMI < 18.5) {
     description = "Underweight";

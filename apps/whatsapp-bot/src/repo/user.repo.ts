@@ -21,6 +21,7 @@ export class UserRepo {
     return await this.client
       .insertInto("User")
       .values({ ...payload, updatedAt: new Date() })
+      .returningAll()
       .executeTakeFirst()
   }
 

@@ -1,11 +1,11 @@
-import { CustomResFilter, DefaultInterceptor } from '@backend-template/helpers';
-import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { CustomResFilter } from "@backend-template/helpers";
+import { Logger } from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
 import {
   FastifyAdapter,
   NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import {GlobalExceptionFilter} from "./exceptionFilter";
+} from "@nestjs/platform-fastify";
+
 
 export async function httpBootstrap(module: unknown, globalPrefix: string) {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -15,8 +15,8 @@ export async function httpBootstrap(module: unknown, globalPrefix: string) {
 
   app.setGlobalPrefix(globalPrefix);
 
-  app.useGlobalFilters(new GlobalExceptionFilter());
-  app.useGlobalInterceptors(new DefaultInterceptor());
+  app.useGlobalFilters(new CustomResFilter());
+
 
   await app.init();
 

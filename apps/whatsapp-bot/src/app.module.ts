@@ -1,10 +1,14 @@
+import { DefaultInterceptor } from "@backend-template/helpers";
 import { CacheModule } from "@nestjs/cache-manager";
 import { Module } from "@nestjs/common";
+import { APP_INTERCEPTOR } from "@nestjs/core";
 import { redisStore } from "cache-manager-redis-yet";
 
 import { AppController } from "./app/app.controller";
 import { AppService } from "./app/app.service";
 import { SignupService } from "./app/auth/signup"
+import { QuestionnaireController } from "./app/calorieQuestioner/questionnaire.controller";
+import { QuestionnaireService } from "./app/calorieQuestioner/questionnaire.service";
 import {FoodBankService} from "./app/food-bank/foodBank"
 // import { CronService } from './cron/subscription';
 import { GenericService, } from "./app/general";
@@ -35,7 +39,7 @@ import { PaymentService } from "./services/paystack";
       isGlobal: true,
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, QuestionnaireController],
   providers: [
     AppService,
     UserRepo,
@@ -53,8 +57,13 @@ import { PaymentService } from "./services/paystack";
     ConsumerService,
     ChatMessageHandler,
     FoodBankService,
-    HandlePayment
+    HandlePayment,
+    QuestionnaireService,
     // CronService
+      // {
+      //   provide: APP_INTERCEPTOR,
+      //   useClass: DefaultInterceptor,
+      // },
   ],
 })
 export class AppModule {

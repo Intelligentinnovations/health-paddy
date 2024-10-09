@@ -1,11 +1,11 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus } from "@nestjs/common";
 
 import {
   noPermissionError,
   successful,
   unauthorizedError,
   unknownServerError,
-} from '../utils';
+} from "../utils";
 
 export class CustomRes<T = unknown> extends HttpException {
   success: boolean;
@@ -13,7 +13,7 @@ export class CustomRes<T = unknown> extends HttpException {
 
   constructor(
     status: HttpStatus = HttpStatus.OK,
-    message = '',
+    message = "",
     success = false,
     data?: T
   ) {
@@ -27,8 +27,12 @@ export class CustomRes<T = unknown> extends HttpException {
     return CustomRes.serverError();
   }
 
-  static success<T>(data?: T, message = successful): CustomRes<T> {
+  static success<T>(data?: T, message = successful): CustomRes<T> {        
     return new CustomRes<T>(HttpStatus.OK, message, true, data);
+  }
+
+  static created<T>(data?: T , message= successful): CustomRes<T> {
+    return new CustomRes<T>(HttpStatus.CREATED, message, true, data);
   }
 
   static failed<T>(message: string, data?: T): CustomRes<T> {

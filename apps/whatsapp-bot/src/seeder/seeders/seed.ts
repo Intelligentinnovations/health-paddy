@@ -28,7 +28,7 @@ try {
     pool: new Pool({
       database: "health_paddy",
       port: 5432,
-      password: "postgres",
+      password: "password",
       host: "localhost",
       user: "postgres"
     })

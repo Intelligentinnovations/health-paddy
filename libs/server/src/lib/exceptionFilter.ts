@@ -4,10 +4,10 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
-} from '@nestjs/common';
-import { FastifyReply } from 'fastify';
-import { JsonWebTokenError } from 'jsonwebtoken';
-import { NoResultError } from 'kysely';
+} from "@nestjs/common";
+import { FastifyReply } from "fastify";
+import { JsonWebTokenError } from "jsonwebtoken";
+import { NoResultError } from "kysely";
 
 export const getStatusCode = <T>(exception: T): number => {
   return exception instanceof HttpException
@@ -17,7 +17,7 @@ export const getStatusCode = <T>(exception: T): number => {
 
 export const getErrorMessage = <T>(exception: T): string => {
   return exception instanceof HttpException
-    ? exception['response']['message']
+    ? exception["response"]["message"]
     : String(exception);
 };
 
@@ -32,7 +32,7 @@ export class GlobalExceptionFilter<T> implements ExceptionFilter {
     if (exception instanceof NoResultError) {
       response.status(404).send({
         status: false,
-        message: 'No record found',
+        message: "No record found",
       });
     }
 
@@ -43,14 +43,14 @@ export class GlobalExceptionFilter<T> implements ExceptionFilter {
     ) {
       response.status(statusCode).send({
         status: false,
-        message: 'Unauthorized',
+        message: "Unauthorized",
         error,
       });
     }
     if (statusCode === HttpStatus.FORBIDDEN) {
       response.status(statusCode).send({
         status: false,
-        message: 'Forbidden',
+        message: "Forbidden",
         error: error,
       });
     }
@@ -58,14 +58,14 @@ export class GlobalExceptionFilter<T> implements ExceptionFilter {
     if (statusCode === HttpStatus.BAD_REQUEST) {
       response.status(statusCode).send({
         status: false,
-        message: 'Bad Request',
+        message: "Bad Request",
         error: error,
       });
     }
 
     response.status(statusCode).send({
       status: false,
-      message: 'Server error',
+      message: "Server error",
     });
   }
 }
